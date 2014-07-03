@@ -39,6 +39,12 @@ PRODUCT_COPY_FILES := \
 
 endif #TARGET_KERNEL_BUILT_FROM_SOURCE
 
+
+PRODUCT_COPY_FILES := \
+    device/asus/fugu/init.fugu.rc:root/init.fugu.rc \
+    device/asus/fugu/init.fugu.usb.rc:root/init.fugu.usb.rc
+
+
 $(call inherit-product-if-exists, vendor/intel/fugu/device-vendor.mk)
 $(call inherit-product, device/asus/fugu/device_legacy.mk)
 
