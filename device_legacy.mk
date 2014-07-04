@@ -14,18 +14,7 @@
 # limitations under the License.
 #
 
-# Use the non-open-source parts, if they're present
--include vendor/intel/fugu/BoardConfigVendor.mk
-
-TARGET_ARCH := x86
-TARGET_ARCH_VARIANT := silvermont
-TARGET_CPU_ABI := x86
-TARGET_CPU_SMP := true
-
-TARGET_BOARD_PLATFORM := moorefield
-TARGET_BOOTLOADER_BOARD_NAME := fugu
-
-# REVERTME: set legacy configuration if needed
-ifneq (,$(wildcard build/core/combo/arch/x86/x86-slm.mk))
-include device/asus/fugu/BoardConfig_legacy.mk
-endif
+# These should be in vendor/intel/fugu/device-vendor.mk
+# These must be enabled to avoid duplicate module android_webview_java
+-include vendor/google/PRIVATE/gms/products/gms.mk
+-include vendor/google/PRIVATE/gms/products/gms_optional.mk
