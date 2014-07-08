@@ -1,0 +1,2 @@
+# Intel SCU watchdog
+/dev/watchdog                           0600   system     system

@@ -43,12 +43,16 @@ endif #TARGET_KERNEL_BUILT_FROM_SOURCE
 PRODUCT_COPY_FILES := \
     device/asus/fugu/fstab.fugu:root/fstab.fugu \
     device/asus/fugu/init.fugu.rc:root/init.fugu.rc \
-    device/asus/fugu/init.fugu.usb.rc:root/init.fugu.usb.rc
+    device/asus/fugu/init.fugu.usb.rc:root/init.fugu.usb.rc \
+    device/asus/fugu/ueventd.fugu.rc:root/ueventd.fugu.rc
 
 # Use partlink block devices
 PRODUCT_PACKAGES += \
     partlink
 
+# Add kernel watchdog daemon
+PRODUCT_PACKAGES += \
+    ia_watchdogd
 
 $(call inherit-product-if-exists, vendor/intel/fugu/device-vendor.mk)
 $(call inherit-product, device/asus/fugu/device_legacy.mk)

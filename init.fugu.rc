@@ -36,6 +36,9 @@ on init
 
     start partlink
 
+    chown system system /usr/bin/ia_watchdogd
+    chmod 0750 /usr/bin/ia_watchdogd
+
 on fs
     mount_all ./fstab.fugu
     setprop ro.crypto.fuse_sdcard true
@@ -158,3 +161,16 @@ service bugreport /system/bin/dumpstate -d -p -B \
 
 service partlink /sbin/partlink
     oneshot
+
+service watchdogd /usr/bin/ia_watchdogd
+    class core
+    user system
+    group system
+    oneshot
+
+# Reset the watchdog counter once boot is completed
+on property:sys.boot_completed=1
+    write /sys/devices/virtual/misc/watchdog/counter "0"
+
+on property:init.svc.recovery=running
+    write /sys/devices/virtual/misc/watchdog/counter "0"
