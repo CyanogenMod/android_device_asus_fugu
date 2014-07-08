@@ -18,3 +18,44 @@
 # These must be enabled to avoid duplicate module android_webview_java
 -include vendor/google/PRIVATE/gms/products/gms.mk
 -include vendor/google/PRIVATE/gms/products/gms_optional.mk
+
+#--------------------------------------------------------------------------------------------------#
+# Add packages required by modifications in AOSP
+#--------------------------------------------------------------------------------------------------#
+
+# This library is required for Intel's implementation of Dalvik
+# libpcgdvmjit is a part of Dalvik JIT compiler
+PRODUCT_PACKAGES += libpcgdvmjit
+
+# This library is required for Intel's implementation of Dalvik
+# libcrash is a library which provides recorded state of an applications
+# which crashed while running on Dalvik VM
+PRODUCT_PACKAGES += libcrash
+
+# Intel fake multiple display
+PRODUCT_PACKAGES += \
+    com.intel.multidisplay \
+    com.intel.multidisplay.xml
+
+#Houdini prebuilt
+HOUDINI_ARM_PREBUILTS_DIR := vendor/intel/houdini/arm
+houdini_prebuilt_stamp := $(HOUDINI_ARM_PREBUILTS_DIR)/stamp-prebuilt-done
+houdini_prebuilt_done := $(wildcard $(houdini_prebuilt_stamp))
+ifneq ($(houdini_prebuilt_done),)
+INTEL_HOUDINI := true
+#Houdini
+PRODUCT_PACKAGES += libhoudini \
+    houdini \
+    enable_houdini \
+    disable_houdini \
+    check.xml \
+    cpuinfo \
+    cpuinfo.neon
+
+#houdini arm libraries
+-include vendor/intel/houdini/houdini.mk
+endif
+
+# CAM
+PRODUCT_PACKAGES += \
+    cam_mandatory

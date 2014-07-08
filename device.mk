@@ -56,7 +56,24 @@ PRODUCT_PACKAGES += \
 
 # IMG graphics
 PRODUCT_PACKAGES += \
-    IMG_graphics
+    IMG_graphics \
+    hwcomposer.moorefield
+
+# psb video
+PRODUCT_PACKAGES += \
+    pvr_drv_video \
+    msvdx_bin \
+    topaz_bin
+
+# pvr
+PRODUCT_PACKAGES += \
+    libpvr2d
+
+# libdrm
+PRODUCT_PACKAGES += \
+    libdrm \
+    dristat \
+    drmstat
 
 $(call inherit-product-if-exists, vendor/intel/fugu/device-vendor.mk)
 $(call inherit-product, device/asus/fugu/device_legacy.mk)

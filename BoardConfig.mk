@@ -29,6 +29,13 @@ TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2147483648
 BOARD_FLASH_BLOCK_SIZE := 2048
 
+# customize the malloced address to be 16-byte aligned
+BOARD_MALLOC_ALIGNMENT := 16
+
+# Security
+BUILD_WITH_SECURITY_FRAMEWORK := chaabi_token
+BUILD_WITH_CHAABI_SUPPORT := true
+
 # IMG graphics
 BOARD_GFX_REV := RGX6400
 ENABLE_IMG_GRAPHICS := true
@@ -43,6 +50,17 @@ SF_VSYNC_EVENT_PHASE_OFFSET_NS := 5000000
 ADDITIONAL_DEFAULT_PROPERTIES += \
     ro.opengles.version = 196608 \
     ro.sf.lcd_density=160
+
+TARGET_HAS_VPP := true
+COMMON_GLOBAL_CFLAGS += -DGFX_BUF_EXT
+
+# enabled to use IMG RS GPU driver
+OVERRIDE_RS_DRIVER := libPVRRS.so
+
+# enabled to carry out all drawing operations performed on a View's canvas with GPU for 2D rendering pipeline.
+USE_OPENGL_RENDERER := true
+# DPST
+INTEL_DPST := true
 
 # REVERTME: set legacy configuration if needed
 ifneq (,$(wildcard build/core/combo/arch/x86/x86-slm.mk))

@@ -88,3 +88,26 @@ override PART_MOUNT_OVERRIDE_FILES := \
 
 # All boot class paths for extensions
 PRODUCT_BOOT_JARS := $(PRODUCT_BOOT_JARS):com.intel.multidisplay:com.intel.config:com.intel.cam.api:com.intel.nfc.adapteraddon
+
+
+# Needed to build PCG JIT compiler for dalvik.
+USE_INTEL_IPP := true
+
+INTEL_VA:=true
+
+#Power_HAL
+POWERHAL_MRFLD := true
+
+#BCU HAL
+BCUHAL_MRFLD := true
+
+# WIFI
+BOARD_HAVE_WIFI := true
+
+# WIDI
+INTEL_WIDI := true
+INTEL_WIDI_MERRIFIELD := true
+TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
+BOARD_USES_48000_AUDIO_CAPTURE_SAMPLERATE_FOR_WIDI:= true
+#Support background music playback for Widi Multitasking
+ENABLE_BACKGROUND_MUSIC := true
