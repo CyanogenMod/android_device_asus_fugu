@@ -25,6 +25,21 @@ TARGET_CPU_SMP := true
 TARGET_BOARD_PLATFORM := moorefield
 TARGET_BOOTLOADER_BOARD_NAME := fugu
 
+# IMG graphics
+BOARD_GFX_REV := RGX6400
+ENABLE_IMG_GRAPHICS := true
+ENABLE_MRFL_GRAPHICS := true
+INTEL_HWC_MOOREFIELD := true
+HWUI_IMG_FBO_CACHE_OPTIM := true
+
+# System's VSYNC phase offsets in nanoseconds
+VSYNC_EVENT_PHASE_OFFSET_NS := 7500000
+SF_VSYNC_EVENT_PHASE_OFFSET_NS := 5000000
+
+ADDITIONAL_DEFAULT_PROPERTIES += \
+    ro.opengles.version = 196608 \
+    ro.sf.lcd_density=160
+
 # REVERTME: set legacy configuration if needed
 ifneq (,$(wildcard build/core/combo/arch/x86/x86-slm.mk))
 include device/asus/fugu/BoardConfig_legacy.mk

@@ -85,3 +85,6 @@ override PART_MOUNT_OVERRIDE_FILE := \
 override PART_MOUNT_OVERRIDE_FILES := \
     device/intel/common/storage/part_mount_override.json \
     device/intel/moorefield/storage/part_mount_override.json
+
+# All boot class paths for extensions
+PRODUCT_BOOT_JARS := $(PRODUCT_BOOT_JARS):com.intel.multidisplay:com.intel.config:com.intel.cam.api:com.intel.nfc.adapteraddon

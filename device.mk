@@ -54,6 +54,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     ia_watchdogd
 
+# IMG graphics
+PRODUCT_PACKAGES += \
+    IMG_graphics
+
 $(call inherit-product-if-exists, vendor/intel/fugu/device-vendor.mk)
 $(call inherit-product, device/asus/fugu/device_legacy.mk)
 

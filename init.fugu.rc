@@ -19,6 +19,11 @@ import init.fugu.usb.rc
 on early-init
     mount debugfs debugfs /sys/kernel/debug
 
+    # IMG Graphics
+    chown system system /dev/dri/card0
+    chmod 0666 /dev/dri/card0
+    symlink /dev/dri/card0 /dev/card0
+
 on init
     # See storage config details at http://source.android.com/tech/storage/
     mkdir /mnt/shell/emulated 0700 shell shell
@@ -54,6 +59,19 @@ on boot
 # Increased technology maximums should be reflected here.
     write /proc/sys/net/core/rmem_max  1220608
     write /proc/sys/net/core/wmem_max  1220608
+
+    # IMG Graphics
+    chown system system /dev/pvr_sync
+    chmod 666 /dev/pvr_sync
+
+    chown system system /dev/card0
+    chown system system /sys/class/backlight/psb-bl/brightness
+    chown system system /sys/class/backlight/psb-bl/max_brightness
+    chown system system /sys/class/backlight/psb-bl/actual_brightness
+    chmod 0666 /dev/card0
+    chmod 0664 /sys/class/backlight/psb-bl/brightness
+    chmod 0664 /sys/class/backlight/psb-bl/max_brightness
+    chmod 0664 /sys/class/backlight/psb-bl/actual_brightness
 
 on post-fs
     # Performance tweaks for interactive governor
@@ -174,3 +192,8 @@ on property:sys.boot_completed=1
 
 on property:init.svc.recovery=running
     write /sys/devices/virtual/misc/watchdog/counter "0"
+
+service pvrsrvctl /system/vendor/bin/pvrsrvctl --no-module --start
+    class core
+    oneshot
+    user root
