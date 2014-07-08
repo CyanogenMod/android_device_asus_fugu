@@ -34,6 +34,8 @@ on init
     symlink /storage/emulated/legacy /storage/sdcard0
     symlink /mnt/shell/emulated/0 /storage/emulated/legacy
 
+    start partlink
+
 on fs
     mount_all ./fstab.fugu
     setprop ro.crypto.fuse_sdcard true
@@ -153,3 +155,6 @@ service bugreport /system/bin/dumpstate -d -p -B \
     disabled
     oneshot
     keycodes 114 115 116
+
+service partlink /sbin/partlink
+    oneshot
