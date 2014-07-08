@@ -111,3 +111,7 @@ TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
 BOARD_USES_48000_AUDIO_CAPTURE_SAMPLERATE_FOR_WIDI:= true
 #Support background music playback for Widi Multitasking
 ENABLE_BACKGROUND_MUSIC := true
+
+# Sign bootimage
+MKBOOTIMG := device/asus/fugu/legacy_sign
+$(MKBOOTIMG): $(PRODUCT_OUT)/bootstub
