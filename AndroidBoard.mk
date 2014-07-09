@@ -16,3 +16,5 @@
 
 LOCAL_PATH := $(my-dir)
 include $(LOCAL_PATH)/AndroidKernel.mk
+
+$(MKBOOTIMG): $(PRODUCT_OUT)/bootstub $(HOST_OUT_EXECUTABLES)/xfstk-stitcher

@@ -59,11 +59,13 @@ PRODUCT_PACKAGES += \
     IMG_graphics \
     hwcomposer.moorefield
 
+ifneq (,$(wildcard build/core/combo/arch/x86/x86-slm.mk))
 # psb video
 PRODUCT_PACKAGES += \
     pvr_drv_video \
     msvdx_bin \
     topaz_bin
+endif
 
 # pvr
 PRODUCT_PACKAGES += \

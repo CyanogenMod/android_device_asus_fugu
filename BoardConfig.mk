@@ -24,7 +24,7 @@ TARGET_CPU_SMP := true
 
 TARGET_BOARD_PLATFORM := moorefield
 TARGET_BOOTLOADER_BOARD_NAME := fugu
-
+TARGET_NO_RECOVERY := true
 TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2147483648
 BOARD_FLASH_BLOCK_SIZE := 2048
@@ -62,7 +62,6 @@ USE_OPENGL_RENDERER := true
 # DPST
 INTEL_DPST := true
 
+
 # REVERTME: set legacy configuration if needed
-ifneq (,$(wildcard build/core/combo/arch/x86/x86-slm.mk))
 include device/asus/fugu/BoardConfig_legacy.mk
-endif

@@ -13,8 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+ifneq (,$(wildcard build/core/combo/arch/x86/x86-slm.mk))
 TARGET_ARCH_VARIANT := x86-slm
+# All boot class paths for extensions
+PRODUCT_BOOT_JARS := $(PRODUCT_BOOT_JARS):com.intel.multidisplay:com.intel.config:com.intel.cam.api:com.intel.nfc.adapteraddon
+# WIDI
+INTEL_WIDI := true
+INTEL_WIDI_MERRIFIELD := true
+TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
+endif
 # TODO: Add kernel headers in device/asus/fugu only
 TARGET_BOARD_KERNEL_HEADERS := device/intel/common/kernel-headers
 
@@ -86,9 +93,6 @@ override PART_MOUNT_OVERRIDE_FILES := \
     device/intel/common/storage/part_mount_override.json \
     device/intel/moorefield/storage/part_mount_override.json
 
-# All boot class paths for extensions
-PRODUCT_BOOT_JARS := $(PRODUCT_BOOT_JARS):com.intel.multidisplay:com.intel.config:com.intel.cam.api:com.intel.nfc.adapteraddon
-
 
 # Needed to build PCG JIT compiler for dalvik.
 USE_INTEL_IPP := true
@@ -104,17 +108,13 @@ BCUHAL_MRFLD := true
 # WIFI
 BOARD_HAVE_WIFI := true
 
-# WIDI
-INTEL_WIDI := true
-INTEL_WIDI_MERRIFIELD := true
-TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
 BOARD_USES_48000_AUDIO_CAPTURE_SAMPLERATE_FOR_WIDI:= true
 #Support background music playback for Widi Multitasking
 ENABLE_BACKGROUND_MUSIC := true
 
 # Sign bootimage
 MKBOOTIMG := device/asus/fugu/legacy_sign
-$(MKBOOTIMG): $(PRODUCT_OUT)/bootstub $(HOST_OUT_EXECUTABLES)/xfstk-stitcher
+BOARD_CUSTOM_MKBOOTIMG := $(MKBOOTIMG)
 
 # Kernel cmdline
 BOARD_KERNEL_CMDLINE := init=/init pci=noearly console=logk0 console=ttyS0 earlyprintk=nologger loglevel=8 vmalloc=256M androidboot.hardware=fugu androidboot.serialno=01234567890123456789 snd_pcm.maximum_substreams=8 ptrace.ptrace_can_access=1 allow_factory=1 ip=50.0.0.2:50.0.0.1::255.255.255.0::usb0:on
