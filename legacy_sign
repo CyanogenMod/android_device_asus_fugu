@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-LOCAL_SIGN=true vendor/intel/support/mkbootimg --sign-with xfstk_no_xml --bootstub out/target/product/fugu/bootstub --type mos --spi-flag 1 $*
+LOCAL_SIGN=true vendor/intel/support/mkbootimg --sign-with xfstk_no_xml --bootstub out/target/product/fugu/bootstub --type mos --spi-flag 1 "$@"
 
 
