@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-#echo "[$0] [$*]"
-#exit 1
 
-LOCAL_SIGN=true vendor/intel/support/mkbootimg --sign-with xfstk_no_xml --bootstub out/target/product/fugu/bootstub  --kernel out/target/product/fugu/kernel --ramdisk out/target/product/fugu/ramdisk.img --cmdline "init=/init pci=noearly console=logk0 console=ttyS0 earlyprintk=nologger loglevel=8 vmalloc=256M androidboot.hardware=fugu androidboot.spid="xxxx:xxxx:xxxx:xxxx:xxxx:xxxx" androidboot.serialno=01234567890123456789 snd_pcm.maximum_substreams=8 ptrace.ptrace_can_access=1 allow_factory=1 ip=50.0.0.2:50.0.0.1::255.255.255.0::usb0:on" --type mos --output out/target/product/fugu/boot.img --spi-flag 1
+LOCAL_SIGN=true vendor/intel/support/mkbootimg --sign-with xfstk_no_xml --bootstub out/target/product/fugu/bootstub --type mos --spi-flag 1 $*
 
 
