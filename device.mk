@@ -21,7 +21,7 @@ TARGET_KERNEL_ARCH ?= x86_64
 # Check for availability of kernel source
 ifneq ($(wildcard $(KERNEL_SRC_DIR)/Makefile),)
   # Give precedence to TARGET_PREBUILT_KERNEL
-  ifeq ($(TAGET_PREBUILT_KERNEL),)
+  ifeq ($(TARGET_PREBUILT_KERNEL),)
     TARGET_KERNEL_BUILT_FROM_SOURCE := true
   endif
 endif
