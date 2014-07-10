@@ -45,6 +45,9 @@ on init
     chmod 0750 /usr/bin/ia_watchdogd
 
 on fs
+    mkdir /logs 0770 system log
+    mkdir /factory 0775 system system
+
     mount_all ./fstab.fugu
     setprop ro.crypto.fuse_sdcard true
 
