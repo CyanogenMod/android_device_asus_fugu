@@ -13,7 +13,7 @@ KERNEL_TOOLCHAIN_ARCH := $(TARGET_KERNEL_ARCH)
 else
 KERNEL_TOOLCHAIN_ARCH := i686
 endif
-KERNEL_EXTRA_FLAGS := ANDROID_TOOLCHAIN_FLAGS=-mno-android
+KERNEL_EXTRA_FLAGS := ANDROID_TOOLCHAIN_FLAGS="-mno-android -Werror"
 KERNEL_CROSS_COMP := $(ANDROID_BUILD_TOP)/prebuilts/gcc/$(HOST_PREBUILT_TAG)/host/$(KERNEL_TOOLCHAIN_ARCH)-linux-glibc2.7-4.6/bin/$(KERNEL_TOOLCHAIN_ARCH)-linux-
 
 KERNEL_CCACHE :=$(firstword $(TARGET_CC))
@@ -138,30 +138,7 @@ TAGS tags gtags cscope: $(KERNEL_CONFIG)
 #$(3) is extra flags
 
 define build_kernel_module
-.PHONY: $(2)
-
-$(2): $(KERNEL_BZIMAGE)
-	@echo Building kernel module $(2) in $(1)
-	@mkdir -p $(KERNEL_OUT_DIR)/../../$(1)
-	@+$(KERNEL_BLD_ENV) $(MAKE) -C $(KERNEL_SRC_DIR) $(KERNEL_BLD_FLAGS) M=../../$(1) $(3)
-
-$(2)_install: $(2)
-	@+$(KERNEL_BLD_ENV) $(MAKE) -C $(KERNEL_SRC_DIR) $(KERNEL_BLD_FLAGS) M=../../$(1) $(3) modules_install
-
-$(2)_clean:
-	@echo Cleaning kernel module $(2) in $(1)
-	@$(KERNEL_BLD_ENV) $(MAKE) -C $(KERNEL_SRC_DIR) $(KERNEL_BLD_FLAGS) M=../../$(1) clean
-
-$(addprefix $(2)_,TAGS tags gtags cscope): $(KERNEL_CONFIG)
-	@$(KERNEL_BLD_ENV) $(MAKE) -C $(KERNEL_SRC_DIR) $(KERNEL_BLD_FLAGS) M=../../$(1) $$(subst $(2)_,,$$@)
-	@rm -f $(1)/$$($$(subst $(2)_,,$$@)_files)
-	@cp -fs $$(addprefix `pwd`/$(KERNEL_OUT_DIR)/,$$($$(subst $(2)_,,$$@)_files)) $(1)/
-
-ifneq ($(NO_KERNEL_EXT_MODULES),true)
-copy_modules_to_root: $(2)_install
-
-clean_kernel: $(2)_clean
-endif
+$(error Use of external Kernel modules is not allowed)
 endef
 
 .PHONY: menuconfig xconfig gconfig
