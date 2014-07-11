@@ -118,3 +118,8 @@ BOARD_CUSTOM_MKBOOTIMG := $(MKBOOTIMG)
 
 # Kernel cmdline
 BOARD_KERNEL_CMDLINE := init=/init pci=noearly console=logk0 console=ttyS0 earlyprintk=nologger loglevel=8 vmalloc=256M androidboot.hardware=fugu androidboot.serialno=01234567890123456789 snd_pcm.maximum_substreams=8 ptrace.ptrace_can_access=1 allow_factory=1 ip=50.0.0.2:50.0.0.1::255.255.255.0::usb0:on
+
+# external release
+PRODUCT_OUT := out/target/product/fugu
+HOST_OUT := out/host/linux-x86
+-include device/intel/common/external/external.mk
