@@ -41,7 +41,7 @@ on property:sys.usb.config=none
 
 # adb only USB configuration
 # This should only be used for debugging
-on property:sys.usb.config=iadb
+on property:sys.usb.config=adb
     mkdir /dev/usb-ffs 0770 shell shell
     mkdir /dev/usb-ffs/adb 0770 shell shell
     mount functionfs adb /dev/usb-ffs/adb uid=2000,gid=2000
