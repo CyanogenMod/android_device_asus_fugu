@@ -22,8 +22,6 @@ INTEL_WIDI := true
 INTEL_WIDI_MERRIFIELD := true
 TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
 endif
-# TODO: Add kernel headers in device/asus/fugu only
-TARGET_BOARD_KERNEL_HEADERS := device/intel/common/kernel-headers
 
 #Extend the AOSP path includes
 $(call add-path-map, stlport:external/stlport/stlport \
@@ -82,16 +80,6 @@ $(call add-path-map, stlport:external/stlport/stlport \
         libstagefright-wifi-display:frameworks/av/media/libstagefright/wifi-display \
         libffi:external/libffi/include \
         libffi-x86:external/libffi/linux-x86)
-
-DEVICE_PACKAGE_OVERLAYS := device/intel/common/overlays
-
-# A static fstab will be used as in device.mk -> PRODUCT_COPY_FILES for fstab.fugu
-# Use legacy generated fstab.fugu for legacy enforced build tree
-override PART_MOUNT_OVERRIDE_FILE := \
-    device/intel/moorefield/storage/part_mount_override.json
-override PART_MOUNT_OVERRIDE_FILES := \
-    device/intel/common/storage/part_mount_override.json \
-    device/intel/moorefield/storage/part_mount_override.json
 
 
 # Needed to build PCG JIT compiler for dalvik.

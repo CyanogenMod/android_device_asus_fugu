@@ -18,6 +18,7 @@ KERNEL_SRC_DIR ?= linux/kernel-fugu
 KERNEL_CFG_NAME ?= fugu
 TARGET_KERNEL_ARCH ?= x86_64
 
+
 # Check for availability of kernel source
 ifneq ($(wildcard $(KERNEL_SRC_DIR)/Makefile),)
   # Give precedence to TARGET_PREBUILT_KERNEL
@@ -35,7 +36,7 @@ LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
 endif
 
 PRODUCT_COPY_FILES := \
-	$(LOCAL_KERNEL):kernel
+    $(LOCAL_KERNEL):kernel
 
 endif #TARGET_KERNEL_BUILT_FROM_SOURCE
 
