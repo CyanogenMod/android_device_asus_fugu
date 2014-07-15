@@ -40,6 +40,10 @@ PRODUCT_COPY_FILES := \
 endif #TARGET_KERNEL_BUILT_FROM_SOURCE
 
 
+# Set default USB interface
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    persist.sys.usb.config=mtp
+
 PRODUCT_COPY_FILES := \
     device/asus/fugu/fstab.fugu:root/fstab.fugu \
     device/asus/fugu/init.fugu.rc:root/init.fugu.rc \

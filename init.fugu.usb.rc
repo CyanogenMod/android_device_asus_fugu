@@ -39,22 +39,6 @@ on property:sys.usb.config=none
     write /sys/class/android_usb/android0/bDeviceClass 0
     setprop sys.usb.state ${sys.usb.config}
 
-# adb only USB configuration
-# This should only be used for debugging
-on property:sys.usb.config=adb
-    mkdir /dev/usb-ffs 0770 shell shell
-    mkdir /dev/usb-ffs/adb 0770 shell shell
-    mount functionfs adb /dev/usb-ffs/adb uid=2000,gid=2000
-    write /sys/class/android_usb/android0/f_ffs/aliases adb
-    write /sys/class/android_usb/android0/enable 0
-    write /sys/class/android_usb/android0/idVendor 8087
-    write /sys/class/android_usb/android0/idProduct 0a1f
-    write /sys/class/android_usb/android0/functions adb
-    write /sys/bus/pci/devices/0000:00:02.3/sdis 0
-    write /sys/class/android_usb/android0/enable 1
-    start adbd
-    setprop sys.usb.state ${sys.usb.config}
-
 # this is charging only mode, no need to enable adbd
 on property:sys.usb.config=charging
     stop adbd
