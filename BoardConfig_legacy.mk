@@ -122,7 +122,7 @@ BOARD_KERNEL_CMDLINE += console=logk0 console=ttyS0 earlyprintk=nologger logleve
 BOARD_KERNEL_CMDLINE += androidboot.hardware=fugu androidboot.serialno=01234567890123456789
 BOARD_KERNEL_CMDLINE += snd_pcm.maximum_substreams=8
 BOARD_KERNEL_CMDLINE += ip=50.0.0.2:50.0.0.1::255.255.255.0::usb0:on
-BOARD_KERNEL_CMDLINE += allow_factory=1
+BOARD_KERNEL_CMDLINE += allow_factory=1 selinux=0
 
 # external release
 PRODUCT_OUT := out/target/product/fugu
