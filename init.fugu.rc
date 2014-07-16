@@ -55,6 +55,11 @@ on early-boot
     # set RLIMIT_MEMLOCK to 64MB
     setrlimit 8 67108864 67108864
 
+    # Bluetooth
+    chmod 0644 /config/bt/bd_addr.conf
+    setprop ro.bt.bdaddr_path "/config/bt/bd_addr.conf"
+    start bd_prov
+
 on boot
     write /proc/sys/vm/swappiness 0
 
@@ -95,6 +100,12 @@ on post-fs
     chmod 0220 /sys/devices/system/cpu/cpufreq/interactive/touchboostpulse
     chmod 0220 /sys/devices/system/cpu/cpufreq/interactive/boostpulse
 
+    # Bluetooth
+    mkdir /config/bt
+    chown system bluetooth /config/bt
+    chmod 0770 /config/bt
+
+
 on post-fs-data
     mkdir /data/media 0770 media_rw media_rw
 
@@ -104,6 +115,14 @@ on post-fs-data
     mkdir /data/misc/dhcp 0770 dhcp wifi
 
     mkdir /data/tombstones 0771 system system
+
+    # Bluetooth
+    chmod 0660 /sys/class/rfkill/rfkill0/state
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/state
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/type
+    chown bluetooth net_bt_stack /dev/ttyMFD0
+    # Bluetooth disable LPM
+    write /sys/devices/pci0000\:00/0000\:00\:04.1/power/control on
 
     # Create directory used by audio subsystem
     mkdir /data/misc/audio 0770 audio audio
@@ -157,6 +176,7 @@ service iprenew_p2p /system/bin/dhcpcd -n
     disabled
     oneshot
 
+# Bluetooth related services
 service dhcpcd_bt-pan /system/bin/logwrapper /system/bin/dhcpcd -ABKL
     class main
     group bluetooth wifi system dhcp
@@ -165,6 +185,13 @@ service dhcpcd_bt-pan /system/bin/logwrapper /system/bin/dhcpcd -ABKL
 
 service iprenew_bt-pan /system/bin/logwrapper /system/bin/dhcpcd -n
     group bluetooth system dhcp
+    disabled
+    oneshot
+
+service bd_prov /system/bin/bd_prov
+    class core
+    user system
+    group system bluetooth security
     disabled
     oneshot
 

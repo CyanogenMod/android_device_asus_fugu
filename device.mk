@@ -59,6 +59,12 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     ia_watchdogd
 
+# Bluetooth
+PRODUCT_PACKAGES += \
+    bt_bcm4339 \
+    bt_bcm43241 \
+    bt_bcm4354
+
 # IMG graphics
 PRODUCT_PACKAGES += \
     IMG_graphics \
