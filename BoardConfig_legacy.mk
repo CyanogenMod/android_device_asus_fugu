@@ -100,10 +100,6 @@ BOARD_USES_48000_AUDIO_CAPTURE_SAMPLERATE_FOR_WIDI:= true
 #Support background music playback for Widi Multitasking
 ENABLE_BACKGROUND_MUSIC := true
 
-# Sign bootimage
-MKBOOTIMG := device/asus/fugu/legacy_sign
-BOARD_CUSTOM_MKBOOTIMG := $(MKBOOTIMG)
-
 # Kernel cmdline
 BOARD_KERNEL_CMDLINE := init=/init pci=noearly vmalloc=256M ptrace.ptrace_can_access=1
 BOARD_KERNEL_CMDLINE += console=logk0 console=ttyS0 earlyprintk=nologger loglevel=8

@@ -72,6 +72,8 @@ USE_OPENGL_RENDERER := true
 # DPST
 INTEL_DPST := true
 
+# bootstub as 2nd bootloader
+TARGET_BOOTLOADER_IS_2ND := true
 
 # REVERTME: set legacy configuration if needed
 include device/asus/fugu/BoardConfig_legacy.mk
