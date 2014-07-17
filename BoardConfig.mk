@@ -56,7 +56,12 @@ ADDITIONAL_DEFAULT_PROPERTIES += \
     ro.opengles.version = 196608 \
     ro.sf.lcd_density=160
 
-TARGET_HAS_VPP := true
+INTEL_VA := true
+BUILD_WITH_FULL_STAGEFRIGHT := true
+BOARD_USES_VIDEO := true
+BOARD_USES_WRS_OMXIL_CORE := true
+BOARD_USES_MRST_OMX := true
+USE_HW_VP8 := true
 COMMON_GLOBAL_CFLAGS += -DGFX_BUF_EXT
 
 # enabled to use IMG RS GPU driver

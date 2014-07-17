@@ -32,11 +32,6 @@ PRODUCT_PACKAGES += libpcgdvmjit
 # which crashed while running on Dalvik VM
 PRODUCT_PACKAGES += libcrash
 
-# Intel fake multiple display
-PRODUCT_PACKAGES += \
-    com.intel.multidisplay \
-    com.intel.multidisplay.xml
-
 #Houdini prebuilt
 HOUDINI_ARM_PREBUILTS_DIR := vendor/intel/houdini/arm
 houdini_prebuilt_stamp := $(HOUDINI_ARM_PREBUILTS_DIR)/stamp-prebuilt-done

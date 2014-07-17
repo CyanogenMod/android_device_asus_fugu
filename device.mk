@@ -70,13 +70,68 @@ PRODUCT_PACKAGES += \
     IMG_graphics \
     hwcomposer.moorefield
 
-ifneq (,$(wildcard build/core/combo/arch/x86/x86-slm.mk))
+#Video
+PRODUCT_COPY_FILES += \
+        device/asus/fugu/media_profiles.xml:system/etc/media_profiles.xml \
+        device/asus/fugu/wrs_omxil_components.list:system/etc/wrs_omxil_components.list \
+        device/asus/fugu/media_codecs.xml:system/etc/media_codecs.xml
+
 # psb video
 PRODUCT_PACKAGES += \
-    pvr_drv_video \
-    msvdx_bin \
-    topaz_bin
-endif
+    pvr_drv_video
+
+#video firmware
+PRODUCT_PACKAGES += \
+    msvdx.bin.0008.0000.0000 \
+    msvdx.bin.0008.0000.0001 \
+    msvdx.bin.0008.0002.0001 \
+    msvdx.bin.0008.0000.0002 \
+    msvdx.bin.000c.0001.0001 \
+    topaz.bin.0008.0000.0000 \
+    topaz.bin.0008.0000.0001 \
+    topaz.bin.0008.0000.0002 \
+    topaz.bin.0008.0002.0001 \
+    topaz.bin.000c.0001.0001 \
+    vsp.bin.0008.0000.0000 \
+    vsp.bin.0008.0000.0001 \
+    vsp.bin.0008.0000.0002 \
+    vsp.bin.0008.0002.0001 \
+    vsp.bin.000c.0001.0001
+# libva
+PRODUCT_PACKAGES += \
+    libva \
+    libva-android \
+    libva-tpi \
+    vainfo
+
+#libstagefrighthw
+PRODUCT_PACKAGES += \
+    libstagefrighthw
+
+# libmix
+PRODUCT_PACKAGES += \
+    libmixvbp_mpeg4 \
+    libmixvbp_h264 \
+    libmixvbp_h264secure \
+    libmixvbp_vc1 \
+    libmixvbp_vp8 \
+    libmixvbp \
+    libva_videodecoder \
+    libva_videoencoder
+
+PRODUCT_PACKAGES += \
+    libwrs_omxil_common \
+    libwrs_omxil_core_pvwrapped \
+    libOMXVideoDecoderAVC \
+    libOMXVideoDecoderH263 \
+    libOMXVideoDecoderMPEG4 \
+    libOMXVideoDecoderWMV \
+    libOMXVideoDecoderVP8 \
+    libOMXVideoEncoderAVC \
+    libOMXVideoEncoderH263 \
+    libOMXVideoEncoderMPEG4 \
+    libOMXVideoEncoderVP8
+
 
 # pvr
 PRODUCT_PACKAGES += \
