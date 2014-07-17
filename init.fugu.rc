@@ -79,6 +79,9 @@ on boot
     chmod 0664 /sys/class/backlight/psb-bl/max_brightness
     chmod 0664 /sys/class/backlight/psb-bl/actual_brightness
 
+    # Wifi
+    setprop wifi.interface wlan0
+
 on post-fs
     # Performance tweaks for interactive governor
     chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq

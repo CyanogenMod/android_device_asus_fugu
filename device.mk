@@ -92,9 +92,9 @@ PRODUCT_PACKAGES += \
 
 #Video
 PRODUCT_COPY_FILES += \
-        device/asus/fugu/media_profiles.xml:system/etc/media_profiles.xml \
-        device/asus/fugu/wrs_omxil_components.list:system/etc/wrs_omxil_components.list \
-        device/asus/fugu/media_codecs.xml:system/etc/media_codecs.xml
+    device/asus/fugu/media_profiles.xml:system/etc/media_profiles.xml \
+    device/asus/fugu/wrs_omxil_components.list:system/etc/wrs_omxil_components.list \
+    device/asus/fugu/media_codecs.xml:system/etc/media_codecs.xml
 
 # psb video
 xxxPRODUCT_PACKAGES += \
@@ -162,6 +162,24 @@ PRODUCT_PACKAGES += \
     libdrm \
     dristat \
     drmstat
+
+# Wifi
+PRODUCT_PACKAGES += \
+    fw_bcmdhd.bin_4339_a0  \
+    fw_bcmdhd.bin_43241_b4 \
+    fw_bcmdhd.bin_4354_a1 \
+    bcmdhd_aob.cal_4339_a0_edge \
+    bcmdhd_aob.cal_4339_a0_level_lp \
+    bcmdhd_aob.cal_43241_b4 \
+    bcmdhd_aob.cal_4354_a1 \
+    wpa_supplicant
+
+PRODUCT_COPY_FILES += \
+    device/asus/fugu/wpa_supplicant.conf:/system/etc/wifi/wpa_supplicant.conf
+
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
+    frameworks/native/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml
 
 $(call inherit-product-if-exists, vendor/intel/fugu/device-vendor.mk)
 
