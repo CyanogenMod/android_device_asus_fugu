@@ -14,12 +14,15 @@ else
 KERNEL_TOOLCHAIN_ARCH := i686
 endif
 KERNEL_EXTRA_FLAGS := ANDROID_TOOLCHAIN_FLAGS="-mno-android -Werror"
-KERNEL_CROSS_COMP := $(ANDROID_BUILD_TOP)/prebuilts/gcc/$(HOST_PREBUILT_TAG)/host/$(KERNEL_TOOLCHAIN_ARCH)-linux-glibc2.7-4.6/bin/$(KERNEL_TOOLCHAIN_ARCH)-linux-
+KERNEL_CROSS_COMP := \
+  $(patsubst %gcc,%,$(firstword \
+    $(wildcard $(ANDROID_BUILD_TOP)/prebuilts/gcc/$(HOST_PREBUILT_TAG)/host/$(KERNEL_TOOLCHAIN_ARCH)-linux-glibc2.7-4.6/bin/$(KERNEL_TOOLCHAIN_ARCH)-linux-gcc) \
+    $(wildcard $(ANDROID_BUILD_TOP)/prebuilts/gcc/$(HOST_PREBUILT_TAG)/host/$(KERNEL_TOOLCHAIN_ARCH)-linux-glibc2.11-4.6/bin/$(KERNEL_TOOLCHAIN_ARCH)-linux-gcc)))
 
 KERNEL_CCACHE :=$(firstword $(TARGET_CC))
 KERNEL_PATH := $(ANDROID_BUILD_TOP)/vendor/intel/support
 ifeq ($(notdir $(KERNEL_CCACHE)),ccache)
-KERNEL_CROSS_COMP := "ccache $(KERNEL_CROSS_COMP)"
+KERNEL_CROSS_COMP := "$(realpath $(KERNEL_CCACHE)) $(KERNEL_CROSS_COMP)"
 KERNEL_PATH := $(KERNEL_PATH):$(ANDROID_BUILD_TOP)/$(dir $(KERNEL_CCACHE))
 endif
 
