@@ -113,6 +113,6 @@ BOARD_KERNEL_CMDLINE += ip=50.0.0.2:50.0.0.1::255.255.255.0::usb0:on
 BOARD_KERNEL_CMDLINE += allow_factory=1 selinux=0
 
 # external release
-PRODUCT_OUT := out/target/product/fugu
+PRODUCT_OUT := out/target/product/$(TARGET_DEVICE)
 HOST_OUT := out/host/linux-x86
 -include device/intel/common/external/external.mk
