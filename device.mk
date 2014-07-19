@@ -76,6 +76,15 @@ PRODUCT_PACKAGES += \
 #PRODUCT_PACKAGES += \
 #    ia_watchdogd
 
+# Hdmi audio
+PRODUCT_PACKAGES += \
+    libtinyalsa \
+    audio.hdmi.moorefield
+
+# specific management of audio_policy.conf
+PRODUCT_COPY_FILES += \
+    device/asus/fugu/audio_policy.conf:system/etc/audio_policy.conf
+
 # Bluetooth
 PRODUCT_PACKAGES += \
     bt_bcm4339 \
