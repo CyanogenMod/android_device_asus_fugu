@@ -119,8 +119,6 @@ on post-fs-data
     chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/state
     chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/type
     chown bluetooth net_bt_stack /dev/ttyMFD0
-    # Bluetooth disable LPM
-    write /sys/devices/pci0000\:00/0000\:00\:04.1/power/control on
 
     # Create directory used by audio subsystem
     mkdir /data/misc/audio 0770 audio audio
