@@ -118,9 +118,9 @@ on post-fs-data
     mkdir /data/tombstones 0771 system system
 
     # Bluetooth
-    chmod 0660 /sys/class/rfkill/rfkill0/state
-    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/state
-    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/type
+    chmod 0660 /sys/class/rfkill/rfkill2/state
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill2/state
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill2/type
     chown bluetooth net_bt_stack /dev/ttyMFD0
 
     # Create directory used by audio subsystem
