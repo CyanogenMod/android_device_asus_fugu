@@ -30,7 +30,7 @@ endif
 ifneq ($(TARGET_KERNEL_BUILT_FROM_SOURCE), true)
 # Use prebuilt kernel
 ifeq ($(TARGET_PREBUILT_KERNEL),)
-LOCAL_KERNEL := device/asus/fugu-kernel/kernel
+LOCAL_KERNEL := device/asus/fugu-kernel/bzImage
 else
 LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
 endif
@@ -45,7 +45,7 @@ endif #TARGET_KERNEL_BUILT_FROM_SOURCE
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     persist.sys.usb.config=mtp
 
-PRODUCT_COPY_FILES := \
+PRODUCT_COPY_FILES += \
     device/asus/fugu/fstab.fugu:root/fstab.fugu \
     device/asus/fugu/init.fugu.rc:root/init.fugu.rc \
     device/asus/fugu/init.fugu.usb.rc:root/init.fugu.usb.rc \
