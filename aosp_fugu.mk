@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+$(call inherit-product, device/asus/fugu/full_fugu.mk)
 
-PRODUCT_MAKEFILES := \
-     $(LOCAL_DIR)/aosp_fugu.mk \
-     $(LOCAL_DIR)/full_fugu.mk
+PRODUCT_NAME := aosp_fugu
