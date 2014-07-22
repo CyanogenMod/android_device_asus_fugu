@@ -40,6 +40,8 @@ PRODUCT_COPY_FILES := \
 
 endif #TARGET_KERNEL_BUILT_FROM_SOURCE
 
+DEVICE_PACKAGE_OVERLAYS := \
+    device/asus/fugu/overlay
 
 # Set default USB interface
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
