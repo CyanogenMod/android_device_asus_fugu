@@ -39,8 +39,6 @@ on init
     symlink /storage/emulated/legacy /storage/sdcard0
     symlink /mnt/shell/emulated/0 /storage/emulated/legacy
 
-    start partlink
-
     chown system system /usr/bin/ia_watchdogd
     chmod 0750 /usr/bin/ia_watchdogd
 
@@ -206,9 +204,6 @@ service bugreport /system/bin/dumpstate -d -p -B \
     disabled
     oneshot
     keycodes 114 115 116
-
-service partlink /sbin/partlink
-    oneshot
 
 service watchdogd /usr/bin/ia_watchdogd
     class core
