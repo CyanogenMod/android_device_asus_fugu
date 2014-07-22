@@ -61,7 +61,8 @@ PRODUCT_COPY_FILES += \
     device/asus/fugu/fstab.fugu:root/fstab.fugu \
     device/asus/fugu/init.fugu.rc:root/init.fugu.rc \
     device/asus/fugu/init.fugu.usb.rc:root/init.fugu.usb.rc \
-    device/asus/fugu/ueventd.fugu.rc:root/ueventd.fugu.rc
+    device/asus/fugu/ueventd.fugu.rc:root/ueventd.fugu.rc \
+    device/asus/fugu/init.recovery.fugu.rc:root/init.recovery.fugu.rc
 
 # ia_watchdog - temporary prebuilt
 PRODUCT_COPY_FILES += \
