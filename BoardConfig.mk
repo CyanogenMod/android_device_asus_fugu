@@ -32,6 +32,14 @@ BOARD_FLASH_BLOCK_SIZE := 2048
 # customize the malloced address to be 16-byte aligned
 BOARD_MALLOC_ALIGNMENT := 16
 
+# Kernel cmdline
+BOARD_KERNEL_CMDLINE := pci=noearly vmalloc=256M ptrace.ptrace_can_access=1
+BOARD_KERNEL_CMDLINE += console=logk0 console=ttyS0 earlyprintk=nologger loglevel=8
+BOARD_KERNEL_CMDLINE += androidboot.hardware=fugu androidboot.serialno=01234567890123456789
+BOARD_KERNEL_CMDLINE += snd_pcm.maximum_substreams=8
+BOARD_KERNEL_CMDLINE += ip=50.0.0.2:50.0.0.1::255.255.255.0::usb0:on
+BOARD_KERNEL_CMDLINE += allow_factory=1 selinux=0
+
 # Security
 BUILD_WITH_SECURITY_FRAMEWORK := chaabi_token
 BUILD_WITH_CHAABI_SUPPORT := true
@@ -75,5 +83,8 @@ INTEL_DPST := true
 # bootstub as 2nd bootloader
 TARGET_BOOTLOADER_IS_2ND := true
 
-# REVERTME: set legacy configuration if needed
-include device/asus/fugu/BoardConfig_legacy.mk
+# Use the non-open-source parts, if they're present
+-include vendor/asus/fugu/BoardConfigVendor.mk
+
+# Recipes to generate prebuilts
+-include device/intel/common/external/external.mk
