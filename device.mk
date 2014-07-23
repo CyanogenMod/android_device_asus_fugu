@@ -53,13 +53,17 @@ PRODUCT_COPY_FILES += \
     device/asus/fugu/init.fugu.usb.rc:root/init.fugu.usb.rc \
     device/asus/fugu/ueventd.fugu.rc:root/ueventd.fugu.rc
 
+# ia_watchdog - temporary prebuilt
+PRODUCT_COPY_FILES += \
+    device/asus/fugu/ia_watchdogd:root/usr/bin/ia_watchdogd
+
 # Use partlink block devices
 PRODUCT_PACKAGES += \
     partlink
 
 # Add kernel watchdog daemon
-PRODUCT_PACKAGES += \
-    ia_watchdogd
+#PRODUCT_PACKAGES += \
+#    ia_watchdogd
 
 # Bluetooth
 PRODUCT_PACKAGES += \
@@ -146,6 +150,5 @@ PRODUCT_PACKAGES += \
     drmstat
 
 $(call inherit-product-if-exists, vendor/intel/fugu/device-vendor.mk)
-$(call inherit-product, device/asus/fugu/device_legacy.mk)
 
-PRODUCT_CHARACTERISTICS := tablet
+#PRODUCT_CHARACTERISTICS := tablet
