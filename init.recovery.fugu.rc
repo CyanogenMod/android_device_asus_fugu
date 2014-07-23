@@ -1,0 +1,18 @@
+on init
+    start partlink
+    wait /dev/block/platform/intel/by-label/userdata 1
+
+    chown system system /usr/bin/ia_watchdogd
+    chmod 0750 /usr/bin/ia_watchdogd
+
+service partlink /sbin/partlink
+    oneshot
+
+service watchdogd /usr/bin/ia_watchdogd
+    user system
+    group system
+    oneshot
+
+# Reset the watchdog counter once boot is completed
+on property:init.svc.recovery=running
+    write /sys/devices/virtual/misc/watchdog/counter "0"
