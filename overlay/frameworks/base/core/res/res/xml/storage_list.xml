@@ -23,6 +23,7 @@
     <!-- removable is not set in nosdcard product -->
     <storage
              android:storageDescription="@string/storage_internal"
+             android:primary="true"
              android:emulated="true"
              android:mtpReserve="100"/>
 
