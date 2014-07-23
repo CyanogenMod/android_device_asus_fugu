@@ -40,6 +40,16 @@ PRODUCT_COPY_FILES := \
 
 endif #TARGET_KERNEL_BUILT_FROM_SOURCE
 
+# Need AppWidget permission to prevent from Launcher's crash.
+# TODO(pattjin): Remove this when the TV Launcher is used, which does not support AppWidget.
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.software.app_widgets.xml:system/etc/permissions/android.software.app_widgets.xml
+
+PRODUCT_AAPT_CONFIG := xlarge hdpi xhdpi
+PRODUCT_AAPT_PREF_CONFIG := xhdpi
+
+PRODUCT_CHARACTERISTICS := nosdcard
+
 DEVICE_PACKAGE_OVERLAYS := \
     device/asus/fugu/overlay
 
