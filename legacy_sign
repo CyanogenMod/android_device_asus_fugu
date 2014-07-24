@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-LOCAL_SIGN=true vendor/intel/support/mkbootimg --sign-with xfstk_no_xml --bootstub $OUT/bootstub --type mos --spi-flag 1 "$@"
