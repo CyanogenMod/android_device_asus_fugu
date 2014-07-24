@@ -80,21 +80,14 @@ can be used:
 
 <MediaCodecs>
     <Decoders>
-        <MediaCodec name="OMX.Intel.VideoDecoder.MPEG4" type="video/mp4v-es" >
-        </MediaCodec>
-        <MediaCodec name="OMX.Intel.VideoDecoder.H263" type="video/3gpp" >
-        </MediaCodec>
-        <MediaCodec name="OMX.Intel.VideoDecoder.AVC" type="video/avc" >
-        </MediaCodec>
-        <MediaCodec name="OMX.Intel.VideoDecoder.AVC.secure" type="video/avc" >
-        </MediaCodec>
-        <MediaCodec name="OMX.Intel.VideoDecoder.WMV" type="video/x-ms-wmv" >
-        </MediaCodec>
-        <MediaCodec name="OMX.Intel.VideoDecoder.VP8" type="video/x-vnd.on2.vp8" >
-        </MediaCodec>
-
-        <MediaCodec name="OMX.Intel.sw_vd.h265" type="video/hevc" >
-        </MediaCodec>
+        <MediaCodec name="OMX.Intel.VideoDecoder.MPEG4" type="video/mp4v-es" />
+        <MediaCodec name="OMX.Intel.VideoDecoder.H263" type="video/3gpp" />
+        <MediaCodec name="OMX.Intel.VideoDecoder.AVC" type="video/avc" />
+        <MediaCodec name="OMX.Intel.VideoDecoder.AVC.secure" type="video/avc" />
+        <MediaCodec name="OMX.Intel.VideoDecoder.WMV" type="video/x-ms-wmv" />
+        <MediaCodec name="OMX.Intel.VideoDecoder.VP8" type="video/x-vnd.on2.vp8" />
+        <MediaCodec name="OMX.Intel.VideoDecoder.VP9.hwr" type="video/x-vnd.on2.vp9" />
+        <MediaCodec name="OMX.Intel.sw_vd.h265" type="video/hevc" />
 
         <MediaCodec name="OMX.google.mp3.decoder" type="audio/mpeg" />
         <MediaCodec name="OMX.google.amrnb.decoder" type="audio/3gpp" />
