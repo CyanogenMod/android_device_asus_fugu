@@ -16,3 +16,4 @@
 $(call inherit-product, device/asus/fugu/full_fugu.mk)
 
 PRODUCT_NAME := aosp_fugu
+
