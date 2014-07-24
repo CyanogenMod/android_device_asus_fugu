@@ -29,6 +29,8 @@ TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2147483648
 BOARD_FLASH_BLOCK_SIZE := 2048
 
+TARGET_DROIDBOOT_LIBS := libintel_droidboot
+
 # customize the malloced address to be 16-byte aligned
 BOARD_MALLOC_ALIGNMENT := 16
 
