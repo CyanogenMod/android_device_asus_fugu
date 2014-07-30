@@ -81,6 +81,9 @@ PRODUCT_PACKAGES += \
     bt_bcm43241 \
     bt_bcm4354
 
+PRODUCT_COPY_FILES += \
+    device/asus/fugu/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf
+
 # IMG graphics
 PRODUCT_PACKAGES += \
     IMG_graphics \
