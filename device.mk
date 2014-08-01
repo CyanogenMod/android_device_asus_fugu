@@ -187,14 +187,11 @@ PRODUCT_PACKAGES += \
 
 # Wifi
 PRODUCT_PACKAGES += \
-    fw_bcmdhd.bin_4339_a0  \
-    fw_bcmdhd.bin_43241_b4 \
-    fw_bcmdhd.bin_4354_a1 \
-    bcmdhd_aob.cal_4339_a0_edge \
-    bcmdhd_aob.cal_4339_a0_level_lp \
-    bcmdhd_aob.cal_43241_b4 \
-    bcmdhd_aob.cal_4354_a1 \
-    wpa_supplicant
+    libwpa_client \
+    lib_driver_cmd_bcmdhd \
+    hostapd \
+    wpa_supplicant \
+    bcmdhd.cal
 
 PRODUCT_COPY_FILES += \
     device/asus/fugu/wpa_supplicant.conf:/system/etc/wifi/wpa_supplicant.conf
@@ -214,3 +211,6 @@ PRODUCT_COPY_FILES += \
 
 $(call inherit-product-if-exists, vendor/asus/fugu/device-vendor.mk)
 $(call inherit-product-if-exists, vendor/intel/PRIVATE/fugu/device-vendor.mk)
+$(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4354/device-bcm.mk)
+
+#PRODUCT_CHARACTERISTICS := tablet
