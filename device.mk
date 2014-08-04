@@ -109,7 +109,7 @@ PRODUCT_COPY_FILES += \
     device/asus/fugu/media_codecs.xml:system/etc/media_codecs.xml
 
 # psb video
-xxxPRODUCT_PACKAGES += \
+PRODUCT_PACKAGES += \
     pvr_drv_video
 
 #video firmware
@@ -141,7 +141,7 @@ PRODUCT_PACKAGES += \
     libstagefrighthw
 
 # libmix
-xxxPRODUCT_PACKAGES += \
+PRODUCT_PACKAGES += \
     libmixvbp_mpeg4 \
     libmixvbp_h264 \
     libmixvbp_h264secure \
@@ -151,7 +151,7 @@ xxxPRODUCT_PACKAGES += \
     libva_videodecoder \
     libva_videoencoder
 
-xxxPRODUCT_PACKAGES += \
+PRODUCT_PACKAGES += \
     libwrs_omxil_common \
     libwrs_omxil_core_pvwrapped \
     libOMXVideoDecoderAVC \
