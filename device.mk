@@ -71,10 +71,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/asus/fugu/ia_watchdogd:root/usr/bin/ia_watchdogd
 
-# Use partlink block devices
-PRODUCT_PACKAGES += \
-    partlink
-
 # Add kernel watchdog daemon
 #PRODUCT_PACKAGES += \
 #    ia_watchdogd

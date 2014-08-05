@@ -8,8 +8,11 @@ on init
 
     symlink /system/etc /etc
 
-    start partlink
-    wait /dev/block/platform/intel/by-label/userdata 1
+    # Android creates by-name disk links with the disk controller
+    # in the generated path, so that the names pulled out of the GPT
+    # can be associated with the correct disk. Create a shortcut to
+    # /dev/block/by-name so that we can use the same fstabs everywhere.
+    symlink /dev/block/pci/pci0000:00/0000:00:01.0/by-name /dev/block/by-name
 
     mount /tmp /tmp tmpfs
     mount /data /data tmpfs
@@ -68,7 +71,6 @@ on property:sys.partitioning=0
     mkdir /logs/flashing
     write /logs/flashing/blankphone_file ""
     start apk_logfs
-    start partlink
 
 on property:sys.forcecoldboot=yes
     write /sys/module/intel_mid/parameters/force_cold_boot 1
@@ -97,9 +99,6 @@ service console /system/bin/sh
 
 service apk_logfs /system/bin/logcat -b system -b main -b radio -b kernel -n 20 -r5000 -v threadtime -f /logs/aplog
     disabled
-
-service partlink /sbin/partlink
-    oneshot
 
 service watchdogd /usr/bin/ia_watchdogd
     class core

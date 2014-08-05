@@ -1,12 +1,12 @@
 on init
-    start partlink
-    wait /dev/block/platform/intel/by-label/userdata 1
-
     chown system system /usr/bin/ia_watchdogd
     chmod 0750 /usr/bin/ia_watchdogd
 
-service partlink /sbin/partlink
-    oneshot
+    # Android creates by-name disk links with the disk controller
+    # in the generated path, so that the names pulled out of the GPT
+    # can be associated with the correct disk. Create a shortcut to
+    # /dev/block/by-name so that we can use the same fstabs everywhere.
+    symlink /dev/block/pci/pci0000:00/0000:00:01.0/by-name /dev/block/by-name
 
 service watchdogd /usr/bin/ia_watchdogd
     user system
