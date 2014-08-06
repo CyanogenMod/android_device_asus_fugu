@@ -60,10 +60,6 @@ PRODUCT_CHARACTERISTICS := nosdcard
 DEVICE_PACKAGE_OVERLAYS := \
     device/asus/fugu/overlay
 
-# Set default USB interface
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp
-
 PRODUCT_COPY_FILES += \
     device/asus/fugu/fstab.fugu:root/fstab.fugu \
     device/asus/fugu/init.fugu.rc:root/init.fugu.rc \
