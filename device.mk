@@ -196,7 +196,15 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
     frameworks/native/data/etc/android.hardware.bluetooth.xml:system/etc/permissions/android.hardware.bluetooth.xml
 
+# Key layout files
+PRODUCT_COPY_FILES += \
+    vendor/google_athome/virtual-remote.idc:system/usr/idc/virtual-remote.idc \
+    vendor/google_athome/virtual-remote.kl:system/usr/keylayout/virtual-remote.kl \
+    vendor/google_athome/virtual-remote.kcm:system/usr/keychars/virtual-remote.kcm \
+    device/asus/fugu/gpio-keys.idc:system/usr/idc/gpio-keys.idc \
+    device/asus/fugu/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
+    device/asus/fugu/gpio-keys.kcm:system/usr/keychars/gpio-keys.kcm \
+    device/asus/fugu/Spike.kl:system/usr/keylayout/Spike.kl
+
 $(call inherit-product-if-exists, vendor/asus/fugu/device-vendor.mk)
 $(call inherit-product-if-exists, vendor/intel/PRIVATE/fugu/device-vendor.mk)
-
-#PRODUCT_CHARACTERISTICS := tablet
