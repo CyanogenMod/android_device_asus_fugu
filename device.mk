@@ -106,11 +106,20 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     device/asus/fugu/media_profiles.xml:system/etc/media_profiles.xml \
     device/asus/fugu/wrs_omxil_components.list:system/etc/wrs_omxil_components.list \
-    device/asus/fugu/media_codecs.xml:system/etc/media_codecs.xml
+    device/asus/fugu/media_codecs.xml:system/etc/media_codecs.xml \
+    device/asus/fugu/mfx_omxil_core.conf:system/etc/mfx_omxil_core.conf
 
 # psb video
 PRODUCT_PACKAGES += \
     pvr_drv_video
+
+# Media SDK and OMX IL components
+PRODUCT_PACKAGES += \
+    libmfxsw32 \
+    libmfx_omx_core \
+    libmfx_omx_components_sw \
+    libgabi++-mfx \
+    libstlport-mfx
 
 #video firmware
 PRODUCT_PACKAGES += \
