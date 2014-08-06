@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Override for recent app switcher -->
+    <add-resource type="string" name="config_recents_activity"/>
+    <string name="config_recents_activity">com.google.android.canvas.settings/com.google.android.canvas.settings.device.apps.RecentAppsActivity</string>
+    <bool name="config_enableKeyguardService">false</bool>
+</resources>

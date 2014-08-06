@@ -1,0 +1,27 @@
+<resources>
+
+    <!-- Don't allow volume change on the device. -->
+    <bool name="config_useFixedVolume">true</bool>
+
+    <!-- Control the behavior when the user double-taps the home button.
+            0 - Nothing
+            1 - Recent apps view in SystemUI
+         This needs to match the constants in
+         policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
+    -->
+    <integer name="config_doubleTapOnHomeBehavior">1</integer>
+
+    <!-- HDMI-CEC logical device types allowed on the device.
+         Device works as a Playback device only.
+    -->
+    <integer-array name="config_hdmiCecLogicalDeviceType">
+        <item>4</item>
+    </integer-array>
+
+    <!-- Supports MS PlayReady in Chromium WebView -->
+    <string-array name="config_keySystemUuidMapping" translatable="false">
+        <item>"x-com.microsoft.playready,9A04F079-9840-4286-AB92-E65BE0885F95"</item>
+    </string-array>
+
+    <bool name="config_ui_enableFadingMarquee">true</bool>
+</resources>

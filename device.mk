@@ -45,8 +45,15 @@ endif #TARGET_KERNEL_BUILT_FROM_SOURCE
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.app_widgets.xml:system/etc/permissions/android.software.app_widgets.xml
 
-PRODUCT_AAPT_CONFIG := xlarge hdpi xhdpi
+PRODUCT_AAPT_CONFIG := normal hdpi xhdpi
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
+
+# xhdpi, while we are hardcoding the 1080 resolution.
+# when we start doing 720 as well, will need to stop hardcoding this.
+PRODUCT_PROPERTY_OVERRIDES += \
+	ro.sf.lcd_density=320
+
+$(call inherit-product-if-exists, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
 
 PRODUCT_CHARACTERISTICS := nosdcard
 
