@@ -103,12 +103,6 @@ on post-fs
     chmod 0220 /sys/devices/system/cpu/cpufreq/interactive/touchboostpulse
     chmod 0220 /sys/devices/system/cpu/cpufreq/interactive/boostpulse
 
-    # Bluetooth
-    mkdir /config/bt
-    chown system bluetooth /config/bt
-    chmod 0770 /config/bt
-
-
 on post-fs-data
     mkdir /data/media 0770 media_rw media_rw
 
@@ -120,6 +114,7 @@ on post-fs-data
     mkdir /data/tombstones 0771 system system
 
     # Bluetooth
+    setprop ro.bt.bdaddr_path "/factory/bt/bd_addr.conf"
     chmod 0660 /sys/class/rfkill/rfkill2/state
     chown bluetooth net_bt_stack /sys/class/rfkill/rfkill2/state
     chown bluetooth net_bt_stack /sys/class/rfkill/rfkill2/type
