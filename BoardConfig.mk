@@ -81,8 +81,7 @@ SF_VSYNC_EVENT_PHASE_OFFSET_NS := 5000000
 BOARD_EGL_CFG := device/asus/fugu/egl.cfg
 
 ADDITIONAL_DEFAULT_PROPERTIES += \
-    ro.opengles.version = 196608 \
-    ro.sf.lcd_density=160
+    ro.opengles.version = 196608
 
 INTEL_VA := true
 BUILD_WITH_FULL_STAGEFRIGHT := true
