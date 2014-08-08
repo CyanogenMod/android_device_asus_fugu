@@ -39,9 +39,6 @@
 #define AVCT_INCLUDED FALSE
 #define AVRC_INCLUDED FALSE
 
-// TBD: check this
-#define BLE_PRIVACY_SPT FALSE
-
 /* We will support a remote +  4 game controllers.  To be able to
  * allocate sufficient bandwidth for all devices we will restrict the
  * Game Controllers to a sniff interval of 13.75ms.
