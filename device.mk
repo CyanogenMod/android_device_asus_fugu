@@ -207,9 +207,6 @@ PRODUCT_COPY_FILES += \
 
 # Key layout files
 PRODUCT_COPY_FILES += \
-    vendor/google_athome/virtual-remote.idc:system/usr/idc/virtual-remote.idc \
-    vendor/google_athome/virtual-remote.kl:system/usr/keylayout/virtual-remote.kl \
-    vendor/google_athome/virtual-remote.kcm:system/usr/keychars/virtual-remote.kcm \
     device/asus/fugu/gpio-keys.idc:system/usr/idc/gpio-keys.idc \
     device/asus/fugu/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
     device/asus/fugu/gpio-keys.kcm:system/usr/keychars/gpio-keys.kcm \
