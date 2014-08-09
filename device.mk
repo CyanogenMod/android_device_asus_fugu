@@ -79,10 +79,12 @@ PRODUCT_COPY_FILES += \
 #PRODUCT_PACKAGES += \
 #    ia_watchdogd
 
-# Hdmi audio
+# Audio
 PRODUCT_PACKAGES += \
     libtinyalsa \
-    audio.hdmi.moorefield
+    audio.primary.fugu
+
+USE_CUSTOM_AUDIO_POLICY := 1
 
 # specific management of audio_policy.conf
 PRODUCT_COPY_FILES += \
