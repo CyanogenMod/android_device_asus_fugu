@@ -110,7 +110,7 @@ PRODUCT_COPY_FILES += \
     device/asus/fugu/mfx_omxil_core.conf:system/etc/mfx_omxil_core.conf
 
 # psb video
-xxxPRODUCT_PACKAGES += \
+PRODUCT_PACKAGES += \
     pvr_drv_video
 
 # Media SDK and OMX IL components
@@ -150,7 +150,7 @@ PRODUCT_PACKAGES += \
     libstagefrighthw
 
 # libmix
-xxxPRODUCT_PACKAGES += \
+PRODUCT_PACKAGES += \
     libmixvbp_mpeg4 \
     libmixvbp_h264 \
     libmixvbp_h264secure \
@@ -160,7 +160,7 @@ xxxPRODUCT_PACKAGES += \
     libva_videodecoder \
     libva_videoencoder
 
-xxxPRODUCT_PACKAGES += \
+PRODUCT_PACKAGES += \
     libwrs_omxil_common \
     libwrs_omxil_core_pvwrapped \
     libOMXVideoDecoderAVC \
