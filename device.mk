@@ -111,6 +111,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     device/asus/fugu/media_profiles.xml:system/etc/media_profiles.xml \
     device/asus/fugu/wrs_omxil_components.list:system/etc/wrs_omxil_components.list \
+    frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
+    frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
     device/asus/fugu/media_codecs.xml:system/etc/media_codecs.xml \
     device/asus/fugu/mfx_omxil_core.conf:system/etc/mfx_omxil_core.conf
 
