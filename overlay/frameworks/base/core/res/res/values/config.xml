@@ -11,13 +11,6 @@
     -->
     <integer name="config_doubleTapOnHomeBehavior">1</integer>
 
-    <!-- HDMI-CEC logical device types allowed on the device.
-         Device works as a Playback device only.
-    -->
-    <integer-array name="config_hdmiCecLogicalDeviceType">
-        <item>4</item>
-    </integer-array>
-
     <!-- Supports MS PlayReady in Chromium WebView -->
     <string-array name="config_keySystemUuidMapping" translatable="false">
         <item>"x-com.microsoft.playready,9A04F079-9840-4286-AB92-E65BE0885F95"</item>

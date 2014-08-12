@@ -88,6 +88,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     device/asus/fugu/audio_policy.conf:system/etc/audio_policy.conf
 
+# Hdmi CEC: Fugu works as a playback device (4).
+PRODUCT_PROPERTY_OVERRIDES += ro.hdmi.device_type=4
+
 # Bluetooth
 PRODUCT_PACKAGES += \
     bt_bcm4339 \
