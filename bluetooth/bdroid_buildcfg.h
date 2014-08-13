@@ -20,6 +20,8 @@
 #define BTM_DEF_LOCAL_NAME "Fugu"
 #define BTA_DM_COD {0x20, BTM_COD_MAJOR_AUDIO, BTM_COD_MINOR_SET_TOP_BOX}
 
+#define BLE_VND_INCLUDED TRUE
+
 // Force connection interval to 13.75ms
 #define BTM_BLE_CONN_INT_MIN_DEF 11 /* 13.75ms = 11 * 1.25 */
 #define BTM_BLE_CONN_INT_MAX_DEF BTM_BLE_CONN_INT_MIN_DEF
