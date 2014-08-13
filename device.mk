@@ -169,6 +169,7 @@ PRODUCT_PACKAGES += \
     libwrs_omxil_common \
     libwrs_omxil_core_pvwrapped \
     libOMXVideoDecoderAVC \
+    libOMXVideoDecoderAVCSecure \
     libOMXVideoDecoderH263 \
     libOMXVideoDecoderMPEG4 \
     libOMXVideoDecoderWMV \
@@ -210,6 +211,22 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
     frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml
 
+
+#enable Widevine drm
+PRODUCT_PROPERTY_OVERRIDES += drm.service.enabled=true
+
+PRODUCT_PACKAGES += com.google.widevine.software.drm.xml \
+    com.google.widevine.software.drm \
+    libdrmwvmplugin \
+    libwvm \
+    libdrmdecrypt \
+    libWVStreamControlAPI_L1 \
+    libwvdrm_L1
+
+# WV Modular
+PRODUCT_PACKAGES += \
+    libwvdrmengine \
+    liboemcrypto
 
 # Key layout files
 PRODUCT_COPY_FILES += \

@@ -90,6 +90,10 @@ BOARD_USES_WRS_OMXIL_CORE := true
 BOARD_USES_MRST_OMX := true
 USE_HW_VP8 := true
 
+# DRM Protected Video
+BOARD_WIDEVINE_OEMCRYPTO_LEVEL := 1
+USE_INTEL_SECURE_AVC := true
+
 # Settings for the Media SDK library and plug-ins:
 # - USE_MEDIASDK: use Media SDK support or not
 # - MFX_IPP: sets IPP library optimization to use
