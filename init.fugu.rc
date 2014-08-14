@@ -21,8 +21,6 @@ on early-init
     mount debugfs debugfs /sys/kernel/debug
 
     # IMG Graphics
-    chown system system /dev/dri/card0
-    chmod 0666 /dev/dri/card0
     symlink /dev/dri/card0 /dev/card0
 
 on init
@@ -68,15 +66,9 @@ on boot
     write /proc/sys/net/core/rmem_max  1220608
     write /proc/sys/net/core/wmem_max  1220608
 
-    # IMG Graphics
-    chown system system /dev/pvr_sync
-    chmod 666 /dev/pvr_sync
-
-    chown system system /dev/card0
     chown system system /sys/class/backlight/psb-bl/brightness
     chown system system /sys/class/backlight/psb-bl/max_brightness
     chown system system /sys/class/backlight/psb-bl/actual_brightness
-    chmod 0666 /dev/card0
     chmod 0664 /sys/class/backlight/psb-bl/brightness
     chmod 0664 /sys/class/backlight/psb-bl/max_brightness
     chmod 0664 /sys/class/backlight/psb-bl/actual_brightness
