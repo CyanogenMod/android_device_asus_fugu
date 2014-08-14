@@ -103,6 +103,12 @@ on post-fs
     chmod 0220 /sys/devices/system/cpu/cpufreq/interactive/touchboostpulse
     chmod 0220 /sys/devices/system/cpu/cpufreq/interactive/boostpulse
 
+    # SEP
+    chown system system /dev/dx_sep_q0
+    chmod 0666 /dev/dx_sep_q0
+    chown system system /dev/dx_sep_q1
+    chmod 0666 /dev/dx_sep_q1
+
 on post-fs-data
     mkdir /data/media 0770 media_rw media_rw
 
