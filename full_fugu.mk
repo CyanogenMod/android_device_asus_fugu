@@ -14,6 +14,7 @@
 # limitations under the License.
 #
 $(call inherit-product, device/asus/fugu/device.mk)
+$(call inherit-product-if-exists, vendor/intel/moorefield/prebuilts/houdini/houdini.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base.mk)
 
 PRODUCT_NAME := full_fugu
