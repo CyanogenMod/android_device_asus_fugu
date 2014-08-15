@@ -22,7 +22,11 @@ TARGET_ARCH_VARIANT := x86
 TARGET_CPU_ABI := x86
 TARGET_CPU_SMP := true
 
-TARGET_RECOVERY_FSTAB = device/asus/fugu/recovery.fstab
+TARGET_RECOVERY_FSTAB := device/asus/fugu/recovery.fstab
+TARGET_RELEASETOOLS_EXTENSIONS := device/asus/fugu
+TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_fugu
+TARGET_RECOVERY_UI_LIB := librecovery_ui_fugu
+
 TARGET_BOARD_PLATFORM := moorefield
 TARGET_BOOTLOADER_BOARD_NAME := fugu
 TARGET_USERIMAGES_USE_EXT4 := true
