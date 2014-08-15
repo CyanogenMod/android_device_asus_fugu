@@ -99,10 +99,8 @@ status_t ATVAudioPolicyManager::setDeviceConnectionState(audio_devices_t device,
             return BAD_VALUE;
     }
 
-    if (tmp != mAvailableOutputDevices.types()) {
-        gAudioHardwareOutput.updateRouting(tmp);
-        tmp = mAvailableOutputDevices.types();
-    }
+    gAudioHardwareOutput.updateRouting(tmp);
+    tmp = mAvailableOutputDevices.types();
 
     status_t ret = AudioPolicyManager::setDeviceConnectionState(
                     device, state, device_address);
