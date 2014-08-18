@@ -84,7 +84,7 @@ LOCAL_SHARED_LIBRARIES := \
     libmedia \
     libatv_audio
 
-LOCAL_MODULE := audio.primary.$(TARGET_PRODUCT)
+LOCAL_MODULE := audio.primary.fugu
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
 LOCAL_MODULE_TAGS := optional
 

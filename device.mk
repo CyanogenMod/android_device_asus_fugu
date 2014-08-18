@@ -78,7 +78,7 @@ PRODUCT_COPY_FILES += \
 # Audio
 PRODUCT_PACKAGES += \
     libtinyalsa \
-    audio.primary.$(TARGET_PRODUCT)
+    audio.primary.fugu
 
 USE_CUSTOM_AUDIO_POLICY := 1
 
