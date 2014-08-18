@@ -1,5 +1,6 @@
 /dev/block/by-name/boot         /boot         emmc     defaults                                                                defaults
 /dev/block/by-name/recovery     /recovery     emmc     defaults                                                                defaults
+/dev/block/by-name/splashscreen /splashscreen emmc     defaults                                                                defaults
 /dev/block/by-name/fastboot     /fastboot     emmc     defaults                                                                defaults
 /dev/block/by-name/misc         /misc         emmc     defaults                                                                defaults
 /dev/block/by-name/system       /system       ext4     ro,noatime                                                              wait

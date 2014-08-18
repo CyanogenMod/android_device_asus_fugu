@@ -23,25 +23,58 @@ def WriteIfwi(info):
   info.script.AppendExtra('package_extract_file("ifwi.bin", "/tmp/ifwi.bin");')
   info.script.AppendExtra("""fugu.flash_ifwi("/tmp/ifwi.bin");""")
 
-def WriteDroitboot(info):
+def WriteDroidboot(info):
   info.script.WriteRawImage("/fastboot", "droidboot.img")
 
+def WriteSplashscreen(info):
+  info.script.WriteRawImage("/splashscreen", "splashscreen.img")
+
 def WriteBootloader(info, bootloader):
-  header_fmt = "<8sHHII"
+  header_fmt = "<8sHH"
   header_size = struct.calcsize(header_fmt)
-  magic, revision, reserved, ifwi_size, droidboot_size = struct.unpack(
+  magic, revision, reserved = struct.unpack(
     header_fmt, bootloader[:header_size])
 
   assert magic == "BOOTLDR!", "bootloader.img bad magic value"
 
-  ifwi = bootloader[header_size:header_size+ifwi_size]
-  droidboot = bootloader[header_size+ifwi_size:]
+  if revision == 1:
+    offset = header_size;
+    header_v1_fmt = "II"
+    header_v1_size = struct.calcsize(header_v1_fmt)
+    ifwi_size, droidboot_size = struct.unpack(header_v1_fmt, bootloader[offset:offset + header_v1_size])
+    offset += header_v1_size
+    ifwi = bootloader[offset:offset + ifwi_size]
+    offset += ifwi_size
+    droidboot = bootloader[offset:]
+    common.ZipWriteStr(info.output_zip, "droidboot.img", droidboot)
+    common.ZipWriteStr(info.output_zip, "ifwi.bin", ifwi)
+    WriteIfwi(info)
+    WriteDroidboot(info)
+    return
 
-  common.ZipWriteStr(info.output_zip, "droidboot.img", droidboot)
-  common.ZipWriteStr(info.output_zip, "ifwi.bin", ifwi)
+  offset = header_size;
+  while offset < len(bootloader):
+    c_header_fmt = "<8sIBBBB"
+    c_header_size = struct.calcsize(c_header_fmt)
+    c_magic, size, flags, _, _ , _ = struct.unpack(c_header_fmt, bootloader[offset:offset + c_header_size])
+    buf = bootloader[offset + c_header_size: offset + c_header_size + size]
+    offset += c_header_size + size
 
-  WriteIfwi(info)
-  WriteDroitboot(info)
+    if not flags & 1:
+      continue
+
+    if c_magic == "IFWI!!!!":
+      common.ZipWriteStr(info.output_zip, "ifwi.bin", buf)
+      WriteIfwi(info);
+      continue
+    if c_magic == "DROIDBT!":
+      common.ZipWriteStr(info.output_zip, "droidboot.img", buf)
+      WriteDroidboot(info);
+      continue
+    if c_magic == "SPLASHS!":
+      common.ZipWriteStr(info.output_zip, "splashscreen.img", buf)
+      WriteSplashscreen(info);
+      continue
 
 def FullOTA_InstallEnd(info):
   try:
