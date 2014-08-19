@@ -93,17 +93,7 @@ int check_ifwi_file_scu_emmc(void *data, size_t size)
 		fprintf(stderr,
 			"IFWI FW Major version numbers (file=%04X current=%04X) don't match, Update abort.\n",
 			img_fw_rev.ifwi.major, dev_fw_rev.ifwi.major);
-
-		/* Not an error case. Let update continue to next IFWI versions. */
-		return 0;
-	}
-
-	if ((img_fw_rev.ifwi.minor >> IFWI_TYPE_LSH) != (dev_fw_rev.ifwi.minor >> IFWI_TYPE_LSH)) {
-		fprintf(stderr, "IFWI FW Type (file=%1X current=%1X) don't match, Update abort.\n",
-			img_fw_rev.ifwi.minor >> IFWI_TYPE_LSH, dev_fw_rev.ifwi.minor >> IFWI_TYPE_LSH);
-
-		/* Not an error case. Let update continue to next IFWI versions. */
-		return 0;
+		return -1;
 	}
 
 	return 1;
