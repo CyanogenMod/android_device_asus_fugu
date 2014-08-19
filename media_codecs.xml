@@ -16,10 +16,12 @@
 
 <!--
 <!DOCTYPE MediaCodecs [
-<!ELEMENT MediaCodecs (Decoders,Encoders)>
-<!ELEMENT Decoders (MediaCodec*)>
-<!ELEMENT Encoders (MediaCodec*)>
-<!ELEMENT MediaCodec (Type*,Quirk*)>
+<!ELEMENT Include EMPTY>
+<!ATTLIST Include href CDATA #REQUIRED>
+<!ELEMENT MediaCodecs (Decoders|Encoders|Include)*>
+<!ELEMENT Decoders (MediaCodec|Include)*>
+<!ELEMENT Encoders (MediaCodec|Include)*>
+<!ELEMENT MediaCodec (Type|Quirk|Include)*>
 <!ATTLIST MediaCodec name CDATA #REQUIRED>
 <!ATTLIST MediaCodec type CDATA>
 <!ELEMENT Type EMPTY>
@@ -48,6 +50,7 @@ can be used:
         <Quirk name="output-buffers-are-unreadable" />
     </MediaCodec>
 
+Only the three quirks included above are recognized at this point:
 
 "requires-allocate-on-input-ports"
     must be advertised if the component does not properly support specification
@@ -72,42 +75,38 @@ can be used:
     matching surfaceflinger support that can render the custom format to
     a texture and possibly other code, so just DON'T USE THIS QUIRK.
 
-"codec-requires-samplerate"
-    Some AUDIO codecs can assume constant sample rate. This may be wrong
-    sometimes and these codecs can be set sample rate from application.
 
 -->
 
 <MediaCodecs>
+    <Include href="media_codecs_google_audio.xml" />
+
     <Decoders>
-        <MediaCodec name="OMX.Intel.VideoDecoder.MPEG4" type="video/mp4v-es" />
-        <MediaCodec name="OMX.Intel.VideoDecoder.H263" type="video/3gpp" />
-        <MediaCodec name="OMX.Intel.VideoDecoder.AVC" type="video/avc" />
-        <MediaCodec name="OMX.Intel.VideoDecoder.AVC.secure" type="video/avc" />
+        <MediaCodec name="OMX.Intel.VideoDecoder.MPEG4" type="video/mp4v-es">
+            <Feature name="adaptive-playback" />
+        </MediaCodec>
+        <MediaCodec name="OMX.Intel.VideoDecoder.H263" type="video/3gpp">
+            <Feature name="adaptive-playback" />
+        </MediaCodec>
+        <MediaCodec name="OMX.Intel.VideoDecoder.AVC" type="video/avc">
+            <Feature name="adaptive-playback" />
+        </MediaCodec>
+        <MediaCodec name="OMX.Intel.VideoDecoder.AVC.secure" type="video/avc">
+            <Feature name="adaptive-playback" />
+            <Feature name="secure-playback" required="true" />
+        </MediaCodec>
         <MediaCodec name="OMX.Intel.VideoDecoder.WMV" type="video/x-ms-wmv" />
-        <MediaCodec name="OMX.Intel.VideoDecoder.VP8" type="video/x-vnd.on2.vp8" />
-        <MediaCodec name="OMX.Intel.VideoDecoder.VP9.hwr" type="video/x-vnd.on2.vp9" />
-        <MediaCodec name="OMX.Intel.sw_vd.h265" type="video/hevc" />
+        <MediaCodec name="OMX.Intel.VideoDecoder.VP8" type="video/x-vnd.on2.vp8">
+            <Feature name="adaptive-playback" />
+        </MediaCodec>
+        <MediaCodec name="OMX.Intel.VideoDecoder.VP9.hwr" type="video/x-vnd.on2.vp9">
+            <Feature name="adaptive-playback" />
+        </MediaCodec>
+        <MediaCodec name="OMX.Intel.sw_vd.h265" type="video/hevc">
+            <Feature name="adaptive-playback" />
+        </MediaCodec>
 
-        <MediaCodec name="OMX.google.mp3.decoder" type="audio/mpeg" />
-        <MediaCodec name="OMX.google.amrnb.decoder" type="audio/3gpp" />
-        <MediaCodec name="OMX.google.amrwb.decoder" type="audio/amr-wb" />
-        <MediaCodec name="OMX.google.aac.decoder" type="audio/mp4a-latm" />
-        <MediaCodec name="OMX.google.aac.decoder" type="audio/mp4a-aacextended" />
-        <MediaCodec name="OMX.google.g711.alaw.decoder" type="audio/g711-alaw" >
-            <Quirk name="codec-requires-samplerate" />
-        </MediaCodec>
-        <MediaCodec name="OMX.google.g711.mlaw.decoder" type="audio/g711-mlaw" >
-            <Quirk name="codec-requires-samplerate" />
-        </MediaCodec>
-        <MediaCodec name="OMX.google.vorbis.decoder" type="audio/vorbis" />
         <MediaCodec name="OMX.Intel.alac.decoder" type="audio/alac" />
-
-        <MediaCodec name="OMX.google.mpeg4.decoder" type="video/mp4v-es" />
-        <MediaCodec name="OMX.google.h263.decoder" type="video/3gpp" />
-        <MediaCodec name="OMX.google.h264.decoder" type="video/avc" />
-        <MediaCodec name="OMX.google.vp8.decoder" type="video/x-vnd.on2.vp8" />
-        <MediaCodec name="OMX.google.vp9.decoder" type="video/x-vnd.on2.vp9" />
     </Decoders>
 
     <Encoders>
@@ -123,9 +122,7 @@ can be used:
         <MediaCodec name="OMX.Intel.VideoEncoder.VP8" type="video/x-vnd.on2.vp8" >
             <Quirk name="requires-allocate-on-input-ports" />
         </MediaCodec>
-        <MediaCodec name="OMX.google.amrnb.encoder" type="audio/3gpp" />
-        <MediaCodec name="OMX.google.amrwb.encoder" type="audio/amr-wb" />
-        <MediaCodec name="OMX.google.aac.encoder" type="audio/mp4a-latm" />
-        <MediaCodec name="OMX.google.flac.encoder" type="audio/flac" />
     </Encoders>
+
+    <Include href="media_codecs_google_video.xml" />
 </MediaCodecs>
