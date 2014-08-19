@@ -71,10 +71,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/asus/fugu/ia_watchdogd:root/usr/bin/ia_watchdogd
 
-# 2ndbootloader - temporary prebuilt
-PRODUCT_COPY_FILES += \
-    device/asus/fugu/2ndbootloader:$(PRODUCT_OUT)/2ndbootloader
-
 # Add kernel watchdog daemon
 #PRODUCT_PACKAGES += \
 #    ia_watchdogd
