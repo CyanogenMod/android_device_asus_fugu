@@ -18,7 +18,7 @@
  ****************************************************************************/
 #ifndef _PSB_DRM_H_
 #define _PSB_DRM_H_
-#ifdef __linux__
+#if defined(__linux__) && !defined(__KERNEL__)
 #include <stdbool.h>
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #include <stdint.h>
@@ -924,252 +924,263 @@ struct drm_psb_idle_ctrl {
 #define DRM_PSB_PANEL_QUERY 0x38
 #define DRM_PSB_IDLE_CTRL 0x39
 #define DRM_PSB_HDMITEST 0x3A
-#define DRM_PSB_PANEL_ORIENTATION 0x3B
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define HT_READ 1
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define HT_WRITE 2
 #define HT_FORCEON 4
 typedef struct tagHDMITESTREGREADWRITE {
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  unsigned int reg;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  unsigned int data;
  int mode;
 } drm_psb_hdmireg_t, *drm_psb_hdmireg_p;
+#define DRM_PSB_PANEL_ORIENTATION 0x3B
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define DRM_PSB_UPDATE_CURSOR_POS 0x3C
 #define DRM_OEM_RESERVED_START 0x40
 #define DRM_OEM_RESERVED_END 0x4F
 #define DRM_PSB_TTM_START 0x50
-#define DRM_PSB_TTM_END 0x5F
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define DRM_PSB_TTM_END 0x5F
 #ifdef PDUMP
 #define DRM_PSB_CMDBUF (PVR_DRM_DBGDRV_CMD + 1)
 #else
-#define DRM_PSB_CMDBUF (DRM_PSB_TTM_START)
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define DRM_PSB_CMDBUF (DRM_PSB_TTM_START)
 #endif
 #define DRM_PSB_SCENE_UNREF (DRM_PSB_CMDBUF + 1)
 #define DRM_PSB_PLACEMENT_OFFSET (DRM_PSB_SCENE_UNREF + 1)
-#define DRM_PSB_DSR_ENABLE 0xfffffffe
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define DRM_PSB_DSR_ENABLE 0xfffffffe
 #define DRM_PSB_DSR_DISABLE 0xffffffff
 struct drm_psb_csc_matrix {
  int pipe;
- int64_t matrix[9];
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ int64_t matrix[9];
 }__attribute__((packed));
 struct psb_drm_dpu_rect {
  int x, y;
- int width, height;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ int width, height;
 };
 struct drm_psb_drv_dsr_off_arg {
  int screen;
- struct psb_drm_dpu_rect damage_rect;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct psb_drm_dpu_rect damage_rect;
 };
 struct drm_psb_dev_info_arg {
  uint32_t num_use_attribute_registers;
-};
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
 #define DRM_PSB_DEVINFO 0x01
 #define PSB_MODE_OPERATION_MODE_VALID 0x01
 #define PSB_MODE_OPERATION_SET_DC_BASE 0x02
-struct drm_psb_get_pipe_from_crtc_id_arg {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct drm_psb_get_pipe_from_crtc_id_arg {
  uint32_t crtc_id;
  uint32_t pipe;
 };
-#define DRM_PSB_DISP_SAVE_HDMI_FB_HANDLE 1
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define DRM_PSB_DISP_SAVE_HDMI_FB_HANDLE 1
 #define DRM_PSB_DISP_GET_HDMI_FB_HANDLE 2
 #define DRM_PSB_DISP_INIT_HDMI_FLIP_CHAIN 1
 #define DRM_PSB_DISP_QUEUE_BUFFER 2
-#define DRM_PSB_DISP_DEQUEUE_BUFFER 3
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define DRM_PSB_DISP_DEQUEUE_BUFFER 3
 #define DRM_PSB_DISP_PLANEB_DISABLE 4
 #define DRM_PSB_DISP_PLANEB_ENABLE 5
 #define DRM_PSB_HDMI_OSPM_ISLAND_DOWN 6
-#define DRM_PSB_HDMI_NOTIFY_HOTPLUG_TO_AUDIO 7
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define DRM_PSB_HDMI_NOTIFY_HOTPLUG_TO_AUDIO 7
 typedef enum {
  GAMMA,
  CSC,
- GAMMA_INITIA,
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ GAMMA_INITIA,
  GAMMA_SETTING,
  GAMMA_REG_SETTING,
  CSC_INITIA,
- CSC_CHROME_SETTING,
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ CSC_CHROME_SETTING,
  CSC_SETTING,
  CSC_REG_SETTING
 } setting_type;
-typedef enum {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+typedef enum {
  GAMMA_05 = 1,
  GAMMA_20,
  GAMMA_05_20,
- GAMMA_20_05,
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ GAMMA_20_05,
  GAMMA_10
 } gamma_mode;
 #define CSC_REG_COUNT 6
-#define CHROME_COUNT 16
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define CHROME_COUNT 16
 #define CSC_COUNT 9
 struct csc_setting {
  uint32_t pipe;
- setting_type type;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ setting_type type;
  bool enable_state;
  uint32_t data_len;
  union {
- int csc_reg_data[CSC_REG_COUNT];
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ int csc_reg_data[CSC_REG_COUNT];
  int chrome_data[CHROME_COUNT];
  int64_t csc_data[CSC_COUNT];
  } data;
-};
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
 #define GAMMA_10_BIT_TABLE_COUNT 129
 struct gamma_setting {
  uint32_t pipe;
- setting_type type;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ setting_type type;
  bool enable_state;
  gamma_mode initia_mode;
  uint32_t data_len;
- uint32_t gamma_tableX100[GAMMA_10_BIT_TABLE_COUNT];
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t gamma_tableX100[GAMMA_10_BIT_TABLE_COUNT];
 };
 struct drm_psb_csc_gamma_setting {
  setting_type type;
- union {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ union {
  struct csc_setting csc_data;
  struct gamma_setting gamma_data;
  } data;
-}__attribute__((packed));
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+}__attribute__((packed));
 struct drm_psb_buffer_data {
  void *h_buffer;
 };
-struct drm_psb_flip_chain_data {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct drm_psb_flip_chain_data {
  void **h_buffer_array;
  unsigned int size;
 };
-struct drm_psb_disp_ctrl {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct drm_psb_disp_ctrl {
  uint32_t cmd;
  union {
  uint32_t data;
- struct drm_psb_buffer_data buf_data;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct drm_psb_buffer_data buf_data;
  struct drm_psb_flip_chain_data flip_chain_data;
  } u;
 };
-#define S3D_MIPIA_DISPLAY 0
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define S3D_MIPIA_DISPLAY 0
 #define S3D_HDMI_DISPLAY 1
 #define S3D_MIPIC_DISPLAY 2
 #define S3D_WIDI_DISPLAY 0xFF
-struct drm_psb_s3d_query {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct drm_psb_s3d_query {
  uint32_t s3d_display_type;
  uint32_t is_s3d_supported;
  uint32_t s3d_format;
- uint32_t mode_resolution_x;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t mode_resolution_x;
  uint32_t mode_resolution_y;
  uint32_t mode_refresh_rate;
  uint32_t is_interleaving;
-};
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
 struct drm_psb_s3d_premodeset {
  uint32_t s3d_buffer_format;
 };
-typedef enum intel_dc_plane_types {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+typedef enum intel_dc_plane_types {
  DC_UNKNOWN_PLANE = 0,
  DC_SPRITE_PLANE = 1,
  DC_OVERLAY_PLANE,
- DC_PRIMARY_PLANE,
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ DC_PRIMARY_PLANE,
+ DC_CURSOR_PLANE,
  DC_PLANE_MAX,
 } DC_MRFLD_PLANE_TYPE;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define SPRITE_UPDATE_SURFACE (0x00000001UL)
 #define SPRITE_UPDATE_CONTROL (0x00000002UL)
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define SPRITE_UPDATE_POSITION (0x00000004UL)
 #define SPRITE_UPDATE_SIZE (0x00000008UL)
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define SPRITE_UPDATE_WAIT_VBLANK (0X00000010UL)
 #define SPRITE_UPDATE_CONSTALPHA (0x00000020UL)
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #define SPRITE_UPDATE_ALL (0x0000003fUL)
 #define MRFLD_PRIMARY_COUNT 3
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 typedef struct intel_dc_overlay_ctx {
  uint32_t index;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  uint32_t pipe;
  uint32_t ovadd;
-} DC_MRFLD_OVERLAY_CONTEXT;
-typedef struct intel_dc_sprite_ctx {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+} DC_MRFLD_OVERLAY_CONTEXT;
+typedef struct intel_dc_cursor_ctx {
+ uint32_t index;
+ uint32_t pipe;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t cntr;
+ uint32_t surf;
+ uint32_t pos;
+} DC_MRFLD_CURSOR_CONTEXT;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+typedef struct intel_dc_sprite_ctx {
  uint32_t update_mask;
  uint32_t index;
  uint32_t pipe;
- uint32_t cntr;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t cntr;
  uint32_t linoff;
  uint32_t stride;
  uint32_t pos;
- uint32_t size;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t size;
  uint32_t keyminval;
  uint32_t keymask;
  uint32_t surf;
- uint32_t keymaxval;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t keymaxval;
  uint32_t tileoff;
  uint32_t contalpa;
 } DC_MRFLD_SPRITE_CONTEXT;
-typedef struct intel_dc_primary_ctx {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+typedef struct intel_dc_primary_ctx {
  uint32_t update_mask;
  uint32_t index;
  uint32_t pipe;
- uint32_t cntr;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t cntr;
  uint32_t linoff;
  uint32_t stride;
  uint32_t pos;
- uint32_t size;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t size;
  uint32_t keyminval;
  uint32_t keymask;
  uint32_t surf;
- uint32_t keymaxval;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ uint32_t keymaxval;
  uint32_t tileoff;
  uint32_t contalpa;
 } DC_MRFLD_PRIMARY_CONTEXT;
-typedef struct intel_dc_plane_zorder {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+typedef struct intel_dc_plane_zorder {
  uint32_t forceBottom[3];
  uint32_t abovePrimary;
 } DC_MRFLD_DC_PLANE_ZORDER;
-typedef struct intel_dc_plane_ctx {
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+typedef struct intel_dc_plane_ctx {
  enum intel_dc_plane_types type;
  struct intel_dc_plane_zorder zorder;
  union {
- struct intel_dc_overlay_ctx ov_ctx;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ struct intel_dc_overlay_ctx ov_ctx;
  struct intel_dc_sprite_ctx sp_ctx;
  struct intel_dc_primary_ctx prim_ctx;
+ struct intel_dc_cursor_ctx cs_ctx;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  } ctx;
 } DC_MRFLD_SURF_CUSTOM;
-/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
 #endif
-
