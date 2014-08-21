@@ -62,7 +62,6 @@ int find_alsa_card_by_name(const char* name) {
 
 namespace android {
 
-#if 0
 static const char *kCtrlNames[] = {
     "Basic Audio Supported",
     "Speaker Allocation",
@@ -84,7 +83,6 @@ size_t kMaxChCntNdx  = 5;
 size_t kSampRateNdx  = 6;
 size_t kBPSNdx       = 7;
 size_t kMaxCompBRNdx = 8;
-#endif
 
 HDMIAudioCaps::HDMIAudioCaps()
 {
@@ -97,15 +95,7 @@ HDMIAudioCaps::HDMIAudioCaps()
 bool HDMIAudioCaps::loadCaps(int ALSADeviceID) {
     bool ret = false;
     struct mixer* mixer = NULL;
-#if 0
     struct mixer_ctl* ctrls[kCtrlCount];
-#else
-    struct mixer_ctl* ctl;
-    enum mixer_ctl_type type;
-    unsigned int i, id;
-    int chcount=0, chmap=0;
-    unsigned int num_values;
-#endif
     int tmp, mode_cnt;
     Mutex::Autolock _l(mLock);
 
@@ -119,7 +109,6 @@ bool HDMIAudioCaps::loadCaps(int ALSADeviceID) {
         goto bailout;
     }
 
-#if 0
     // Gather handles to all of the controls we will need in order to enumerate
     // the audio capabilities of this HDMI link.  No need to free/release these
     // later, they are just pointers into the tinyalsa mixer structure itself.
@@ -133,8 +122,10 @@ bool HDMIAudioCaps::loadCaps(int ALSADeviceID) {
 
     // Start by checking to see if this HDMI connection supports even basic
     // audio.  If it does not, there is no point in proceeding.
-    if ((tmp = mixer_ctl_get_value(ctrls[kBasicAudNdx], 0)) <= 0)
+    if ((tmp = mixer_ctl_get_value(ctrls[kBasicAudNdx], 0)) <= 0) {
+        ALOGI("%s: Basic audio not supported by attached device", __func__);
         goto bailout;
+    }
 
     // Looks like we support basic audio.  Get a count of the available
     // non-basic modes.
@@ -146,6 +137,7 @@ bool HDMIAudioCaps::loadCaps(int ALSADeviceID) {
     if ((tmp = mixer_ctl_get_value(ctrls[kSpeakerAlloc], 0)) < 0)
         goto bailout;
     mSpeakerAlloc = static_cast<uint16_t>(tmp);
+    ALOGI("%s: Speaker Allocation Map for attached device is: 0x%hx", __func__, mSpeakerAlloc);
 
     // If there are no non-basic modes available, then we are done.  Be sure to
     // flag this as a successful operation.
@@ -200,48 +192,6 @@ bool HDMIAudioCaps::loadCaps(int ALSADeviceID) {
             mModes.add(m);
         }
     }
-#else
-    /* TODO: add to IntelHDMI alsa driver EDID info that we can parse here */
-    mBasicAudioSupported = true;
-#if 0
-/*Playback Channel Map*/
-#define CHANNEL_MAP_REQUEST      2
-
-    id = CHANNEL_MAP_REQUEST;
-    if (id >= mixer_get_num_ctls(mixer)) {
-        ALOGE("[EDID] Invalid request for channel map %d",id);
-        goto bailout;
-    }
-
-    ctl = mixer_get_ctl_by_name(mixer, "Playback Channel Map");
-
-    type = mixer_ctl_get_type(ctl);
-    num_values = mixer_ctl_get_num_values(ctl);
-
-    ALOGV("[EDID]id = %d",id);
-    ALOGV("[EDID]type = %d",type);
-    ALOGV("[EDID]count = %d",num_values);
-
-    for (i = 0; i < num_values; i++) {
-      switch (type)
-      {
-       case MIXER_CTL_TYPE_INT:
-            chmap = mixer_ctl_get_value(ctl, i);
-            ALOGD("[EDID]chmap = %d", chmap);
-            if(chmap > 0)  ++chcount;
-            break;
-       default:
-            printf(" unknown");
-            break;
-      };
-    }
-
-    ALOGI("[EDID]valid number of channels supported by sink = %d",chcount);
-    if (chcount >= 2) {
-        mBasicAudioSupported = true;
-    }
-#endif
-#endif
 
     // Looks like we managed to enumerate all of the modes before someone
     // unplugged the HDMI cable.  Signal success and get out.
