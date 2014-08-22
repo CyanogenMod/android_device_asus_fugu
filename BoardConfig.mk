@@ -47,6 +47,9 @@ BOARD_KERNEL_CMDLINE += snd_pcm.maximum_substreams=8
 BOARD_KERNEL_CMDLINE += ip=50.0.0.2:50.0.0.1::255.255.255.0::usb0:on
 BOARD_KERNEL_CMDLINE += allow_factory=1 androidboot.selinux=permissive
 
+# Binder API version
+TARGET_USES_64_BIT_BINDER := true
+
 # Security
 BUILD_WITH_SECURITY_FRAMEWORK := chaabi_token
 BUILD_WITH_CHAABI_SUPPORT := true
