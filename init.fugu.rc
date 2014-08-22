@@ -54,6 +54,8 @@ on fs
     mount_all ./fstab.fugu
     setprop ro.crypto.fuse_sdcard true
 
+    restorecon_recursive /factory
+
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
     setrlimit 8 67108864 67108864
@@ -175,12 +177,12 @@ service dhcpcd_p2p /system/bin/dhcpcd -aABKL
     disabled
     oneshot
 
-service iprenew_eth0 /system/bin/logwrapper /system/bin/dhcpcd -n
+service iprenew_eth0 /system/bin/dhcpcd -n
     class late_start
     disabled
     oneshot
 
-service iprenew_wlan0 /system/bin/logwrapper /system/bin/dhcpcd -n
+service iprenew_wlan0 /system/bin/dhcpcd -n
     class late_start
     disabled
     oneshot
@@ -191,13 +193,13 @@ service iprenew_p2p /system/bin/dhcpcd -n
     oneshot
 
 # Bluetooth related services
-service dhcpcd_bt-pan /system/bin/logwrapper /system/bin/dhcpcd -ABKL
+service dhcpcd_bt-pan /system/bin/dhcpcd -ABKL
     class main
     group bluetooth wifi system dhcp
     disabled
     oneshot
 
-service iprenew_bt-pan /system/bin/logwrapper /system/bin/dhcpcd -n
+service iprenew_bt-pan /system/bin/dhcpcd -n
     group bluetooth system dhcp
     disabled
     oneshot
@@ -219,6 +221,7 @@ service watchdogd /usr/bin/ia_watchdogd
     user system
     group system
     oneshot
+    seclabel u:r:watchdogd:s0
 
 # Reset the watchdog counter once boot is completed
 on property:sys.boot_completed=1

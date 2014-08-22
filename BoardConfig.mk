@@ -45,7 +45,7 @@ BOARD_KERNEL_CMDLINE += console=ttyMFD2 earlyprintk=nologger loglevel=8
 BOARD_KERNEL_CMDLINE += androidboot.hardware=fugu androidboot.serialno=01234567890123456789
 BOARD_KERNEL_CMDLINE += snd_pcm.maximum_substreams=8
 BOARD_KERNEL_CMDLINE += ip=50.0.0.2:50.0.0.1::255.255.255.0::usb0:on
-BOARD_KERNEL_CMDLINE += allow_factory=1 androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE += allow_factory=1
 
 # Binder API version
 TARGET_USES_64_BIT_BINDER := true
@@ -128,6 +128,23 @@ INTEL_DPST := true
 
 # bootstub as 2nd bootloader
 TARGET_BOOTLOADER_IS_2ND := true
+
+BOARD_SEPOLICY_DIRS := device/asus/fugu/sepolicy
+BOARD_SEPOLICY_UNION := \
+    bluetooth.te \
+    dhcp.te \
+    file.te \
+    init.te \
+    mediaserver.te \
+    netd.te \
+    property.te \
+    pvrsrvctl.te \
+    surfaceflinger.te \
+    system_app.te \
+    wpa.te \
+    file_contexts \
+    property_contexts \
+    service_contexts
 
 # Use the non-open-source parts, if they're present
 -include vendor/asus/fugu/BoardConfigVendor.mk
