@@ -32,6 +32,10 @@
 // Detect disconnects faster
 #define BTM_BLE_CONN_TIMEOUT_DEF 300
 
+// Disable HFP
+#define BTIF_HF_SERVICES (BTA_HSP_SERVICE_MASK)
+#define BTIF_HF_SERVICE_NAMES  { BTIF_HSAG_SERVICE_NAME, NULL }
+
 // Disable compiling code in Bluedroid for profiles we don't support
 #define BTA_PAN_INCLUDED FALSE
 #define A2D_INCLUDED FALSE
