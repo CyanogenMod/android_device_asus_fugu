@@ -1,7 +1,14 @@
 # Intel SCU watchdog
 /dev/watchdog                           0600   system     system
 /dev/ttyMFD0                            0660   bluetooth  net_bt_stack
+
 # Android sync framework sw driver
 /dev/dri/card0                          0666   system     system
 /dev/pvr_sync                           0666   system     system
 /dev/sw_sync                            0666   system     system
+
+# itux properties
+/sys/devices/virtual/thermal/cooling_device*    cur_state            0644 system system
+/sys/devices/virtual/thermal/thermal_zone*      trip_point_1_temp    0644 system system
+/sys/devices/virtual/thermal/thermal_zone*      trip_point_0_temp    0644 system system
+/sys/devices/virtual/thermal/thermal_zone*      emul_temp    0644 system system

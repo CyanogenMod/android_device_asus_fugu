@@ -241,6 +241,11 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/asus/fugu/powervr.ini:system/etc/powervr.ini
 
+# Thermal itux
+ENABLE_ITUXD := true
+PRODUCT_PACKAGES += \
+    ituxd
+
 $(call inherit-product-if-exists, vendor/asus/fugu/device-vendor.mk)
 $(call inherit-product-if-exists, vendor/intel/PRIVATE/fugu/device-vendor.mk)
 $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4354/device-bcm.mk)

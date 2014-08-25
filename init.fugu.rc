@@ -124,6 +124,20 @@ on post-fs-data
 
     setprop vold.post_fs_data_done 1
 
+    # itux
+    # Set this property to enable Thermal service
+    setprop persist.service.thermal 1
+    # Properties for Thermal Service
+    setprop persist.thermal.turbo.dynamic 1
+    setprop ro.thermal.ituxversion 3.0
+    setprop persist.thermal.shutdown.msg 0
+    setprop persist.thermal.shutdown.vibra 0
+    setprop persist.thermal.shutdown.tone 0
+    chown system system /sys/module/intel_mid_osip/parameters/force_shutdown_occured
+    chown system system /sys/module/intel_mid_osip/parameters/thermal_shutdown_occured
+    chown system system /sys/devices/platform/coretemp.0/temp2_threshold1
+    chown system system /sys/devices/platform/coretemp.0/temp2_threshold2
+
 on property:init.svc.wpa_supplicant=stopped
     stop dhcpcd
 
