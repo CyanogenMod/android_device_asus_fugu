@@ -240,5 +240,6 @@ PRODUCT_COPY_FILES += \
 $(call inherit-product-if-exists, vendor/asus/fugu/device-vendor.mk)
 $(call inherit-product-if-exists, vendor/intel/PRIVATE/fugu/device-vendor.mk)
 $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4354/device-bcm.mk)
+$(call inherit-product-if-exists, vendor/intel/moorefield/prebuilts/houdini/houdini.mk)
 
 #PRODUCT_CHARACTERISTICS := tablet
