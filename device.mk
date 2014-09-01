@@ -67,14 +67,6 @@ PRODUCT_COPY_FILES += \
     device/asus/fugu/ueventd.fugu.rc:root/ueventd.fugu.rc \
     device/asus/fugu/init.recovery.fugu.rc:root/init.recovery.fugu.rc
 
-# ia_watchdog - temporary prebuilt
-PRODUCT_COPY_FILES += \
-    device/asus/fugu/ia_watchdogd:root/usr/bin/ia_watchdogd
-
-# Add kernel watchdog daemon
-#PRODUCT_PACKAGES += \
-#    ia_watchdogd
-
 # Audio
 PRODUCT_PACKAGES += \
     libtinyalsa \

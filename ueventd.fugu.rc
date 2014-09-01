@@ -1,5 +1,3 @@
-# Intel SCU watchdog
-/dev/watchdog                           0600   system     system
 /dev/ttyMFD0                            0660   bluetooth  net_bt_stack
 
 # Android sync framework sw driver

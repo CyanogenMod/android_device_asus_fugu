@@ -44,9 +44,6 @@ on init
     symlink /storage/emulated/legacy /storage/sdcard0
     symlink /mnt/shell/emulated/0 /storage/emulated/legacy
 
-    chown system system /usr/bin/ia_watchdogd
-    chmod 0750 /usr/bin/ia_watchdogd
-
 on fs
     mkdir /logs 0770 system log
     mkdir /factory 0775 system system
@@ -216,18 +213,14 @@ service bugreport /system/bin/dumpstate -d -p -B \
     oneshot
     keycodes 114 115 116
 
-service watchdogd /usr/bin/ia_watchdogd
+# interval:60s margin:20s
+service watchdogd /sbin/watchdogd 60 20
     class core
-    user system
-    group system
     oneshot
     seclabel u:r:watchdogd:s0
 
 # Reset the watchdog counter once boot is completed
 on property:sys.boot_completed=1
-    write /sys/devices/virtual/misc/watchdog/counter "0"
-
-on property:init.svc.recovery=running
     write /sys/devices/virtual/misc/watchdog/counter "0"
 
 service pvrsrvctl /system/vendor/bin/pvrsrvctl --no-module --start
