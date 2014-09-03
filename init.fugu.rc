@@ -147,6 +147,10 @@ on post-fs-data
     chown system system /sys/devices/platform/coretemp.0/temp2_threshold1
     chown system system /sys/devices/platform/coretemp.0/temp2_threshold2
 
+    # Stop led blinking and reduce brightness
+    write /sys/class/leds/white/device/led_lighting_effect 1
+    write /sys/class/leds/white/brightness 0
+
 on property:init.post_fs_data.bootreason=panic
     # Create dump dir and collect dumps. (use the same location as in init.rc)
     mkdir /data/dontpanic 0750 root log
