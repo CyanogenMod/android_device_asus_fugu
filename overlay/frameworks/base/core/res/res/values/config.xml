@@ -41,4 +41,10 @@
     </string-array>
 
     <bool name="config_ui_enableFadingMarquee">true</bool>
+
+    <!-- Enable multi-user in order to get restricted profile support. -->
+    <!-- TODO: move this to a more generic place once we have verified it. -->
+    <bool name="config_enableMultiUserUI">true</bool>
+    <integer name="config_multiuserMaximumUsers">2</integer>
+
 </resources>
