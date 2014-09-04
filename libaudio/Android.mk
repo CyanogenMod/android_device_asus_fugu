@@ -111,6 +111,16 @@ LOCAL_C_INCLUDES := \
     external/tinyalsa/include \
     $(TOPDIR)frameworks/av/services/audiopolicy
 
+ifeq ($(TARGET_PRODUCT),fugu)
+LOCAL_C_INCLUDES += \
+    vendor/google_athome/services/RemoteControlService/include
+
+LOCAL_SHARED_LIBRARIES += \
+    libremotecontrolservice
+
+LOCAL_CFLAGS += -DREMOTE_CONTROL_INTERFACE
+endif
+
 LOCAL_MODULE := libaudiopolicymanager
 LOCAL_MODULE_TAGS := optional
 

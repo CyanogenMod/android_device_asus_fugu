@@ -26,6 +26,11 @@
 #include "AudioHardwareOutput.h"
 #include "ATVAudioPolicyManager.h"
 
+#ifdef REMOTE_CONTROL_INTERFACE
+#include <IRemoteControlService.h>
+#endif
+
+
 namespace android {
 extern AudioHardwareOutput gAudioHardwareOutput;
 
@@ -125,6 +130,21 @@ audio_devices_t ATVAudioPolicyManager::getDeviceForInputSource(audio_source_t in
         }
         ALOGV("getDeviceForInputSource() forcing device to %08x for voice rec", device);
     }
+
+#ifdef REMOTE_CONTROL_INTERFACE
+    // Check if remote is actually connected or we should move on
+    sp<IRemoteControlService> service = IRemoteControlService::getInstance();
+    if (service == NULL) {
+        ALOGV("getDeviceForInputSource No RemoteControl service detected, ignoring");
+    } else {
+        ALOGV("getDeviceForInputSource Querying remote service for connected devices");
+        if (service->hasConnectedRemotes() && !service->hasActiveRemote()) {
+            ALOGV("getDeviceForInputSource No active connected device, passing onto submix");
+            device = AUDIO_DEVICE_NONE;
+        }
+    }
+#endif
+
     if (device == AUDIO_DEVICE_IN_BUILTIN_MIC || device == AUDIO_DEVICE_NONE) {
         ALOGV("getDeviceForInputSource(): Falling back to remote submix input");
         device = AUDIO_DEVICE_IN_REMOTE_SUBMIX;
