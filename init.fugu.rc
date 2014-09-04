@@ -100,6 +100,14 @@ on post-fs
     chown system system /dev/dx_sep_q1
     chmod 0666 /dev/dx_sep_q1
 
+    # hdmi cec
+    chown system system /dev/it8566_hdmi_cec
+    chmod 0660 /dev/it8566_hdmi_cec
+    chown system system /sys/module/tngdisp/parameters/hdmi_state
+    chmod 0440 /sys/module/tngdisp/parameters/hdmi_state
+    chown system system /sys/module/tngdisp/parameters/hdmi_edid_src_phy_addr
+    chmod 0440 /sys/module/tngdisp/parameters/hdmi_edid_src_phy_addr
+
 on post-fs-data
     mkdir /data/media 0770 media_rw media_rw
 
