@@ -186,6 +186,9 @@ void AudioOutput::stageChunk(const uint8_t* chunkData,
 }
 
 void AudioOutput::cleanupResources() {
+
+    Mutex::Autolock _l(mDeviceLock);
+
     if (NULL != mDevice)
         pcm_close(mDevice);
 
@@ -195,6 +198,8 @@ void AudioOutput::cleanupResources() {
 }
 
 void AudioOutput::openPCMDevice() {
+
+    Mutex::Autolock _l(mDeviceLock);
     if (NULL == mDevice) {
         struct pcm_config config;
         int dev_id = 0;
@@ -237,6 +242,7 @@ void AudioOutput::openPCMDevice() {
              * first open try.
              */
             pcm_close(mDevice);
+            mDevice = NULL;
             sleep(1);
             ALOGI("retrying pcm_open() after delay");
         }
@@ -518,6 +524,11 @@ void AudioOutput::setFixedOutputLevel(float level) {
 int  AudioOutput::getHardwareTimestamp(size_t *pAvail,
                             struct timespec *pTimestamp)
 {
+    Mutex::Autolock _l(mDeviceLock);
+    if (!mDevice) {
+       ALOGW("pcm device unavailable - reinitialize  timestamp");
+       return 0;
+    }
     return pcm_get_htimestamp(mDevice, pAvail, pTimestamp);
 }
 

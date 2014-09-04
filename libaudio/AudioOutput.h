@@ -153,6 +153,7 @@ class AudioOutput : public RefBase {
     LinearTransform     mFramesToLocalTime;
 
     // ALSA device stuff.
+    Mutex               mDeviceLock;
     struct pcm*         mDevice;
     int                 mDeviceExtFd;
     int                 mALSACardID;
