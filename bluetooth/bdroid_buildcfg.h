@@ -63,4 +63,7 @@
 #define BTA_DM_PM_SNIFF_HH_IDLE_IDX BTA_DM_PM_SNIFF4
 #define BTA_DM_PM_HH_IDLE_DELAY 0
 
+// Change I/O capabilities to output only so pairing uses passkey instead of pin
+#define BTM_LOCAL_IO_CAPS BTM_IO_CAP_OUT
+
 #endif
