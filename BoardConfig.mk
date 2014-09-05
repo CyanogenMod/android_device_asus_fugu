@@ -134,7 +134,6 @@ BOARD_SEPOLICY_UNION := \
     bluetooth.te \
     dhcp.te \
     file.te \
-    init.te \
     mediaserver.te \
     netd.te \
     property.te \
