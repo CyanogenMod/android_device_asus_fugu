@@ -30,9 +30,9 @@ def WriteSplashscreen(info):
   info.script.WriteRawImage("/splashscreen", "splashscreen.img")
 
 def WriteBootloader(info, bootloader):
-  header_fmt = "<8sHH"
+  header_fmt = "<8sHHI"
   header_size = struct.calcsize(header_fmt)
-  magic, revision, reserved = struct.unpack(
+  magic, revision, reserved, reserved = struct.unpack(
     header_fmt, bootloader[:header_size])
 
   assert magic == "BOOTLDR!", "bootloader.img bad magic value"
