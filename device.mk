@@ -189,7 +189,8 @@ PRODUCT_PACKAGES += \
     lib_driver_cmd_bcmdhd \
     hostapd \
     wpa_supplicant \
-    bcmdhd.cal
+    bcmdhd.cal \
+    bcmdhd_sr2.cal
 
 PRODUCT_COPY_FILES += \
     device/asus/fugu/wpa_supplicant.conf:/system/etc/wifi/wpa_supplicant.conf
