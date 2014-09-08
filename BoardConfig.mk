@@ -47,6 +47,9 @@ BOARD_KERNEL_CMDLINE += snd_pcm.maximum_substreams=8
 BOARD_KERNEL_CMDLINE += ip=50.0.0.2:50.0.0.1::255.255.255.0::usb0:on
 BOARD_KERNEL_CMDLINE += allow_factory=1
 
+# Custom dumpstate library to add board specific stuff to bugreport
+BOARD_HAL_STATIC_LIBRARIES := libdumpstate.fugu
+
 # Binder API version
 TARGET_USES_64_BIT_BINDER := true
 
