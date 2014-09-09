@@ -36,6 +36,10 @@
 // Detect disconnects faster
 #define BTM_BLE_CONN_TIMEOUT_DEF 300
 
+// Increase background scanning to reduce reconnect time
+#define BTM_BLE_SCAN_SLOW_INT_1    110    /* 68.75 ms   = 110 *0.625 */
+#define BTM_BLE_SCAN_SLOW_WIN_1    8      /* 5 ms = 8 *0.625 */
+
 // Disable HFP
 #define BTIF_HF_SERVICES (BTA_HSP_SERVICE_MASK)
 #define BTIF_HF_SERVICE_NAMES  { BTIF_HSAG_SERVICE_NAME, NULL }
