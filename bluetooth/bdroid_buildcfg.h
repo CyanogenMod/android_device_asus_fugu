@@ -42,12 +42,10 @@
 
 // Disable compiling code in Bluedroid for profiles we don't support
 #define BTA_PAN_INCLUDED FALSE
-#define A2D_INCLUDED FALSE
 #define BNEP_INCLUDED FALSE
 #define AVDT_INCLUDED FALSE
 #define PAN_INCLUDED FALSE
 #define AVCT_INCLUDED FALSE
-#define AVRC_INCLUDED FALSE
 
 /* We will support a remote +  4 game controllers.  To be able to
  * allocate sufficient bandwidth for all devices we will restrict the
