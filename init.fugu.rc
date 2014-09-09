@@ -152,6 +152,12 @@ on post-fs-data
     write /sys/class/leds/white/device/led_lighting_effect 1
     write /sys/class/leds/white/brightness 0
 
+    # Playready
+    mkdir /data/mediadrm/playready/ 0770 mediadrm mediadrm
+    copy  /system/vendor/firmware/PR-ModelCert /data/mediadrm/playready/bgroupcert.dat
+    chown mediadrm mediadrm /data/mediadrm/playready/bgroupcert.dat
+    chmod 0440 /data/mediadrm/playready/bgroupcert.dat
+
 on property:init.post_fs_data.bootreason=panic
     # Create dump dir and collect dumps. (use the same location as in init.rc)
     mkdir /data/dontpanic 0750 root log
