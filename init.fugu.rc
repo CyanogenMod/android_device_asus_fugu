@@ -56,7 +56,7 @@ on fs
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
     setrlimit 8 67108864 67108864
-    setprop ro.audio.flinger_standbytime_ms 15000
+    setprop ro.audio.flinger_standbytime_ms 600000
 
 on boot
     write /proc/sys/vm/swappiness 0
