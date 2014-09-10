@@ -230,6 +230,12 @@ service iprenew_p2p /system/bin/dhcpcd -n
     oneshot
 
 # Bluetooth related services
+service BtFwLoader /system/bin/BtFwLoader
+    class main
+    group bluetooth net_bt_stack
+    user bluetooth
+    oneshot
+
 service dhcpcd_bt-pan /system/bin/dhcpcd -ABKL
     class main
     group bluetooth wifi system dhcp
