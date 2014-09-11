@@ -158,7 +158,7 @@ on post-fs-data
     chown mediadrm mediadrm /data/mediadrm/playready/bgroupcert.dat
     chmod 0440 /data/mediadrm/playready/bgroupcert.dat
 
-on property:init.post_fs_data.bootreason=panic
+on property:init.post_fs_data.bootreason=*
     # Create dump dir and collect dumps. (use the same location as in init.rc)
     mkdir /data/dontpanic 0750 root log
 
