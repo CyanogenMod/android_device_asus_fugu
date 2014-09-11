@@ -220,6 +220,10 @@ PRODUCT_PACKAGES += \
     libwvdrmengine \
     liboemcrypto
 
+# PlayReady DRM
+PRODUCT_PACKAGES += \
+    libplayreadydrmplugin
+
 # Key layout files
 PRODUCT_COPY_FILES += \
     device/asus/fugu/gpio-keys.idc:system/usr/idc/gpio-keys.idc \
