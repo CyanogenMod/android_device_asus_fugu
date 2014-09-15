@@ -137,6 +137,7 @@ BOARD_SEPOLICY_DIRS := device/asus/fugu/sepolicy
 BOARD_SEPOLICY_UNION := \
     bluetooth.te \
     dhcp.te \
+    dumpstate.te \
     file.te \
     mediaserver.te \
     netd.te \

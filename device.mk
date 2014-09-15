@@ -242,6 +242,12 @@ ENABLE_ITUXD := true
 PRODUCT_PACKAGES += \
     ituxd
 
+# Debug rc files
+ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
+PRODUCT_COPY_FILES += \
+    device/asus/fugu/init.fugu.diag.rc.userdebug:root/init.fugu.diag.rc
+endif
+
 $(call inherit-product-if-exists, vendor/asus/fugu/device-vendor.mk)
 $(call inherit-product-if-exists, vendor/intel/PRIVATE/fugu/device-vendor.mk)
 $(call inherit-product-if-exists, vendor/intel/moorefield/prebuilts/houdini/houdini.mk)

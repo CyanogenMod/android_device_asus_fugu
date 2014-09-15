@@ -16,6 +16,7 @@
 
 import init.fugu.usb.rc
 import init.intel.tools.rc
+import init.fugu.diag.rc
 
 on early-init
     mount debugfs debugfs /sys/kernel/debug
