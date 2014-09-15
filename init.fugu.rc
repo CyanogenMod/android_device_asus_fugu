@@ -55,6 +55,7 @@ on fs
     mkdir /factory 0775 system system
 
     mount_all ./fstab.fugu
+    swapon_all ./fstab.fugu
     setprop ro.crypto.fuse_sdcard true
 
     restorecon_recursive /factory
