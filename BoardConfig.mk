@@ -136,6 +136,7 @@ TARGET_BOOTLOADER_IS_2ND := true
 BOARD_SEPOLICY_DIRS := device/asus/fugu/sepolicy
 BOARD_SEPOLICY_UNION := \
     bluetooth.te \
+    btfwloader.te \
     dhcp.te \
     dumpstate.te \
     file.te \

@@ -8,6 +8,7 @@
 /dev/snd_atvr_(.*)          u:object_r:atvr_device:s0
 
 /system/vendor/bin/pvrsrvctl u:object_r:pvrsrvctl_exec:s0
+/system/bin/BtFwLoader       u:object_r:btfwloader_exec:s0
 
 /sys/devices/platform/bcm_bt_lpm.0/rfkill/rfkill[0-9]/state     u:object_r:sysfs_bluetooth_writable:s0
 /sys/devices/platform/bcm_bt_lpm.0/rfkill/rfkill[0-9]/type      u:object_r:sysfs_bluetooth_writable:s0
