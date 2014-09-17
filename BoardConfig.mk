@@ -36,8 +36,8 @@ BOARD_FLASH_BLOCK_SIZE := 2048
 TARGET_DROIDBOOT_LIBS := libintel_droidboot
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 
-# customize the malloced address to be 16-byte aligned
-BOARD_MALLOC_ALIGNMENT := 16
+# Use dlmalloc
+MALLOC_IMPL := dlmalloc
 
 # Kernel cmdline
 BOARD_KERNEL_CMDLINE := pci=noearly vmalloc=256M ptrace.ptrace_can_access=1
