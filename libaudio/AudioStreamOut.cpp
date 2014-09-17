@@ -426,7 +426,7 @@ status_t AudioStreamOut::getPresentationPosition(uint64_t *frames,
             ALOGE("getPresentationPosition: getHardwareTimestamp returned non-zero");
         }
     } else {
-        ALOGD("getPresentationPosition: no physical outputs! This HAL is inactive.");
+        ALOGVV("getPresentationPosition: no physical outputs! This HAL is inactive!");
     }
     return result;
 }
