@@ -47,6 +47,7 @@ static const char* ITEMS[] =  {"reboot system now",
                                NULL };
 
 #define kFBDevice "/dev/graphics/fb0"
+#define FBIO_PSB_SET_RGBX	_IOWR('F', 0x42, struct fb_var_screeninfo)
 
 struct led_rgb_vals {
         uint8_t rgb[3];
@@ -71,6 +72,65 @@ public:
         long_press(false) {
         pthread_mutex_init(&long_mu, NULL);
         memset(last_keys, 0, kKeyBufferSize * sizeof(int));
+    }
+
+    void Init() {
+        SetupDisplayMode();
+        ScreenRecoveryUI::Init();
+    }
+
+    void SetupDisplayMode() {
+        int fb_dev = open(kFBDevice, O_RDWR);
+        int res;
+        uint32_t i;
+        printf("opening fb %s\n", kFBDevice);
+        if (fb_dev < 0) {
+            fprintf(stderr, "FAIL: failed to open \"%s\" (errno = %d)\n", kFBDevice, errno);
+            return;
+        }
+
+        struct fb_var_screeninfo current_mode;
+
+        res = ioctl(fb_dev, FBIOGET_VSCREENINFO, &current_mode);
+        if (res) {
+            fprintf(stderr, "FAIL: unable to get mode, err %d\n", res);
+            return;
+        }
+
+        res = ioctl(fb_dev, FBIOBLANK, FB_BLANK_POWERDOWN);
+        if (res) {
+            fprintf(stderr, "FAIL: unable to blank display, err %d\n", res);
+            return;
+        }
+
+        current_mode.bits_per_pixel = 32;
+        current_mode.red.offset = 0;
+        current_mode.red.length = 8;
+        current_mode.green.offset = 8;
+        current_mode.green.length = 8;
+        current_mode.blue.offset = 16;
+        current_mode.blue.length = 8;
+
+        res = ioctl(fb_dev, FBIOPUT_VSCREENINFO, &current_mode);
+        if (res) {
+            fprintf(stderr, "FAIL: unable to set mode, err %d\n", res);
+            return;
+        }
+
+        /* set our display controller for RGBX */
+        res = ioctl(fb_dev, FBIO_PSB_SET_RGBX, &current_mode);
+        if (res) {
+            fprintf(stderr,
+                "FAIL: unable to set RGBX mode on display controller (errno = %d)\n",
+                errno);
+            return;
+        }
+
+        res = ioctl(fb_dev, FBIOBLANK, FB_BLANK_UNBLANK);
+        if (res) {
+            fprintf(stderr, "FAIL: unable to unblank display, err %d\n", res);
+            return;
+        }
     }
 
     void SetBackground(Icon icon) {
