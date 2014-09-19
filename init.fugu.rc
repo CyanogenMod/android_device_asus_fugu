@@ -19,7 +19,7 @@ import init.intel.tools.rc
 import init.fugu.diag.rc
 
 on early-init
-    mount debugfs debugfs /sys/kernel/debug
+    mount debugfs debugfs /sys/kernel/debug mode=0755
 
     # IMG Graphics
     symlink /dev/dri/card0 /dev/card0
