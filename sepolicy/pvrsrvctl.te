@@ -7,6 +7,5 @@ init_daemon_domain(pvrsrvctl)
 # allow access to /dev/dri/card0
 allow pvrsrvctl gpu_device:chr_file rw_file_perms;
 
-# TODO change to dontaudit since we don't allow modules.  No module on device,
-# though, so this is ok to allow for now. b/17373886.
-allow pvrsrvctl self:capability sys_module;
+# allow graphics driver initialization
+allow pvrsrvctl self:capability sys_admin;
