@@ -147,6 +147,7 @@ BOARD_SEPOLICY_UNION := \
     surfaceflinger.te \
     system_app.te \
     wpa.te \
+    shell.te \
     file_contexts \
     property_contexts \
     service_contexts
