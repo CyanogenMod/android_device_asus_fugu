@@ -242,6 +242,10 @@ ENABLE_ITUXD := true
 PRODUCT_PACKAGES += \
     ituxd
 
+# Power HAL
+PRODUCT_PACKAGES += \
+    power.fugu
+
 # Debug rc files
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 PRODUCT_COPY_FILES += \
