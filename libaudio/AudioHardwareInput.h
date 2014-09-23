@@ -22,6 +22,7 @@
 #include <system/audio.h>
 #include <utils/Errors.h>
 #include <utils/threads.h>
+#include <utils/Vector.h>
 
 #include "AudioHotplugThread.h"
 
@@ -64,11 +65,13 @@ class AudioHardwareInput : public AudioHotplugThread::Callback {
 
   private:
     static const int    kMaxDevices = 8; // TODO review strategy for adding more devices
-    void                closeActiveInputStream_l();
-
+    void                closeAllInputStreams();
+    // Place all input streams using the specified device into standby. If deviceInfo is NULL,
+    // all input streams are placed into standby.
+    void                standbyAllInputStreams(const AudioHotplugThread::DeviceInfo* deviceInfo);
     Mutex               mLock;
     bool                mMicMute;
-    AudioStreamIn*      mActiveInputStream;
+    Vector<AudioStreamIn*> mInputStreams;
 
     sp<AudioHotplugThread> mHotplugThread;
 

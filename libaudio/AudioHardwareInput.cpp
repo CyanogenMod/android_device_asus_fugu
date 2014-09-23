@@ -37,7 +37,6 @@ AudioHardwareInput gAudioHardwareInput;
 
 AudioHardwareInput::AudioHardwareInput()
     : mMicMute(false)
-    , mActiveInputStream(NULL)
 {
     mHotplugThread = new AudioHotplugThread(*this);
     if (mHotplugThread == NULL) {
@@ -61,7 +60,7 @@ AudioHardwareInput::~AudioHardwareInput()
         mHotplugThread.clear();
     }
 
-    closeActiveInputStream_l();
+    closeAllInputStreams();
 }
 
 status_t AudioHardwareInput::setMicMute(bool mute)
@@ -115,11 +114,6 @@ AudioStreamIn* AudioHardwareInput::openInputStream(uint32_t devices,
         return NULL;
     }
 
-    // If there is an active stream then close it first before setting
-    // up the new stream.
-    if (mActiveInputStream)
-        closeActiveInputStream_l();
-
     *status = in->set(format, channelMask, sampleRate);
 
     if (*status != NO_ERROR) {
@@ -127,7 +121,7 @@ AudioStreamIn* AudioHardwareInput::openInputStream(uint32_t devices,
         return NULL;
     }
 
-    mActiveInputStream = in;
+    mInputStreams.add(in);
 
     return in;
 }
@@ -136,20 +130,31 @@ void AudioHardwareInput::closeInputStream(AudioStreamIn* in)
 {
     Mutex::Autolock _l(mLock);
 
-    if (mActiveInputStream != in) {
-        ALOGW("closeInputStream: tried to close an unexpected stream");
-        return;
+    for (size_t i = 0; i < mInputStreams.size(); i++) {
+        if (in == mInputStreams[i]) {
+            mInputStreams.removeAt(i);
+            in->standby();
+            delete in;
+            break;
+        }
     }
-
-    closeActiveInputStream_l();
 }
 
-void AudioHardwareInput::closeActiveInputStream_l()
+void AudioHardwareInput::closeAllInputStreams()
 {
-    if (mActiveInputStream != NULL) {
-        mActiveInputStream->standby();
-        delete mActiveInputStream;
-        mActiveInputStream = NULL;
+    while (mInputStreams.size() != 0) {
+        mInputStreams.removeAt(0);
+        mInputStreams[0]->standby();
+        delete mInputStreams[0];
+    }
+}
+
+void AudioHardwareInput::standbyAllInputStreams(const AudioHotplugThread::DeviceInfo* deviceInfo)
+{
+    for (size_t i = 0; i < mInputStreams.size(); i++) {
+        if (deviceInfo == NULL || deviceInfo == mInputStreams[i]->getDeviceInfo()) {
+            mInputStreams[i]->standby();
+        }
     }
 }
 
@@ -179,8 +184,8 @@ status_t AudioHardwareInput::dump(int fd)
 
     {
         Mutex::Autolock _l(mLock);
-        if (mActiveInputStream) {
-            mActiveInputStream->dump(fd);
+        for (size_t i = 0; i < mInputStreams.size(); i++) {
+            mInputStreams[i]->dump(fd);
         }
     }
 
@@ -217,10 +222,8 @@ void AudioHardwareInput::onDeviceFound(
             mDeviceInfos[i] = devInfo;
             mDeviceInfos[i].valid = true;
             foundSlot = true;
-            /* Restart any currently running streamIn. */
-            if (mActiveInputStream != NULL) {
-                mActiveInputStream->standby();
-            }
+            /* Restart any currently running streams. */
+            standbyAllInputStreams(NULL);
             break;
         }
     }
@@ -243,11 +246,7 @@ void AudioHardwareInput::onDeviceRemoved(unsigned int pcmCard, unsigned int pcmD
                 ALOGD("AudioHardwareInput::onDeviceRemoved matches #%d", i);
                 mDeviceInfos[i].valid = false;
                 /* If currently active stream is using this device then restart. */
-                if (mActiveInputStream != NULL) {
-                    if (mActiveInputStream->getDeviceInfo() == &mDeviceInfos[i]) {
-                        mActiveInputStream->standby();
-                    }
-                }
+                standbyAllInputStreams(&mDeviceInfos[i]);
                 break;
             }
         }
