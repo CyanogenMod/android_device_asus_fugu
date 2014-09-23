@@ -145,6 +145,9 @@ status_t AudioStreamIn::standby()
 
 status_t AudioStreamIn::standby_l()
 {
+    if (mStandby) {
+        return NO_ERROR;
+    }
     if (mPcm) {
         ALOGD("AudioStreamIn::standby_l, call pcm_close()");
         pcm_close(mPcm);
