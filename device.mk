@@ -166,6 +166,7 @@ PRODUCT_PACKAGES += \
     libOMXVideoDecoderWMV \
     libOMXVideoDecoderVP8 \
     libOMXVideoDecoderVP9HWR \
+    libOMXVideoDecoderVP9Hybrid \
     libOMXVideoEncoderAVC \
     libOMXVideoEncoderH263 \
     libOMXVideoEncoderMPEG4 \
