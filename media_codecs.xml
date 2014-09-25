@@ -102,6 +102,7 @@ Only the three quirks included above are recognized at this point:
         <MediaCodec name="OMX.Intel.VideoDecoder.VP9.hwr" type="video/x-vnd.on2.vp9">
             <Feature name="adaptive-playback" />
         </MediaCodec>
+        <MediaCodec name="OMX.Intel.VideoDecoder.VP9.hybrid" type="video/x-vnd.on2.vp9" />
         <MediaCodec name="OMX.Intel.sw_vd.h265" type="video/hevc">
             <Feature name="adaptive-playback" />
         </MediaCodec>
