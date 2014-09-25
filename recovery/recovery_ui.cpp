@@ -47,7 +47,8 @@ static const char* ITEMS[] =  {"reboot system now",
                                NULL };
 
 #define kFBDevice "/dev/graphics/fb0"
-#define FBIO_PSB_SET_RGBX	_IOWR('F', 0x42, struct fb_var_screeninfo)
+#define FBIO_PSB_SET_RGBX       _IOWR('F', 0x42, struct fb_var_screeninfo)
+#define FBIO_PSB_SET_RMODE      _IOWR('F', 0x43, struct fb_var_screeninfo)
 
 struct led_rgb_vals {
         uint8_t rgb[3];
@@ -90,6 +91,14 @@ public:
         }
 
         struct fb_var_screeninfo current_mode;
+
+        res = ioctl(fb_dev, FBIO_PSB_SET_RMODE, &current_mode);
+        if (res) {
+            fprintf(stderr,
+                "FAIL: unable to set RGBX mode on display controller (errno = %d)\n",
+                errno);
+            return;
+        }
 
         res = ioctl(fb_dev, FBIOGET_VSCREENINFO, &current_mode);
         if (res) {
