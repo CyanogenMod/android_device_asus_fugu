@@ -16,8 +16,6 @@
 
 LOCAL_PATH := $(my-dir)
 
-INSTALLED_RADIOIMAGE_TARGET += $(PRODUCT_OUT)/bootloader.img
-
 include $(LOCAL_PATH)/AndroidKernel.mk
 
 -include vendor/intel/prebuilts/$(TARGET_PRODUCT)/prebuilts.mk
