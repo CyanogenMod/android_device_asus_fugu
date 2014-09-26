@@ -44,8 +44,6 @@ BOARD_KERNEL_CMDLINE := pci=noearly vmalloc=256M ptrace.ptrace_can_access=1
 BOARD_KERNEL_CMDLINE += earlyprintk=nologger loglevel=8
 BOARD_KERNEL_CMDLINE += androidboot.hardware=fugu androidboot.serialno=01234567890123456789
 BOARD_KERNEL_CMDLINE += snd_pcm.maximum_substreams=8
-BOARD_KERNEL_CMDLINE += ip=50.0.0.2:50.0.0.1::255.255.255.0::usb0:on
-BOARD_KERNEL_CMDLINE += allow_factory=1
 BOARD_KERNEL_CMDLINE += intel_soc_pmu.enable_s3=0
 
 # Custom dumpstate library to add board specific stuff to bugreport
