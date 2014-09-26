@@ -143,9 +143,10 @@ void AudioHardwareInput::closeInputStream(AudioStreamIn* in)
 void AudioHardwareInput::closeAllInputStreams()
 {
     while (mInputStreams.size() != 0) {
+        AudioStreamIn* in = mInputStreams[0];
         mInputStreams.removeAt(0);
-        mInputStreams[0]->standby();
-        delete mInputStreams[0];
+        in->standby();
+        delete in;
     }
 }
 
