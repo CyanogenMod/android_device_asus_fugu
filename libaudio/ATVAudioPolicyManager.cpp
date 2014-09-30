@@ -76,8 +76,8 @@ status_t ATVAudioPolicyManager::setDeviceConnectionState(audio_devices_t device,
                                                          audio_policy_dev_state_t state,
                                                          const char *device_address)
 {
-    audio_devices_t tmp;
-    ALOGE("setDeviceConnectionState %d %x %s", device, state,
+    audio_devices_t tmp = AUDIO_DEVICE_NONE;;
+    ALOGE("setDeviceConnectionState %08x %x %s", device, state,
           device_address ? device_address : "(null)");
 
     // If the input device is the remote submix and an address starting with "force=" was
@@ -91,64 +91,72 @@ status_t ATVAudioPolicyManager::setDeviceConnectionState(audio_devices_t device,
         }
     }
 
-    switch (state) {
-        case AUDIO_POLICY_DEVICE_STATE_AVAILABLE:
-            tmp = mAvailableOutputDevices.types() | device;
-            break;
+    if (audio_is_output_device(device)) {
+      switch (state) {
+          case AUDIO_POLICY_DEVICE_STATE_AVAILABLE:
+              tmp = mAvailableOutputDevices.types() | device;
+              break;
 
-        case AUDIO_POLICY_DEVICE_STATE_UNAVAILABLE:
-            tmp = mAvailableOutputDevices.types() & ~device;
-            break;
-        default:
-            ALOGE("setDeviceConnectionState() invalid state: %x", state);
-            return BAD_VALUE;
+          case AUDIO_POLICY_DEVICE_STATE_UNAVAILABLE:
+              tmp = mAvailableOutputDevices.types() & ~device;
+              break;
+          default:
+              ALOGE("setDeviceConnectionState() invalid state: %x", state);
+              return BAD_VALUE;
+      }
+
+      gAudioHardwareOutput.updateRouting(tmp);
+      tmp = mAvailableOutputDevices.types();
     }
 
-    gAudioHardwareOutput.updateRouting(tmp);
-    tmp = mAvailableOutputDevices.types();
-
-    status_t ret = AudioPolicyManager::setDeviceConnectionState(
+    status_t ret = 0;
+    if (device != AUDIO_DEVICE_IN_REMOTE_SUBMIX) {
+      ret = AudioPolicyManager::setDeviceConnectionState(
                     device, state, device_address);
+    }
 
-    if (tmp != mAvailableOutputDevices.types())
-        gAudioHardwareOutput.updateRouting(mAvailableOutputDevices.types());
+    if (audio_is_output_device(device)) {
+      if (tmp != mAvailableOutputDevices.types())
+          gAudioHardwareOutput.updateRouting(mAvailableOutputDevices.types());
+    }
 
     return ret;
 }
 
 audio_devices_t ATVAudioPolicyManager::getDeviceForInputSource(audio_source_t inputSource)
 {
-    uint32_t device = AudioPolicyManager::getDeviceForInputSource(inputSource);
-    //FIXME: do not allow capture from USB input for voice recognition
-    if (device == AUDIO_DEVICE_IN_USB_DEVICE && inputSource == AUDIO_SOURCE_VOICE_RECOGNITION) {
-        audio_devices_t availableDeviceTypes = mAvailableInputDevices.types() &
-                                                ~AUDIO_DEVICE_BIT_IN;
-        if (availableDeviceTypes & AUDIO_DEVICE_IN_WIRED_HEADSET) {
-            device = AUDIO_DEVICE_IN_WIRED_HEADSET;
-        } else if (availableDeviceTypes & AUDIO_DEVICE_IN_BUILTIN_MIC) {
-            device = AUDIO_DEVICE_IN_BUILTIN_MIC;
-        }
-        ALOGV("getDeviceForInputSource() forcing device to %08x for voice rec", device);
-    }
+    uint32_t device = AUDIO_DEVICE_NONE;
+    bool usePhysRemote = true;
 
+    if (inputSource == AUDIO_SOURCE_VOICE_RECOGNITION) {
 #ifdef REMOTE_CONTROL_INTERFACE
-    // Check if remote is actually connected or we should move on
-    sp<IRemoteControlService> service = IRemoteControlService::getInstance();
-    if (service == NULL) {
-        ALOGV("getDeviceForInputSource No RemoteControl service detected, ignoring");
-    } else {
-        ALOGV("getDeviceForInputSource Querying remote service for connected devices");
-        if (service->hasConnectedRemotes() && !service->hasActiveRemote()) {
-            ALOGV("getDeviceForInputSource No active connected device, passing onto submix");
-            device = AUDIO_DEVICE_NONE;
-        }
-    }
+      // Check if remote is actually connected or we should move on
+      sp<IRemoteControlService> service = IRemoteControlService::getInstance();
+      if (service == NULL) {
+          ALOGV("getDeviceForInputSource No RemoteControl service detected, ignoring");
+          usePhysRemote = false;
+      } else if (!service->hasActiveRemote()) {
+          ALOGV("getDeviceForInputSource No active connected device, passing onto submix");
+          usePhysRemote = false;
+      }
 #endif
-
-    if (device == AUDIO_DEVICE_IN_BUILTIN_MIC || device == AUDIO_DEVICE_NONE) {
-        ALOGV("getDeviceForInputSource(): Falling back to remote submix input");
-        device = AUDIO_DEVICE_IN_REMOTE_SUBMIX;
+      ALOGV("getDeviceForInputSource %s %s", usePhysRemote ? "use physical" : "",
+          mForceSubmixInputSelection ? "use virtual" : "");
+      audio_devices_t availableDeviceTypes = mAvailableInputDevices.types() &
+                                                ~AUDIO_DEVICE_BIT_IN;
+      if (availableDeviceTypes & AUDIO_DEVICE_IN_WIRED_HEADSET &&
+            usePhysRemote) {
+          // User a wired headset (physical remote) if available, connected and active
+          ALOGV("Wired Headset available");
+          device = AUDIO_DEVICE_IN_WIRED_HEADSET;
+      } else if (availableDeviceTypes & AUDIO_DEVICE_IN_REMOTE_SUBMIX &&
+            mForceSubmixInputSelection) {
+          // REMOTE_SUBMIX should always be avaible, let's make sure it's being forced at the moment
+          ALOGV("Virtual remote available");
+          device = AUDIO_DEVICE_IN_REMOTE_SUBMIX;
+      }
     }
+
     ALOGV("getDeviceForInputSource() input source %d, device %08x", inputSource, device);
     return device;
 }
