@@ -38,6 +38,7 @@ namespace android {
 
 AudioStreamOut::AudioStreamOut(AudioHardwareOutput& owner, bool mcOut)
     : mFramesPresented(0)
+    , mFramesRendered(0)
     , mFramesWrittenRemainder(0)
     , mOwnerHAL(owner)
     , mFramesWritten(0)
@@ -128,6 +129,7 @@ void AudioStreamOut::setTgtDevices(uint32_t tgtDevices)
 
 status_t AudioStreamOut::standby()
 {
+    mFramesRendered = 0;
     releaseAllOutputs();
     return NO_ERROR;
 }
@@ -251,6 +253,7 @@ void AudioStreamOut::finishedWriteOp(size_t framesWritten,
 
     mFramesWritten += framesWrittenAppRate;
     mFramesPresented += framesWrittenAppRate;
+    mFramesRendered += framesWrittenAppRate;
 
     if (needThrottle) {
         int64_t deltaLT;
@@ -433,7 +436,15 @@ status_t AudioStreamOut::getPresentationPosition(uint64_t *frames,
 
 status_t AudioStreamOut::getRenderPosition(__unused uint32_t *dspFrames)
 {
-    return INVALID_OPERATION;
+    if (dspFrames == NULL) {
+        return -EINVAL;
+    }
+    if (mPhysOutputs.isEmpty()) {
+        *dspFrames = 0;
+        return -ENODEV;
+    }
+    *dspFrames = (uint32_t) mFramesRendered;
+    return NO_ERROR;
 }
 
 void AudioStreamOut::updateTargetOutputs()
