@@ -159,7 +159,9 @@ BOARD_SEPOLICY_UNION := \
     system_app.te \
     wpa.te \
     shell.te \
+    sepfs.te \
     file_contexts \
+    genfs_contexts \
     property_contexts \
     service_contexts
 

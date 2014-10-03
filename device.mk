@@ -241,4 +241,8 @@ $(call inherit-product-if-exists, vendor/intel/moorefield/prebuilts/houdini/houd
 # Add WiFi Firmware
 $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4354/device-bcm.mk)
 
+# specific management of sep_policy.conf
+PRODUCT_COPY_FILES += \
+    device/asus/fugu/sep_policy.conf:system/etc/security/sep_policy.conf
+
 #PRODUCT_CHARACTERISTICS := tablet
