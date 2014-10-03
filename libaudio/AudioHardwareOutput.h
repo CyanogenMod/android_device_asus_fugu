@@ -54,10 +54,10 @@ class AudioHardwareOutput {
 
     // Interface to allow streams to obtain and release various physical
     // outputs.
-    status_t    obtainOutput(const AudioStreamOut& tgtStream,
+    status_t       obtainOutput(const AudioStreamOut& tgtStream,
                              uint32_t devMask,
                              sp<AudioOutput>* newOutput);
-    void        releaseOutput(const AudioStreamOut& tgtStream,
+    void           releaseOutput(const AudioStreamOut& tgtStream,
                               const sp<AudioOutput>& releaseMe);
 
 
@@ -68,7 +68,9 @@ class AudioHardwareOutput {
                                      uint32_t *sampleRate,
                                      audio_output_flags_t flags,
                                      status_t *status);
-    void closeOutputStream(AudioStreamOut* out);
+    void           closeOutputStream(AudioStreamOut* out);
+
+    void           standbyStatusUpdate(bool isInStandby, bool isMCStream);
 
   private:
     struct OutputSettings {

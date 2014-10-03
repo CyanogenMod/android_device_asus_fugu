@@ -128,6 +128,8 @@ protected:
     bool            mIsMCOutput;
     // Is the audio data encoded, eg. AC3?
     bool            mIsEncoded;
+    // Is the stream on standby?
+    bool            mInStandby;
 
     MySPDIFEncoder  mSPDIFEncoder;
 

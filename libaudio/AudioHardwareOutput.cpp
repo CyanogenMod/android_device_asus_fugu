@@ -506,6 +506,37 @@ void AudioHardwareOutput::updateTgtDevices_l() {
         mMCOutput->setTgtDevices(mcMask);
 }
 
+void AudioHardwareOutput::standbyStatusUpdate(bool isInStandby, bool isMCStream) {
+
+    Mutex::Autolock _l1(mStreamLock);
+    Mutex::Autolock _l2(mSettingsLock);
+
+    // If there is no HDMI, do nothing
+    if (mSettings.hdmi.allowed && mHDMIConnected) {
+        // If a multi-channel stream goes to standy state, we must switch
+        // to stereo stream. If MC comes out of standby, we must switch
+        // back to MC. No special processing needed for main stream.
+        // AudioStreamOut class handles that correctly
+        if (isMCStream) {
+            uint32_t mcMask;
+            uint32_t mainMask;
+            if (isInStandby) {
+                mainMask = HDMIAudioOutput::classDevMask();
+                mcMask = 0;
+            } else {
+                mainMask = 0;
+                mcMask = HDMIAudioOutput::classDevMask();
+            }
+
+            if (NULL != mMainOutput)
+                mMainOutput->setTgtDevices(mainMask);
+
+            if (NULL != mMCOutput)
+                mMCOutput->setTgtDevices(mcMask);
+        }
+    }
+}
+
 #define DUMP(a...) \
     snprintf(buffer, SIZE, a); \
     buffer[SIZE - 1] = 0; \

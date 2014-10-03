@@ -45,6 +45,7 @@ AudioStreamOut::AudioStreamOut(AudioHardwareOutput& owner, bool mcOut)
     , mAudioFlingerTgtDevices(0)
     , mIsMCOutput(mcOut)
     , mIsEncoded(false)
+    , mInStandby(false)
     , mSPDIFEncoder(this)
 {
     assert(mLocalClock.initCheck());
@@ -129,6 +130,9 @@ void AudioStreamOut::setTgtDevices(uint32_t tgtDevices)
 status_t AudioStreamOut::standby()
 {
     releaseAllOutputs();
+    mOwnerHAL.standbyStatusUpdate(true, mIsMCOutput);
+    mInStandby = true;
+
     return NO_ERROR;
 }
 
@@ -569,6 +573,7 @@ ssize_t AudioStreamOut::writeInternal(const void* buffer, size_t bytes)
         data[8], data[9], data[10], data[11],
         data[12], data[13], data[14], data[15]
         );
+
     // Note: no lock is obtained here.  Calls to write and getNextWriteTimestamp
     // happen only on the AudioFlinger mixer thread which owns this particular
     // output stream, so there is no need to worry that there will be two
@@ -581,6 +586,14 @@ ssize_t AudioStreamOut::writeInternal(const void* buffer, size_t bytes)
     // getNextWriteTimestamp (we know that it is safe for write and gnwt to read
     // the collection because the only collection mutator is the same thread
     // which calls write and gnwt).
+
+    // If the stream is in standby, then the first write should bring it out
+    // of standby
+    if (mInStandby) {
+        mOwnerHAL.standbyStatusUpdate(false, mIsMCOutput);
+        mInStandby = false;
+    }
+
     updateTargetOutputs();
 
     // If any of our outputs is in the PRIMED state when ::write is called, it
@@ -725,6 +738,7 @@ status_t AudioStreamOut::dump(int fd)
     DUMP("\tchannel mask           : 0x%04x\n", chanMask());
     DUMP("\tformat                 : %d\n", format());
     DUMP("\tdevice mask            : 0x%04x\n", mTgtDevices);
+    DUMP("\tIn standby             : %s\n", mInStandby? "yes" : "no");
 
     mRoutingLock.lock();
     AudioOutputList outSnapshot(mPhysOutputs);
