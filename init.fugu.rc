@@ -101,7 +101,13 @@ on post-fs
     chown system system /sys/devices/system/cpu/cpufreq/interactive/touchboost_freq
     chmod 0220 /sys/devices/system/cpu/cpufreq/interactive/touchboostpulse
     chmod 0220 /sys/devices/system/cpu/cpufreq/interactive/boostpulse
-    write /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration 2000000
+
+    # Tune interactive governor parameters for Android TV UI animations
+    write /sys/devices/system/cpu/cpufreq/interactive/timer_rate 4000
+    write /sys/devices/system/cpu/cpufreq/interactive/timer_slack 16000
+    write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 90
+    write /sys/devices/system/cpu/cpufreq/interactive/target_loads 70
+    write /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration 800000
 
     # SEP
     chown system system /dev/dx_sep_q0
