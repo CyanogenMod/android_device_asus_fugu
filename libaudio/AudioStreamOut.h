@@ -90,6 +90,8 @@ protected:
 
     // Used to implment get_presentation_position()
     int64_t         mFramesPresented; // application rate frames, not device rate frames
+    // Used to implement get_render_position()
+    int64_t         mFramesRendered; // application rate frames, not device rate frames
     uint32_t        mFramesWrittenRemainder; // needed when device rate > app rate
 
     // Our HAL, used as the middle-man to collect and trade AudioOutputs.
