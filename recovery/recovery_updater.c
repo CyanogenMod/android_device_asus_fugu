@@ -313,7 +313,10 @@ Value* FlashIfwiFuguFn(const char *name, State * state, int argc, Expr * argv[])
 	};
 	fseek(f, 0, SEEK_SET);
 
-	buffer = malloc(ifwi_size);
+	if ((buffer = malloc(ifwi_size)) == NULL) {
+		ErrorAbort(state, "Unable to alloc ifwi flash buffer of size %d", ifwi_size);
+		goto done;
+	}
 	fread(buffer, ifwi_size, 1, f);
 	fclose(f);
 
