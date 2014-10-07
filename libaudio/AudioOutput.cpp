@@ -527,7 +527,7 @@ int  AudioOutput::getHardwareTimestamp(size_t *pAvail,
     Mutex::Autolock _l(mDeviceLock);
     if (!mDevice) {
        ALOGW("pcm device unavailable - reinitialize  timestamp");
-       return 0;
+       return -1;
     }
     return pcm_get_htimestamp(mDevice, pAvail, pTimestamp);
 }

@@ -73,16 +73,16 @@ static const char *kCtrlNames[] = {
     "Query Mode : PCM Bits/Sample Mask",
     "Query Mode : Max Compressed Bitrate"
 };
-static size_t kCtrlCount = sizeof(kCtrlNames)/sizeof(*kCtrlNames);
-size_t kBasicAudNdx  = 0;
-size_t kSpeakerAlloc = 1;
-size_t kModeCntNdx   = 2;
-size_t kModeSelNdx   = 3;
-size_t kFmtNdx       = 4;
-size_t kMaxChCntNdx  = 5;
-size_t kSampRateNdx  = 6;
-size_t kBPSNdx       = 7;
-size_t kMaxCompBRNdx = 8;
+static const size_t kCtrlCount    = sizeof(kCtrlNames)/sizeof(*kCtrlNames);
+static const size_t kBasicAudNdx  = 0;
+static const size_t kSpeakerAlloc = 1;
+static const size_t kModeCntNdx   = 2;
+static const size_t kModeSelNdx   = 3;
+static const size_t kFmtNdx       = 4;
+static const size_t kMaxChCntNdx  = 5;
+static const size_t kSampRateNdx  = 6;
+static const size_t kBPSNdx       = 7;
+static const size_t kMaxCompBRNdx = 8;
 
 HDMIAudioCaps::HDMIAudioCaps()
 {
@@ -95,7 +95,7 @@ HDMIAudioCaps::HDMIAudioCaps()
 bool HDMIAudioCaps::loadCaps(int ALSADeviceID) {
     bool ret = false;
     struct mixer* mixer = NULL;
-    struct mixer_ctl* ctrls[kCtrlCount];
+    struct mixer_ctl* ctrls[kCtrlCount] = {NULL};
     int tmp, mode_cnt;
     Mutex::Autolock _l(mLock);
 
