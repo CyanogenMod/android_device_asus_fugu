@@ -31,7 +31,7 @@
 #define BTM_BLE_CONN_INT_MAX_DEF BTM_BLE_CONN_INT_MIN_DEF
 
 // Allow better battery life
-#define BTM_BLE_CONN_SLAVE_LATENCY_DEF 75
+#define BTM_BLE_CONN_SLAVE_LATENCY_DEF 24
 
 // Detect disconnects faster
 #define BTM_BLE_CONN_TIMEOUT_DEF 300
