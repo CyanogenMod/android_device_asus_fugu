@@ -57,7 +57,6 @@ ifeq ($(HOST_OS),linux)
   ifeq ($(TARGET_BUILD_VARIANT),user)
     ifeq ($(WITH_DEXPREOPT),)
       WITH_DEXPREOPT := true
-      DONT_DEXPREOPT_PREBUILTS := true
     endif
   endif
 endif
