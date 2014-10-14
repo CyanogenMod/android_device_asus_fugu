@@ -397,7 +397,7 @@ status_t AudioStreamOut::getPresentationPosition(uint64_t *frames,
                 // actual buffer sizes.
                 // Increasing kFudgeMSec will move the audio earlier in
                 // relation to the video.
-                const int kFudgeMSec = 40;
+                const int kFudgeMSec = 50;
                 int fudgeFrames = kFudgeMSec * sampleRate() / 1000;
 
                 // Scale the frames in the driver because it might be running at
