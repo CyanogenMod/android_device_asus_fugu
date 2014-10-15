@@ -135,6 +135,8 @@ COMMON_GLOBAL_CFLAGS += -DGFX_BUF_EXT
 
 # enabled to use IMG RS GPU driver
 OVERRIDE_RS_DRIVER := libPVRRS.so
+# enable ARM codegen for x86 with Houdini
+BUILD_ARM_FOR_X86 := true
 
 # enabled to carry out all drawing operations performed on a View's canvas with GPU for 2D rendering pipeline.
 USE_OPENGL_RENDERER := true
