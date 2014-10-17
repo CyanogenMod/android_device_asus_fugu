@@ -192,7 +192,7 @@
 /system/vendor/lib/libglslcompiler.so
 /system/vendor/lib/libIMGegl.so
 /system/vendor/lib/libLLVM.moorefield.so
-/system/vendor/lib/liboclcompiler.so
+/system/vendor/lib/libcptcompiler.so
 /system/vendor/lib/liboemcrypto.so
 /system/vendor/lib/libpvr2d.so
 /system/vendor/lib/libpvrANDROID_WSEGL.so

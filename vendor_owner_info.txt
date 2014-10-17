@@ -176,7 +176,7 @@ system/vendor/lib/libdrmdecrypt.so:widevine
 system/vendor/lib/libglslcompiler.so:intel
 system/vendor/lib/libIMGegl.so:intel
 system/vendor/lib/libLLVM.moorefield.so:intel
-system/vendor/lib/liboclcompiler.so:intel
+system/vendor/lib/libcptcompiler.so:intel
 system/vendor/lib/liboemcrypto.so:widevine
 system/vendor/lib/libpvr2d.so:intel
 system/vendor/lib/libpvrANDROID_WSEGL.so:intel

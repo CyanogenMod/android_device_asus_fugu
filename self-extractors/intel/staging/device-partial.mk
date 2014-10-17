@@ -173,7 +173,7 @@ PRODUCT_COPY_FILES := \
     vendor/intel/fugu/proprietary/libglslcompiler.so:system/vendor/lib/libglslcompiler.so:intel \
     vendor/intel/fugu/proprietary/libIMGegl.so:system/vendor/lib/libIMGegl.so:intel \
     vendor/intel/fugu/proprietary/libLLVM.moorefield.so:system/vendor/lib/libLLVM.moorefield.so:intel \
-    vendor/intel/fugu/proprietary/liboclcompiler.so:system/vendor/lib/liboclcompiler.so:intel \
+    vendor/intel/fugu/proprietary/libcptcompiler.so:system/vendor/lib/libcptcompiler.so:intel \
     vendor/intel/fugu/proprietary/libpvr2d.so:system/vendor/lib/libpvr2d.so:intel \
     vendor/intel/fugu/proprietary/libpvrANDROID_WSEGL.so:system/vendor/lib/libpvrANDROID_WSEGL.so:intel \
     vendor/intel/fugu/proprietary/libpvrcpt.so:system/vendor/lib/libpvrcpt.so:intel \
