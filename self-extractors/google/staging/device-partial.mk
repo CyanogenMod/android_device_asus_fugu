@@ -14,6 +14,5 @@
 
 # Google blob(s) necessary for Fugu hardware
 PRODUCT_COPY_FILES := \
-    vendor/google/fugu/proprietary/libiperf.so:system/lib/libiperf.so:google \
-    vendor/google/fugu/proprietary/ADT-1_Remote.kl:system/usr/keylayout/ADT-1_Remote.kl:google \
+    vendor/google/fugu/proprietary/libiperf.so:system/lib/libiperf.so:google
 

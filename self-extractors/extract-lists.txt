@@ -10,7 +10,6 @@
             system/bin/BtFwLoader \
             system/etc/wifi/bcmdhd.cal \
             system/etc/wifi/bcmdhd_sr2.cal \
-            system/priv-app/BroadcomOTA/BroadcomOTA.apk \
             system/vendor/firmware/BCM4350C0.hcd \
             system/vendor/firmware/BCM4350C0_SR2.hcd \
             system/xbin/wlutil \
@@ -18,12 +17,9 @@
     ;;
   google)
     TO_EXTRACT="\
-            system/app/FuguPairingTutorial/FuguPairingTutorial.apk \
-            system/app/PlayAutoInstallConfigFugu/PlayAutoInstallConfigFugu.apk \
             system/lib/libiperf.so \
             system/priv-app/LeanbackLauncher/LeanbackLauncher.apk \
             system/priv-app/TV/TV.apk \
-            system/usr/keylayout/ADT-1_Remote.kl \
             "
     ;;
   intel)

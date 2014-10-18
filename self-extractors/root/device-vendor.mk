@@ -14,10 +14,7 @@
 
 
 PRODUCT_PACKAGES += \
-    BroadcomOTA \
-    FuguPairingTutorial \
     LeanbackLauncher \
-    PlayAutoInstallConfigFugu \
     TV
 
 LOCAL_STEM := fugu/device-partial.mk

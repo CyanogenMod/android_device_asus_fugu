@@ -1,5 +1,3 @@
-system/app/FuguPairingTutorial/FuguPairingTutorial.apk:google
-system/app/PlayAutoInstallConfigFugu/PlayAutoInstallConfigFugu.apk:google
 system/bin/BtFwLoader:broadcom
 system/bin/houdini:intel
 system/etc/binfmt_misc/arm_dyn:intel
@@ -150,10 +148,8 @@ system/lib/libmixvbp_vp8.so:intel
 system/lib/libOMXVideoDecoderAVCSecure.so:intel
 system/lib/libsepdrm_cc54.so:intel
 system/lib/libstlport-mfx.so:intel
-system/priv-app/BroadcomOTA/BroadcomOTA.apk:broadcom
 system/priv-app/LeanbackLauncher/LeanbackLauncher.apk:google
 system/priv-app/TV/TV.apk:google
-system/usr/keylayout/ADT-1_Remote.kl:google
 system/usr/share/librscruntime.bc:intel
 system/vendor/bin/bcc.moorefield:intel
 system/vendor/bin/framebuffer_test:intel
