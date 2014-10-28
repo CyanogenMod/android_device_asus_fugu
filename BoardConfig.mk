@@ -131,6 +131,9 @@ USE_INTEL_SECURE_AVC := true
 USE_MEDIASDK := true
 MFX_IPP := p8
 
+# Video Post Processing
+TARGET_HAS_ISV := true
+
 COMMON_GLOBAL_CFLAGS += -DGFX_BUF_EXT
 
 # Disable IMG RS GPU driver
