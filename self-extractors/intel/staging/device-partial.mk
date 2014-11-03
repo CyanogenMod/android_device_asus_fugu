@@ -169,11 +169,11 @@ PRODUCT_COPY_FILES := \
     vendor/intel/fugu/proprietary/gralloc.moorefield.so:system/vendor/lib/hw/gralloc.moorefield.so:intel \
     vendor/intel/fugu/proprietary/libbcc.moorefield.so:system/vendor/lib/libbcc.moorefield.so:intel \
     vendor/intel/fugu/proprietary/libbcinfo.moorefield.so:system/vendor/lib/libbcinfo.moorefield.so:intel \
+    vendor/intel/fugu/proprietary/libcptcompiler.so:system/vendor/lib/libcptcompiler.so:intel \
     vendor/intel/fugu/proprietary/libcreatesurface.so:system/vendor/lib/libcreatesurface.so:intel \
     vendor/intel/fugu/proprietary/libglslcompiler.so:system/vendor/lib/libglslcompiler.so:intel \
     vendor/intel/fugu/proprietary/libIMGegl.so:system/vendor/lib/libIMGegl.so:intel \
     vendor/intel/fugu/proprietary/libLLVM.moorefield.so:system/vendor/lib/libLLVM.moorefield.so:intel \
-    vendor/intel/fugu/proprietary/libcptcompiler.so:system/vendor/lib/libcptcompiler.so:intel \
     vendor/intel/fugu/proprietary/libpvr2d.so:system/vendor/lib/libpvr2d.so:intel \
     vendor/intel/fugu/proprietary/libpvrANDROID_WSEGL.so:system/vendor/lib/libpvrANDROID_WSEGL.so:intel \
     vendor/intel/fugu/proprietary/libpvrcpt.so:system/vendor/lib/libpvrcpt.so:intel \
