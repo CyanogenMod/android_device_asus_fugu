@@ -164,6 +164,7 @@
 /system/lib/libOMXVideoDecoderAVCSecure.so
 /system/lib/libsepdrm_cc54.so
 /system/lib/libstlport-mfx.so
+/system/priv-app/AtvRemoteService/AtvRemoteService.apk
 /system/priv-app/LeanbackLauncher/LeanbackLauncher.apk
 /system/priv-app/TV/TV.apk
 /system/usr/share/librscruntime.bc

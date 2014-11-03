@@ -18,6 +18,7 @@
   google)
     TO_EXTRACT="\
             system/lib/libiperf.so \
+            system/priv-app/AtvRemoteService/AtvRemoteService.apk \
             system/priv-app/LeanbackLauncher/LeanbackLauncher.apk \
             system/priv-app/TV/TV.apk \
             "
@@ -179,11 +180,11 @@
             system/vendor/lib/hw/gralloc.moorefield.so \
             system/vendor/lib/libbcc.moorefield.so \
             system/vendor/lib/libbcinfo.moorefield.so \
+            system/vendor/lib/libcptcompiler.so \
             system/vendor/lib/libcreatesurface.so \
             system/vendor/lib/libglslcompiler.so \
             system/vendor/lib/libIMGegl.so \
             system/vendor/lib/libLLVM.moorefield.so \
-            system/vendor/lib/libcptcompiler.so \
             system/vendor/lib/libpvr2d.so \
             system/vendor/lib/libpvrANDROID_WSEGL.so \
             system/vendor/lib/libpvrcpt.so \

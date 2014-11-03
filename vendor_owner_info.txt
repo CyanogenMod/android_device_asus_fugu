@@ -148,6 +148,7 @@ system/lib/libmixvbp_vp8.so:intel
 system/lib/libOMXVideoDecoderAVCSecure.so:intel
 system/lib/libsepdrm_cc54.so:intel
 system/lib/libstlport-mfx.so:intel
+system/priv-app/AtvRemoteService/AtvRemoteService.apk:google
 system/priv-app/LeanbackLauncher/LeanbackLauncher.apk:google
 system/priv-app/TV/TV.apk:google
 system/usr/share/librscruntime.bc:intel
