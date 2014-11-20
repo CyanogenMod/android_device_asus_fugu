@@ -133,6 +133,9 @@ MFX_IPP := p8
 
 # Video Post Processing
 TARGET_HAS_ISV := true
+ADDITIONAL_DEFAULT_PROPERTIES += \
+    persist.intel.isv.vpp = 1 \
+    persist.intel.isv.frc = 1
 
 COMMON_GLOBAL_CFLAGS += -DGFX_BUF_EXT
 
