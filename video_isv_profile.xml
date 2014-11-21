@@ -17,6 +17,12 @@
 
 
 <VideoPostProcessSettings>
+	<!-- The default status for VPP/FRC.
+	     "0" is OFF and "1" is ON
+	-->
+	<Parameter name="DefaultVPPStatus" value="1" />
+	<Parameter name="DefaultFRCStatus" value="1" />
+
 	<Filter name="ProcFilterNoiseReduction">
 		<enabled value="false"/>
 		<minResolution value="320x240"/>
