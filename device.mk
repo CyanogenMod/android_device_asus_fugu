@@ -70,7 +70,8 @@ PRODUCT_COPY_FILES += \
 # Audio
 PRODUCT_PACKAGES += \
     libtinyalsa \
-    audio.primary.fugu
+    audio.primary.fugu \
+    audio.usb.default
 
 USE_CUSTOM_AUDIO_POLICY := 1
 

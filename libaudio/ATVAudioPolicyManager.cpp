@@ -154,6 +154,9 @@ audio_devices_t ATVAudioPolicyManager::getDeviceForInputSource(audio_source_t in
           // REMOTE_SUBMIX should always be avaible, let's make sure it's being forced at the moment
           ALOGV("Virtual remote available");
           device = AUDIO_DEVICE_IN_REMOTE_SUBMIX;
+      } else if (availableDeviceTypes & AUDIO_DEVICE_IN_USB_DEVICE) {
+          ALOGV("Use USB audio input");
+          device = AUDIO_DEVICE_IN_USB_DEVICE;
       }
     }
 
