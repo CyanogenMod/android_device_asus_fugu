@@ -100,7 +100,7 @@ SF_VSYNC_EVENT_PHASE_OFFSET_NS := 5000000
 BOARD_EGL_CFG := device/asus/fugu/egl.cfg
 
 ADDITIONAL_DEFAULT_PROPERTIES += \
-    ro.opengles.version = 196608 \
+    ro.opengles.version = 196609 \
     ro.hwui.drop_shadow_cache_size = 4.0 \
     ro.hwui.gradient_cache_size = 0.8 \
     ro.hwui.layer_cache_size = 32.0 \
