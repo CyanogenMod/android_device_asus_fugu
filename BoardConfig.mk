@@ -21,6 +21,7 @@ TARGET_ARCH := x86
 TARGET_ARCH_VARIANT := silvermont
 TARGET_CPU_ABI := x86
 TARGET_CPU_SMP := true
+TARGET_KERNEL_CROSS_COMPILE_PREFIX := x86_64-linux-android-
 
 TARGET_RECOVERY_FSTAB := device/asus/fugu/recovery.fstab
 TARGET_RELEASETOOLS_EXTENSIONS := device/asus/fugu
@@ -38,6 +39,12 @@ TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 
 # Use dlmalloc
 MALLOC_IMPL := dlmalloc
+
+# Inline kernel building
+TARGET_KERNEL_CONFIG := fugu_defconfig
+TARGET_KERNEL_SOURCE := kernel/asus/fugu
+TARGET_KERNEL_ARCH := x86_64
+BOARD_KERNEL_IMAGE_NAME := bzImage
 
 # Kernel cmdline
 BOARD_KERNEL_CMDLINE := pci=noearly vmalloc=256M ptrace.ptrace_can_access=1

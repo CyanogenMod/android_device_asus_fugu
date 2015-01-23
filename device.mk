@@ -81,10 +81,6 @@ PRODUCT_COPY_FILES += \
 # Hdmi CEC: Fugu works as a playback device (4).
 PRODUCT_PROPERTY_OVERRIDES += ro.hdmi.device_type=4
 
-# Boot Animation
-PRODUCT_COPY_FILES += \
-    device/asus/fugu/bootanimation.zip:system/media/bootanimation.zip
-
 # Bluetooth
 PRODUCT_PACKAGES += \
     bt_bcm4354

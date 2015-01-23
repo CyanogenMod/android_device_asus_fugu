@@ -1,0 +1,6 @@
+[
+  {
+    "repository": "android_kernel_asus_fugu",
+    "target_path": "kernel/asus/fugu"
+  }
+]
