@@ -14,32 +14,6 @@
 # limitations under the License.
 #
 
-KERNEL_SRC_DIR ?= linux/kernel-fugu
-KERNEL_CFG_NAME ?= fugu
-TARGET_KERNEL_ARCH ?= x86_64
-
-
-# Check for availability of kernel source
-ifneq ($(wildcard $(KERNEL_SRC_DIR)/Makefile),)
-  # Give precedence to TARGET_PREBUILT_KERNEL
-  ifeq ($(TARGET_PREBUILT_KERNEL),)
-    TARGET_KERNEL_BUILT_FROM_SOURCE := true
-  endif
-endif
-
-ifneq ($(TARGET_KERNEL_BUILT_FROM_SOURCE), true)
-# Use prebuilt kernel
-ifeq ($(TARGET_PREBUILT_KERNEL),)
-LOCAL_KERNEL := device/asus/fugu-kernel/bzImage
-else
-LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
-endif
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_KERNEL):kernel
-
-endif #TARGET_KERNEL_BUILT_FROM_SOURCE
-
 # Need AppWidget permission to prevent from Launcher's crash.
 # TODO(pattjin): Remove this when the TV Launcher is used, which does not support AppWidget.
 PRODUCT_COPY_FILES += \
@@ -92,10 +66,6 @@ PRODUCT_COPY_FILES += \
 
 # Hdmi CEC: Fugu works as a playback device (4).
 PRODUCT_PROPERTY_OVERRIDES += ro.hdmi.device_type=4
-
-# Boot Animation
-PRODUCT_COPY_FILES += \
-    device/asus/fugu/bootanimation-580-256col.zip:system/media/bootanimation.zip
 
 # Bluetooth
 PRODUCT_PACKAGES += \

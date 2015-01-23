@@ -14,5 +14,5 @@
 # limitations under the License.
 #
 
-add_lunch_combo full_fugu-userdebug
-add_lunch_combo aosp_fugu-userdebug
+add_lunch_combo cm_fugu-userdebug
+add_lunch_combo cm_fugu-eng
