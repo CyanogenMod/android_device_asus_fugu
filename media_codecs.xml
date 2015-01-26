@@ -123,6 +123,14 @@ Only the three quirks included above are recognized at this point:
             <Limit name="bitrate" range="1-50000000" />
             <Feature name="adaptive-playback" />
         </MediaCodec>
+        <MediaCodec name="OMX.Intel.VideoDecoder.MPEG2" type="video/mpeg2">
+            <Limit name="size" min="96x32" max="1920x1088" />
+            <Limit name="alignment" value="2x2" />
+            <Limit name="block-size" value="16x16" />
+            <Limit name="blocks-per-second" range="12-489600" />
+            <Limit name="bitrate" range="1-80000000" />
+            <Feature name="adaptive-playback" />
+        </MediaCodec>
         <MediaCodec name="OMX.Intel.VideoDecoder.VP9.hybrid" type="video/x-vnd.on2.vp9">
             <Limit name="size" min="16x16" max="1920x1088" />
             <Limit name="alignment" value="2x2" />

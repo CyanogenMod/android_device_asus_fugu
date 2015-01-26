@@ -163,6 +163,7 @@ PRODUCT_PACKAGES += \
     libmixvbp_h264secure \
     libmixvbp_vc1 \
     libmixvbp_vp8 \
+    libmixvbp_mpeg2 \
     libmixvbp \
     libva_videodecoder \
     libva_videoencoder
@@ -175,6 +176,7 @@ PRODUCT_PACKAGES += \
     libOMXVideoDecoderMPEG4 \
     libOMXVideoDecoderWMV \
     libOMXVideoDecoderVP8 \
+    libOMXVideoDecoderMPEG2 \
     libOMXVideoDecoderVP9HWR \
     libOMXVideoDecoderVP9Hybrid \
     libOMXVideoEncoderAVC \
