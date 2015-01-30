@@ -343,7 +343,7 @@ ssize_t HDMIAudioCaps::getMaxChModeNdx_l() {
 
     for (size_t i = 0; i < mModes.size(); ++i) {
         if ((mModes[i].fmt == kFmtLPCM) && (max_ch < mModes[i].max_ch)) {
-            max_ch < mModes[i].max_ch;
+            max_ch = mModes[i].max_ch;
             max_ch_ndx = i;
         }
     }
