@@ -74,7 +74,8 @@ float ATVAudioPolicyManager::computeVolume(audio_stream_type_t stream,
 
 status_t ATVAudioPolicyManager::setDeviceConnectionState(audio_devices_t device,
                                                          audio_policy_dev_state_t state,
-                                                         const char *device_address)
+                                                         const char *device_address,
+                                                         const char *device_name)
 {
     audio_devices_t tmp = AUDIO_DEVICE_NONE;;
     ALOGE("setDeviceConnectionState %08x %x %s", device, state,
@@ -112,7 +113,7 @@ status_t ATVAudioPolicyManager::setDeviceConnectionState(audio_devices_t device,
     status_t ret = 0;
     if (device != AUDIO_DEVICE_IN_REMOTE_SUBMIX) {
       ret = AudioPolicyManager::setDeviceConnectionState(
-                    device, state, device_address);
+                    device, state, device_address, device_name);
     }
 
     if (audio_is_output_device(device)) {
