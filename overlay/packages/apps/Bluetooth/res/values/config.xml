@@ -13,6 +13,7 @@
    limitations under the License.
 -->
 <resources>
+    <bool name="profile_supported_a2dp">false</bool>
     <bool name="profile_supported_pbap">false</bool>
     <bool name="profile_supported_map">false</bool>
     <bool name="profile_supported_opp">false</bool>
