@@ -20,7 +20,7 @@
 #include <utils/Timers.h>
 #include <utils/Errors.h>
 #include <utils/KeyedVector.h>
-#include <AudioPolicyManager.h>
+#include <managerdefault/AudioPolicyManager.h>
 
 #ifndef ANDROID_ATV_AUDIO_POLICY_MANAGER_H
 #define ANDROID_ATV_AUDIO_POLICY_MANAGER_H
