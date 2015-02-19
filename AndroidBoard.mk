@@ -16,7 +16,5 @@
 
 LOCAL_PATH := $(my-dir)
 
-include $(LOCAL_PATH)/AndroidKernel.mk
-
 -include vendor/intel/prebuilts/$(TARGET_PRODUCT)/prebuilts.mk
 
