@@ -44,6 +44,7 @@ static const char* ITEMS[] =  {"reboot system now",
                                "apply update from ADB",
                                "wipe data/factory reset",
                                "wipe cache partition",
+                               "view recovery logs",
                                NULL };
 
 #define kFBDevice "/dev/graphics/fb0"
@@ -313,6 +314,7 @@ class FuguDevice : public Device {
           case 1: return APPLY_ADB_SIDELOAD;
           case 2: return WIPE_DATA;
           case 3: return WIPE_CACHE;
+          case 4: return READ_RECOVERY_LASTLOG;
           default: return NO_ACTION;
         }
     }
