@@ -255,4 +255,7 @@ $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4354
 PRODUCT_COPY_FILES += \
     device/asus/fugu/sep_policy.conf:system/etc/security/sep_policy.conf
 
+# Without this filter, we get very close to the limit.
+PRODUCT_DEX_PREOPT_DEFAULT_FLAGS += --compiler-filter=space
+
 #PRODUCT_CHARACTERISTICS := tablet
