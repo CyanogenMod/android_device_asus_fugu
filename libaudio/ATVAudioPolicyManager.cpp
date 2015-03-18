@@ -60,14 +60,12 @@ ATVAudioPolicyManager::ATVAudioPolicyManager(
 
 float ATVAudioPolicyManager::computeVolume(audio_stream_type_t stream,
                                            int index,
-                                           audio_io_handle_t output,
                                            audio_devices_t device)
 {
     // We only use master volume, so all audio flinger streams
     // should be set to maximum
     (void)stream;
     (void)index;
-    (void)output;
     (void)device;
     return 1.0;
 }
