@@ -67,7 +67,7 @@ float ATVAudioPolicyManager::computeVolume(audio_stream_type_t stream,
     (void)stream;
     (void)index;
     (void)device;
-    return 1.0;
+    return 0.0; // no attenuation == 0.0dB
 }
 
 status_t ATVAudioPolicyManager::setDeviceConnectionState(audio_devices_t device,
