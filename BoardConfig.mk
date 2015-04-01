@@ -152,26 +152,7 @@ INTEL_DPST := true
 # bootstub as 2nd bootloader
 TARGET_BOOTLOADER_IS_2ND := true
 
-BOARD_SEPOLICY_DIRS := device/asus/fugu/sepolicy
-BOARD_SEPOLICY_UNION := \
-    bluetooth.te \
-    btfwloader.te \
-    dhcp.te \
-    dumpstate.te \
-    file.te \
-    mediaserver.te \
-    netd.te \
-    property.te \
-    pvrsrvctl.te \
-    surfaceflinger.te \
-    system_app.te \
-    wpa.te \
-    shell.te \
-    sepfs.te \
-    file_contexts \
-    genfs_contexts \
-    property_contexts \
-    service_contexts
+BOARD_SEPOLICY_DIRS += device/asus/fugu/sepolicy
 
 # Use the non-open-source parts, if they're present
 -include vendor/asus/fugu/BoardConfigVendor.mk
