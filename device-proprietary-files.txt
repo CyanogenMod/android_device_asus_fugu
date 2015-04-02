@@ -147,7 +147,6 @@ lib/libdx_cc7.so
 lib/libgabi++-mfx.so
 lib/libhoudini.so
 lib/libifp.so
-lib/libiperf.so
 lib/libkeymaster.so
 lib/libmfx_omx_components_sw.so
 lib/libmfx_omx_core.so
@@ -161,8 +160,9 @@ lib/libmixvbp_vp8.so
 lib/libOMXVideoDecoderAVCSecure.so
 lib/libsepdrm_cc54.so
 lib/libstlport-mfx.so
-#priv-app/LeanbackLauncher/LeanbackLauncher.apk
-#priv-app/TV/TV.apk
+priv-app/AtvRemoteService/AtvRemoteService.apk
+priv-app/LeanbackLauncher/LeanbackLauncher.apk
+priv-app/TV/TV.apk
 usr/share/librscruntime.bc
 vendor/bin/bcc.moorefield
 vendor/bin/framebuffer_test
@@ -205,4 +205,3 @@ vendor/lib/libwvm.so
 vendor/lib/libWVStreamControlAPI_L1.so
 vendor/lib/mediadrm/libplayreadydrmplugin.so
 vendor/lib/mediadrm/libwvdrmengine.so
-xbin/wlutil
