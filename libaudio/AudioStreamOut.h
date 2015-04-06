@@ -72,8 +72,9 @@ class AudioStreamOut {
     class MySPDIFEncoder : public SPDIFEncoder
     {
     public:
-        MySPDIFEncoder(AudioStreamOut *streamOut)
-          : mStreamOut(streamOut)
+        MySPDIFEncoder(AudioStreamOut *streamOut, audio_format_t format)
+          : SPDIFEncoder(format)
+          , mStreamOut(streamOut)
         {};
 
         virtual ssize_t writeOutput(const void* buffer, size_t bytes)
@@ -133,7 +134,7 @@ protected:
     // Is the stream on standby?
     bool            mInStandby;
 
-    MySPDIFEncoder  mSPDIFEncoder;
+    MySPDIFEncoder *mSPDIFEncoder;
 
     void            releaseAllOutputs();
     void            updateTargetOutputs();

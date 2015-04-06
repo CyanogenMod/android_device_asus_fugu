@@ -180,6 +180,7 @@ bool HDMIAudioCaps::loadCaps(int ALSADeviceID) {
                 goto bailout;
             m.bps_bitmask = static_cast<uint32_t>(tmp);
         } else if ((m.fmt >= kFmtAC3) && (m.fmt <= kFmtATRAC)) { // FIXME ATRAC is not last format!?
+            // FIXME SHould we extend the range up to kFmtDTSHD or kFmtMPGSUR?
             if ((tmp = mixer_ctl_get_value(ctrls[kMaxCompBRNdx], 0)) < 0)
                 goto bailout;
             m.comp_bitrate = static_cast<uint32_t>(tmp);
@@ -267,6 +268,12 @@ void HDMIAudioCaps::getFmtsForAF(String8& fmts) {
                 break;
             case kFmtEAC3:
                 fmts.append("|AUDIO_FORMAT_E_AC3");
+                break;
+            case kFmtDTS:
+                fmts.append("|AUDIO_FORMAT_DTS");
+                break;
+            case kFmtDTSHD:
+                fmts.append("|AUDIO_FORMAT_DTS_HD");
                 break;
             default:
                 break;
@@ -360,7 +367,9 @@ bool HDMIAudioCaps::supportsFormat(audio_format_t format,
     switch (format & AUDIO_FORMAT_MAIN_MASK) {
         case AUDIO_FORMAT_PCM: alsaFormat = kFmtLPCM; break;
         case AUDIO_FORMAT_AC3: alsaFormat = kFmtAC3; break;
-        case AUDIO_FORMAT_E_AC3: alsaFormat = kFmtAC3; break;
+        case AUDIO_FORMAT_E_AC3: alsaFormat = kFmtAC3; break; // FIXME should this be kFmtEAC3?
+        case AUDIO_FORMAT_DTS: alsaFormat = kFmtDTS; break;
+        case AUDIO_FORMAT_DTS_HD: alsaFormat = kFmtDTSHD; break;
         default: return false;
     }
 

@@ -47,7 +47,7 @@ AudioStreamOut::AudioStreamOut(AudioHardwareOutput& owner, bool mcOut)
     , mIsMCOutput(mcOut)
     , mIsEncoded(false)
     , mInStandby(false)
-    , mSPDIFEncoder(this)
+    , mSPDIFEncoder(NULL)
 {
     assert(mLocalClock.initCheck());
 
@@ -74,6 +74,7 @@ AudioStreamOut::AudioStreamOut(AudioHardwareOutput& owner, bool mcOut)
 AudioStreamOut::~AudioStreamOut()
 {
     releaseAllOutputs();
+    delete mSPDIFEncoder;
 }
 
 status_t AudioStreamOut::set(
@@ -109,6 +110,11 @@ status_t AudioStreamOut::set(
                                                      lRate,
                                                      audio_channel_count_from_out_mask(lChannels)))
             return BAD_VALUE;
+    }
+
+    delete mSPDIFEncoder;
+    if (mIsEncoded) {
+        mSPDIFEncoder = new MySPDIFEncoder(this, lFormat);
     }
 
     mInputFormat = lFormat;
@@ -352,7 +358,7 @@ char* AudioStreamOut::getParameters(const char* k)
 
 uint32_t AudioStreamOut::getRateMultiplier() const
 {
-    return (mIsEncoded) ? mSPDIFEncoder.getRateMultiplier() : 1;
+    return (mIsEncoded) ? mSPDIFEncoder->getRateMultiplier() : 1;
 }
 
 uint32_t AudioStreamOut::outputSampleRate() const
@@ -362,7 +368,7 @@ uint32_t AudioStreamOut::outputSampleRate() const
 
 int AudioStreamOut::getBytesPerOutputFrame()
 {
-    return (mIsEncoded) ? mSPDIFEncoder.getBytesPerOutputFrame()
+    return (mIsEncoded) ? mSPDIFEncoder->getBytesPerOutputFrame()
         : (mInputChanCount * sizeof(int16_t));
 }
 
@@ -564,17 +570,17 @@ void AudioStreamOut::adjustOutputs(int64_t maxTime)
 ssize_t AudioStreamOut::write(const void* buffer, size_t bytes)
 {
     uint8_t *data = (uint8_t *)buffer;
-    ALOGVV("AudioStreamOut::write(%u)   0x%02X, 0x%02X, 0x%02X, 0x%02X,"
-          " 0x%02X, 0x%02X, 0x%02X, 0x%02X,"
-          " 0x%02X, 0x%02X, 0x%02X, 0x%02X,"
-          " 0x%02X, 0x%02X, 0x%02X, 0x%02X ====",
-        bytes, data[0], data[1], data[2], data[3],
-        data[4], data[5], data[6], data[7],
-        data[8], data[9], data[10], data[11],
-        data[12], data[13], data[14], data[15]
-        );
     if (mIsEncoded) {
-        return mSPDIFEncoder.write(buffer, bytes);
+        ALOGVV("AudioStreamOut::write(%u)   0x%02X, 0x%02X, 0x%02X, 0x%02X,"
+              " 0x%02X, 0x%02X, 0x%02X, 0x%02X,"
+              " 0x%02X, 0x%02X, 0x%02X, 0x%02X,"
+              " 0x%02X, 0x%02X, 0x%02X, 0x%02X ====",
+            bytes, data[0], data[1], data[2], data[3],
+            data[4], data[5], data[6], data[7],
+            data[8], data[9], data[10], data[11],
+            data[12], data[13], data[14], data[15]
+            );
+        return mSPDIFEncoder->write(buffer, bytes);
     } else {
         return writeInternal(buffer, bytes);
     }
