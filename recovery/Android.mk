@@ -14,7 +14,7 @@ include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE_TAGS := optional
-LOCAL_C_INCLUDES += bootable/recovery
+LOCAL_C_INCLUDES += bootable/recovery system/core/fs_mgr/include
 LOCAL_SRC_FILES := recovery_ui.cpp
 
 # should match TARGET_RECOVERY_UI_LIB set in BoardConfig.mk

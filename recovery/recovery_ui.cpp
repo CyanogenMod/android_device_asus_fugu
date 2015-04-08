@@ -33,18 +33,36 @@
 #include "ui.h"
 #include "screen_ui.h"
 
+#include "roots.h"
+
 /* CEA-861 specifies a maximum of 65 modes in an EDID */
 #define CEA_MODEDB_SIZE 65
-static const char* HEADERS[] = { "Use hardware button to move cursor; long-press to select item.",
+static const char* HEADERS[] = { "Use hardware button to move cursor;",
+                                 "long-press to select item.",
                                  "",
                                  NULL };
 
-// these strings are never actually displayed
-static const char* ITEMS[] =  {"reboot system now",
-                               "apply update from ADB",
-                               "wipe data/factory reset",
-                               "wipe cache partition",
+static const char* ITEMS[] =  {"Reboot system now",
+                               "Apply update",
+                               "Wipe data/factory reset",
+                               "Wipe cache partition",
+                               "Wipe media",
+                               "Reboot to bootloader",
+                               "Power down",
+                               "View recovery logs",
                                NULL };
+
+static Device::BuiltinAction ACTIONS[] = {
+    Device::REBOOT,
+    Device::APPLY_UPDATE,
+    Device::WIPE_DATA,
+    Device::WIPE_CACHE,
+    Device::WIPE_MEDIA,
+    Device::REBOOT_BOOTLOADER,
+    Device::SHUTDOWN,
+    Device::READ_RECOVERY_LASTLOG,
+    Device::NO_ACTION
+};
 
 #define kFBDevice "/dev/graphics/fb0"
 #define FBIO_PSB_SET_RGBX       _IOWR('F', 0x42, struct fb_var_screeninfo)
@@ -280,6 +298,16 @@ class FuguDevice : public Device {
   public:
     FuguDevice() :
         ui(new FuguUI) {
+        // Remove "wipe media" option for non-datamedia devices
+        if (!is_data_media()) {
+            int i;
+            for (i = 4; ITEMS[i+1] != NULL; ++i) {
+                ITEMS[i] = ITEMS[i+1];
+                ACTIONS[i] = ACTIONS[i+1];
+            }
+            ITEMS[i] = NULL;
+            ACTIONS[i] = NO_ACTION;
+        }
     }
 
     RecoveryUI* GetUI() { return ui; }
@@ -291,16 +319,13 @@ class FuguDevice : public Device {
             switch (key) {
                 case KEY_ENTER:
                     return kInvokeItem;
-                    break;
 
                 case KEY_UP:
                     return kHighlightUp;
-                    break;
 
                 case KEY_DOWN:
                 case KEY_CONNECT:   // the Fugu hardware button
                     return kHighlightDown;
-                    break;
             }
         }
 
@@ -308,13 +333,12 @@ class FuguDevice : public Device {
     }
 
     BuiltinAction InvokeMenuItem(int menu_position) {
-        switch (menu_position) {
-          case 0: return REBOOT;
-//          case 1: return APPLY_ADB_SIDELOAD;
-          case 2: return WIPE_DATA;
-          case 3: return WIPE_CACHE;
-          default: return NO_ACTION;
+        if (menu_position < 0 ||
+                menu_position >= (int)(sizeof(ITEMS)/sizeof(ITEMS[0])) ||
+                ITEMS[menu_position] == NULL) {
+            return NO_ACTION;
         }
+        return ACTIONS[menu_position];
     }
 
     const char* const* GetMenuHeaders() { return HEADERS; }
