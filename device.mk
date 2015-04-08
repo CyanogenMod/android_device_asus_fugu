@@ -68,6 +68,18 @@ PRODUCT_COPY_FILES += \
 # Hdmi CEC: Fugu works as a playback device (4).
 PRODUCT_PROPERTY_OVERRIDES += ro.hdmi.device_type=4
 
+# Add props used in stock
+PRODUCT_PROPERTY_OVERRIDES +=  \
+    ro.dalvik.vm.isa.arm=x86 \
+    ro.enable.native.bridge.exec=1 \
+    ro.vold.wipe_on_crypt_fail=1 \
+    ro.nrdp.modelgroup=NEXUSPLAYERFUGU \
+    drm.service.enabled=true \
+    ro.com.widevine.cachesize=16777216 \
+    media.stagefright.cache-params=10240/20480/15 \
+    media.aac_51_output_enabled=true \
+    dalvik.vm.implicit_checks=none
+
 # Bluetooth
 PRODUCT_PACKAGES += \
     bt_bcm4354
