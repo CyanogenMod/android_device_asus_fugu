@@ -91,6 +91,11 @@ ADDITIONAL_DEFAULT_PROPERTIES += ro.dalvik.vm.native.bridge=libhoudini.so
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.media.avsync=true
 
+# Include the Tv parts for use
+PRODUCT_PACKAGES += \
+    TvProvider \
+    TvSettings \
+    tv_input.default
 # Bluetooth
 PRODUCT_PACKAGES += \
     bt_bcm4354

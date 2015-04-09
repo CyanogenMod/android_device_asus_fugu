@@ -204,6 +204,7 @@ lib/libremotecontrolservice.so
 lib/libsepdrm_cc54.so
 lib/libstlport-mfx.so
 -priv-app/AtvRemoteService/AtvRemoteService.apk
+-priv-app/GlobalKeyInterceptor/GlobalKeyInterceptor.apk
 -priv-app/LeanbackLauncher/LeanbackLauncher.apk
 -priv-app/RemoteControlService/RemoteControlService.apk
 -priv-app/TV/TV.apk
