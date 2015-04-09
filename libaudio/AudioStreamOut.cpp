@@ -39,15 +39,12 @@ namespace android {
 AudioStreamOut::AudioStreamOut(AudioHardwareOutput& owner, bool mcOut)
     : mFramesPresented(0)
     , mFramesRendered(0)
-    , mFramesWrittenRemainder(0)
     , mOwnerHAL(owner)
     , mFramesWritten(0)
     , mTgtDevices(0)
     , mAudioFlingerTgtDevices(0)
     , mIsMCOutput(mcOut)
-    , mIsEncoded(false)
     , mInStandby(false)
-    , mSPDIFEncoder(NULL)
 {
     assert(mLocalClock.initCheck());
 
@@ -74,7 +71,6 @@ AudioStreamOut::AudioStreamOut(AudioHardwareOutput& owner, bool mcOut)
 AudioStreamOut::~AudioStreamOut()
 {
     releaseAllOutputs();
-    delete mSPDIFEncoder;
 }
 
 status_t AudioStreamOut::set(
@@ -96,9 +92,12 @@ status_t AudioStreamOut::set(
     if (pChannels) *pChannels = lChannels;
     if (pRate)     *pRate     = lRate;
 
-    mIsEncoded = !audio_is_linear_pcm(lFormat);
+    if (!audio_is_linear_pcm(lFormat)) {
+        ALOGW("set: format 0x%08X needs to be wrapped in SPDIF data burst", lFormat);
+        return BAD_VALUE;
+    }
 
-    if (!mIsMCOutput && !mIsEncoded) {
+    if (!mIsMCOutput) {
         // If this is the primary stream out, then demand our defaults.
         if ((lFormat   != format()) ||
             (lChannels != chanMask()) ||
@@ -112,15 +111,10 @@ status_t AudioStreamOut::set(
             return BAD_VALUE;
     }
 
-    delete mSPDIFEncoder;
-    if (mIsEncoded) {
-        mSPDIFEncoder = new MySPDIFEncoder(this, lFormat);
-    }
-
     mInputFormat = lFormat;
     mInputChanMask = lChannels;
     mInputSampleRate = lRate;
-    ALOGI("AudioStreamOut::set: lRate = %u, mIsEncoded = %d\n", lRate, mIsEncoded);
+    ALOGI("AudioStreamOut::set: rate = %u, format = 0x%08X\n", lRate, lFormat);
     updateInputNums();
 
     return NO_ERROR;
@@ -246,24 +240,9 @@ void AudioStreamOut::finishedWriteOp(size_t framesWritten,
         mFramesWritten = 0;
     }
 
-    size_t framesWrittenAppRate;
-    uint32_t multiplier = getRateMultiplier();
-    if (multiplier != 1) {
-        // Accumulate round-off error from previous call.
-        framesWritten += mFramesWrittenRemainder;
-        // Scale from device sample rate to application rate.
-        framesWrittenAppRate = framesWritten / multiplier;
-        ALOGV("finishedWriteOp() framesWrittenAppRate = %d = %d / %d\n",
-            framesWrittenAppRate, framesWritten, multiplier);
-        // Save remainder for next time to prevent error accumulation.
-        mFramesWrittenRemainder = framesWritten - (framesWrittenAppRate * multiplier);
-    } else {
-        framesWrittenAppRate = framesWritten;
-    }
-
-    mFramesWritten += framesWrittenAppRate;
-    mFramesPresented += framesWrittenAppRate;
-    mFramesRendered += framesWrittenAppRate;
+    mFramesWritten += framesWritten;
+    mFramesPresented += framesWritten;
+    mFramesRendered += framesWritten;
 
     if (needThrottle) {
         int64_t deltaLT;
@@ -356,20 +335,14 @@ char* AudioStreamOut::getParameters(const char* k)
     return strdup(param.toString().string());
 }
 
-uint32_t AudioStreamOut::getRateMultiplier() const
-{
-    return (mIsEncoded) ? mSPDIFEncoder->getRateMultiplier() : 1;
-}
-
 uint32_t AudioStreamOut::outputSampleRate() const
 {
-    return mInputSampleRate * getRateMultiplier();
+    return mInputSampleRate;
 }
 
 int AudioStreamOut::getBytesPerOutputFrame()
 {
-    return (mIsEncoded) ? mSPDIFEncoder->getBytesPerOutputFrame()
-        : (mInputChanCount * sizeof(int16_t));
+    return mInputChanCount * sizeof(int16_t);
 }
 
 uint32_t AudioStreamOut::latency() const {
@@ -408,11 +381,8 @@ status_t AudioStreamOut::getPresentationPosition(uint64_t *frames,
                 const int kFudgeMSec = 50;
                 int fudgeFrames = kFudgeMSec * sampleRate() / 1000;
 
-                // Scale the frames in the driver because it might be running at
-                // a higher rate for EAC3.
                 int64_t framesInDriverBuffer =
                     (int64_t)audioOutput->getKernelBufferSize() - (int64_t)avail;
-                framesInDriverBuffer = framesInDriverBuffer / getRateMultiplier();
 
                 int64_t pendingFrames = framesInDriverBuffer + fudgeFrames;
                 int64_t signedFrames = mFramesPresented - pendingFrames;
@@ -568,25 +538,6 @@ void AudioStreamOut::adjustOutputs(int64_t maxTime)
 }
 
 ssize_t AudioStreamOut::write(const void* buffer, size_t bytes)
-{
-    uint8_t *data = (uint8_t *)buffer;
-    if (mIsEncoded) {
-        ALOGVV("AudioStreamOut::write(%u)   0x%02X, 0x%02X, 0x%02X, 0x%02X,"
-              " 0x%02X, 0x%02X, 0x%02X, 0x%02X,"
-              " 0x%02X, 0x%02X, 0x%02X, 0x%02X,"
-              " 0x%02X, 0x%02X, 0x%02X, 0x%02X ====",
-            bytes, data[0], data[1], data[2], data[3],
-            data[4], data[5], data[6], data[7],
-            data[8], data[9], data[10], data[11],
-            data[12], data[13], data[14], data[15]
-            );
-        return mSPDIFEncoder->write(buffer, bytes);
-    } else {
-        return writeInternal(buffer, bytes);
-    }
-}
-
-ssize_t AudioStreamOut::writeInternal(const void* buffer, size_t bytes)
 {
     uint8_t *data = (uint8_t *)buffer;
     ALOGVV("AudioStreamOut::write_l(%u) 0x%02X, 0x%02X, 0x%02X, 0x%02X,"

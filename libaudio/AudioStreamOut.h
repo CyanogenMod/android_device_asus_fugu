@@ -24,7 +24,6 @@
 #include <common_time/local_clock.h>
 #include <hardware/audio.h>
 #include <media/AudioParameter.h>
-#include <audio_utils/spdif/SPDIFEncoder.h>
 
 #include "AudioOutput.h"
 
@@ -46,7 +45,6 @@ class AudioStreamOut {
 
     uint32_t            sampleRate()        const { return mInputSampleRate; }
     uint32_t            outputSampleRate()  const;
-    uint32_t            getRateMultiplier() const;
 
     size_t              bufferSize()        const { return mInputBufSize; }
     uint32_t            chanMask()          const { return mInputChanMask; }
@@ -67,33 +65,14 @@ class AudioStreamOut {
 
     ssize_t             write(const void* buffer, size_t bytes);
 
-    bool                isEncoded() const { return mIsEncoded; }
-
-    class MySPDIFEncoder : public SPDIFEncoder
-    {
-    public:
-        MySPDIFEncoder(AudioStreamOut *streamOut, audio_format_t format)
-          : SPDIFEncoder(format)
-          , mStreamOut(streamOut)
-        {};
-
-        virtual ssize_t writeOutput(const void* buffer, size_t bytes)
-        {
-            return mStreamOut->writeInternal(buffer, bytes);
-        }
-    protected:
-        AudioStreamOut * const mStreamOut;
-    };
-
 protected:
     Mutex           mLock;
     Mutex           mRoutingLock;
 
     // Used to implment get_presentation_position()
-    int64_t         mFramesPresented; // application rate frames, not device rate frames
+    int64_t         mFramesPresented;
     // Used to implement get_render_position()
-    int64_t         mFramesRendered; // application rate frames, not device rate frames
-    uint32_t        mFramesWrittenRemainder; // needed when device rate > app rate
+    int64_t         mFramesRendered;
 
     // Our HAL, used as the middle-man to collect and trade AudioOutputs.
     AudioHardwareOutput&  mOwnerHAL;
@@ -129,12 +108,8 @@ protected:
     // Flag to track if this StreamOut was created to sink a direct output
     // multichannel stream.
     bool            mIsMCOutput;
-    // Is the audio data encoded, eg. AC3?
-    bool            mIsEncoded;
     // Is the stream on standby?
     bool            mInStandby;
-
-    MySPDIFEncoder *mSPDIFEncoder;
 
     void            releaseAllOutputs();
     void            updateTargetOutputs();
