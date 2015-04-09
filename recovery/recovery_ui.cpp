@@ -33,24 +33,13 @@
 #include "ui.h"
 #include "screen_ui.h"
 
-static const char* HEADERS[] = { "Use hardware button to move cursor; long-press to select item.",
-                                 "",
-                                 NULL };
-
-// these strings are never actually displayed
-static const char* ITEMS[] =  {"reboot system now",
-                               "apply update from ADB",
-                               "wipe data/factory reset",
-                               "wipe cache partition",
-                               "view recovery logs",
-                               NULL };
-
 #define kFBDevice "/dev/graphics/fb0"
+
 #define FBIO_PSB_SET_RGBX       _IOWR('F', 0x42, struct fb_var_screeninfo)
 #define FBIO_PSB_SET_RMODE      _IOWR('F', 0x43, struct fb_var_screeninfo)
 
 class FuguUI : public ScreenRecoveryUI {
-public:
+  public:
     FuguUI() :
         up_keys(0),
         next_key_pos(0),
@@ -66,34 +55,27 @@ public:
     }
 
     void SetupDisplayMode() {
-        int fb_dev = open(kFBDevice, O_RDWR);
-        int res;
-        uint32_t i;
         printf("opening fb %s\n", kFBDevice);
-        if (fb_dev < 0) {
-            fprintf(stderr, "FAIL: failed to open \"%s\" (errno = %d)\n", kFBDevice, errno);
+        int fb_dev = open(kFBDevice, O_RDWR);
+        if (fb_dev == -1) {
+            fprintf(stderr, "FAIL: failed to open \"%s\": %s\n", kFBDevice, strerror(errno));
             return;
         }
 
         struct fb_var_screeninfo current_mode;
-
-        res = ioctl(fb_dev, FBIO_PSB_SET_RMODE, &current_mode);
-        if (res) {
-            fprintf(stderr,
-                "FAIL: unable to set RGBX mode on display controller (errno = %d)\n",
-                errno);
+        if (ioctl(fb_dev, FBIO_PSB_SET_RMODE, &current_mode) == -1) {
+            fprintf(stderr, "FAIL: unable to set RGBX mode on display controller: %s\n",
+                    strerror(errno));
             return;
         }
 
-        res = ioctl(fb_dev, FBIOGET_VSCREENINFO, &current_mode);
-        if (res) {
-            fprintf(stderr, "FAIL: unable to get mode, err %d\n", res);
+        if (ioctl(fb_dev, FBIOGET_VSCREENINFO, &current_mode) == -1) {
+            fprintf(stderr, "FAIL: unable to get mode: %s\n", strerror(errno));
             return;
         }
 
-        res = ioctl(fb_dev, FBIOBLANK, FB_BLANK_POWERDOWN);
-        if (res) {
-            fprintf(stderr, "FAIL: unable to blank display, err %d\n", res);
+        if (ioctl(fb_dev, FBIOBLANK, FB_BLANK_POWERDOWN) == -1) {
+            fprintf(stderr, "FAIL: unable to blank display: %s\n", strerror(errno));
             return;
         }
 
@@ -105,24 +87,19 @@ public:
         current_mode.blue.offset = 16;
         current_mode.blue.length = 8;
 
-        res = ioctl(fb_dev, FBIOPUT_VSCREENINFO, &current_mode);
-        if (res) {
-            fprintf(stderr, "FAIL: unable to set mode, err %d\n", res);
+        if (ioctl(fb_dev, FBIOPUT_VSCREENINFO, &current_mode) == -1) {
+            fprintf(stderr, "FAIL: unable to set mode: %s\n", strerror(errno));
             return;
         }
 
-        /* set our display controller for RGBX */
-        res = ioctl(fb_dev, FBIO_PSB_SET_RGBX, &current_mode);
-        if (res) {
-            fprintf(stderr,
-                "FAIL: unable to set RGBX mode on display controller (errno = %d)\n",
-                errno);
+        if (ioctl(fb_dev, FBIO_PSB_SET_RGBX, &current_mode) == -1) {
+            fprintf(stderr, "FAIL: unable to set RGBX mode on display controller: %s\n",
+                    strerror(errno));
             return;
         }
 
-        res = ioctl(fb_dev, FBIOBLANK, FB_BLANK_UNBLANK);
-        if (res) {
-            fprintf(stderr, "FAIL: unable to unblank display, err %d\n", res);
+        if (ioctl(fb_dev, FBIOBLANK, FB_BLANK_UNBLANK) == -1) {
+            fprintf(stderr, "FAIL: unable to unblank display: %s\n", strerror(errno));
             return;
         }
     }
@@ -163,7 +140,7 @@ public:
         long_press = is_long_press;
     }
 
-    void KeyLongPress(int key) override {
+    void KeyLongPress(int /*key*/) override {
         pthread_mutex_lock(&long_mu);
         pending_select = true;
         pthread_mutex_unlock(&long_mu);
@@ -192,7 +169,7 @@ public:
         }
     }
 
-private:
+  private:
     static const int kKeyBufferSize = 100;
 
     int up_keys;
@@ -207,52 +184,28 @@ private:
 
 class FuguDevice : public Device {
   public:
-    FuguDevice() : ui(new FuguUI) {
+    FuguDevice() : Device(new FuguUI) {
     }
 
-    RecoveryUI* GetUI() override { return ui; }
-
     int HandleMenuKey(int key, int visible) override {
-        static int running = 0;
-
         if (visible) {
             switch (key) {
                 case KEY_ENTER:
                     return kInvokeItem;
-                    break;
 
                 case KEY_UP:
                     return kHighlightUp;
-                    break;
 
                 case KEY_DOWN:
                 case KEY_CONNECT:   // the Fugu hardware button
                     return kHighlightDown;
-                    break;
             }
         }
 
         return kNoAction;
     }
-
-    BuiltinAction InvokeMenuItem(int menu_position) override {
-        switch (menu_position) {
-          case 0: return REBOOT;
-          case 1: return APPLY_ADB_SIDELOAD;
-          case 2: return WIPE_DATA;
-          case 3: return WIPE_CACHE;
-          case 4: return READ_RECOVERY_LASTLOG;
-          default: return NO_ACTION;
-        }
-    }
-
-    const char* const* GetMenuHeaders() override { return HEADERS; }
-    const char* const* GetMenuItems() override { return ITEMS; }
-
-  private:
-    RecoveryUI* ui;
 };
 
 Device* make_device() {
-    return new FuguDevice();
+    return new FuguDevice;
 }
