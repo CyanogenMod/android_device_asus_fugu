@@ -17,7 +17,6 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <linux/fb.h>
-#include <linux/input.h>
 #include <pthread.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -28,15 +27,12 @@
 #include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
-#include <linux/ioctl.h>
 
 #include "common.h"
 #include "device.h"
 #include "ui.h"
 #include "screen_ui.h"
 
-/* CEA-861 specifies a maximum of 65 modes in an EDID */
-#define CEA_MODEDB_SIZE 65
 static const char* HEADERS[] = { "Use hardware button to move cursor; long-press to select item.",
                                  "",
                                  NULL };
@@ -53,23 +49,9 @@ static const char* ITEMS[] =  {"reboot system now",
 #define FBIO_PSB_SET_RGBX       _IOWR('F', 0x42, struct fb_var_screeninfo)
 #define FBIO_PSB_SET_RMODE      _IOWR('F', 0x43, struct fb_var_screeninfo)
 
-struct led_rgb_vals {
-        uint8_t rgb[3];
-};
-
-// Return the current time as a double (including fractions of a second).
-static double now() {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return tv.tv_sec + tv.tv_usec / 1000000.0;
-}
-
 class FuguUI : public ScreenRecoveryUI {
 public:
     FuguUI() :
-        text_visible(false),
-        text_ever_visible(false),
-        background_mode(NONE),
         up_keys(0),
         next_key_pos(0),
         pending_select(false),
@@ -78,7 +60,7 @@ public:
         memset(last_keys, 0, kKeyBufferSize * sizeof(int));
     }
 
-    void Init() {
+    void Init() override {
         SetupDisplayMode();
         ScreenRecoveryUI::Init();
     }
@@ -145,13 +127,7 @@ public:
         }
     }
 
-    void SetBackground(Icon icon) {
-        ScreenRecoveryUI::SetBackground(icon);
-
-        background_mode = icon;
-    }
-
-    void SetColor(UIElement e) {
+    void SetColor(UIElement e) override {
         switch (e) {
             case HEADER:
                 gr_color(247, 0, 6, 255);
@@ -183,54 +159,11 @@ public:
         }
     }
 
-    void ShowText(bool visible) {
-        ScreenRecoveryUI::ShowText(visible);
-
-        text_ever_visible = text_ever_visible || visible;
-        text_visible = visible;
-    }
-
-    bool IsTextVisible() {
-        return text_visible;
-    }
-
-    bool WasTextEverVisible() {
-        return text_ever_visible;
-    }
-
-    void Print(const char* fmt, ...) {
-        char buf[256];
-        va_list ap;
-        va_start(ap, fmt);
-        vsnprintf(buf, 256, fmt, ap);
-        va_end(ap);
-        ScreenRecoveryUI::Print("%s", buf);
-    }
-
-    void StartMenu(const char* const * headers, const char* const * items,
-                   int initial_selection) {
-        ScreenRecoveryUI::StartMenu(headers, items, initial_selection);
-
-        menu_items = 0;
-        for (const char* const * p = items; *p; ++p) {
-            ++menu_items;
-        }
-    }
-
-    int SelectMenu(int sel) {
-        if (sel < 0) {
-            sel += menu_items;
-        }
-        sel %= menu_items;
-        ScreenRecoveryUI::SelectMenu(sel);
-        return sel;
-    }
-
-    void NextCheckKeyIsLong(bool is_long_press) {
+    void NextCheckKeyIsLong(bool is_long_press) override {
         long_press = is_long_press;
     }
 
-    void KeyLongPress(int key) {
+    void KeyLongPress(int key) override {
         pthread_mutex_lock(&long_mu);
         pending_select = true;
         pthread_mutex_unlock(&long_mu);
@@ -238,7 +171,7 @@ public:
         Redraw();
     }
 
-    KeyAction CheckKey(int key) {
+    KeyAction CheckKey(int key) override {
         pthread_mutex_lock(&long_mu);
         pending_select = false;
         pthread_mutex_unlock(&long_mu);
@@ -248,30 +181,23 @@ public:
         }
 
         if (long_press) {
-            if (text_visible) {
+            if (IsTextVisible()) {
                 EnqueueKey(KEY_ENTER);
                 return IGNORE;
             } else {
                 return TOGGLE;
             }
         } else {
-            return text_visible ? ENQUEUE : IGNORE;
+            return IsTextVisible() ? ENQUEUE : IGNORE;
         }
     }
 
 private:
     static const int kKeyBufferSize = 100;
 
-    int text_visible;
-    int text_ever_visible;
-
-    Icon background_mode;
-
     int up_keys;
     int next_key_pos;
     int last_keys[kKeyBufferSize];
-
-    int menu_items;
 
     pthread_mutex_t long_mu;
     bool pending_select;
@@ -281,13 +207,12 @@ private:
 
 class FuguDevice : public Device {
   public:
-    FuguDevice() :
-        ui(new FuguUI) {
+    FuguDevice() : ui(new FuguUI) {
     }
 
-    RecoveryUI* GetUI() { return ui; }
+    RecoveryUI* GetUI() override { return ui; }
 
-    int HandleMenuKey(int key, int visible) {
+    int HandleMenuKey(int key, int visible) override {
         static int running = 0;
 
         if (visible) {
@@ -310,7 +235,7 @@ class FuguDevice : public Device {
         return kNoAction;
     }
 
-    BuiltinAction InvokeMenuItem(int menu_position) {
+    BuiltinAction InvokeMenuItem(int menu_position) override {
         switch (menu_position) {
           case 0: return REBOOT;
           case 1: return APPLY_ADB_SIDELOAD;
@@ -321,8 +246,8 @@ class FuguDevice : public Device {
         }
     }
 
-    const char* const* GetMenuHeaders() { return HEADERS; }
-    const char* const* GetMenuItems() { return ITEMS; }
+    const char* const* GetMenuHeaders() override { return HEADERS; }
+    const char* const* GetMenuItems() override { return ITEMS; }
 
   private:
     RecoveryUI* ui;
