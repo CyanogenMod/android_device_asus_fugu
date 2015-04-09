@@ -21,9 +21,9 @@ PRODUCT_COPY_FILES += \
 
 # Taken from device/google/atv/tv_core_hardware.xml and modified to include some tablet features
 PRODUCT_COPY_FILES += \
-    device/asus/fugu/fugu_core_hardware.xml:system/etc/permissions/fugu_core_hardware.xml \
-    device/asus/fugu/android.hardware.type.television.xml:system/etc/permissions/android.hardware.type.television.xml
-
+    device/asus/fugu/permissions/fugu_core_hardware.xml:system/etc/permissions/fugu_core_hardware.xml \
+    device/asus/fugu/permissions/android.hardware.type.television.xml:system/etc/permissions/android.hardware.type.television.xml \
+    device/asus/fugu/permissions/com.google.android.tv.installed.xml:system/etc/permissions/com.google.android.tv.installed.xml
 
 PRODUCT_AAPT_CONFIG := normal large xlarge hdpi xhdpi
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
