@@ -169,28 +169,32 @@ public:
     void SetColor(UIElement e) {
         switch (e) {
             case HEADER:
-                gr_color(247, 0, 6, 255);
+                gr_color(111,111,111,255);
+                break;
+            case TOP:
+                gr_color(208, 208, 208, 255);
                 break;
             case MENU:
-                gr_color(0, 106, 157, 255);
+            case MENU_SEL_FG:
+                gr_color(0, 177, 229, 255);
                 break;
             case MENU_SEL_BG:
                 pthread_mutex_lock(&long_mu);
                 if (pending_select) {
                     gr_color(0, 156, 100, 255);
                 } else {
-                    gr_color(0, 106, 157, 255);
+                    gr_color(106, 103, 102, 255);
                 }
                 pthread_mutex_unlock(&long_mu);
                 break;
-            case MENU_SEL_FG:
-                gr_color(255, 255, 255, 255);
-                break;
             case LOG:
-                gr_color(249, 194, 0, 255);
+                gr_color(76, 76, 76, 128);
                 break;
             case TEXT_FILL:
-                gr_color(0, 0, 0, 160);
+                gr_color(0, 0, 0, 255);
+                break;
+            case ERROR_TEXT:
+                gr_color(255, 0, 0, 255);
                 break;
             default:
                 gr_color(255, 255, 255, 255);
