@@ -88,6 +88,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # set USB OTG enabled to add support for USB storage type
 PRODUCT_PROPERTY_OVERRIDES += persist.sys.isUsbOtgEnabled=1
 
+# Include the Tv parts for use
+PRODUCT_PACKAGES += \
+    TvProvider \
+    TvSettings \
+    tv_input.default
+
 # Bluetooth
 PRODUCT_PACKAGES += \
     bt_bcm4354
