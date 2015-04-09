@@ -43,7 +43,6 @@ public:
 protected:
     virtual float computeVolume(audio_stream_type_t stream,
                                 int index,
-                                audio_io_handle_t output,
                                 audio_devices_t device);
 
 private:
