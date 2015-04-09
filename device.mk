@@ -19,6 +19,10 @@
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.app_widgets.xml:system/etc/permissions/android.software.app_widgets.xml
 
+# Taken from device/google/atv/tv_core_hardware.xml and modified to include some tablet features
+PRODUCT_COPY_FILES += \
+    device/asus/fugu/fugu_core_hardware.xml:system/etc/permissions/fugu_core_hardware.xml
+
 PRODUCT_AAPT_CONFIG := normal large xlarge hdpi xhdpi
 PRODUCT_AAPT_PREF_CONFIG := hdpi
 
@@ -194,7 +198,6 @@ PRODUCT_COPY_FILES += \
     device/asus/fugu/wpa_supplicant.conf:/system/etc/wifi/wpa_supplicant.conf
 
 PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/tablet_core_hardware.xml:system/etc/permissions/tablet_core_hardware.xml \
     frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
