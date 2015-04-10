@@ -40,12 +40,6 @@
 
 class FuguUI : public ScreenRecoveryUI {
   public:
-    FuguUI() :
-        pending_select(false),
-        long_press(false) {
-        pthread_mutex_init(&long_mu, NULL);
-    }
-
     void Init() override {
         SetupDisplayMode();
         ScreenRecoveryUI::Init();
@@ -100,73 +94,6 @@ class FuguUI : public ScreenRecoveryUI {
             return;
         }
     }
-
-    void SetColor(UIElement e) override {
-        switch (e) {
-            case HEADER:
-                gr_color(247, 0, 6, 255);
-                break;
-            case MENU:
-                gr_color(0, 106, 157, 255);
-                break;
-            case MENU_SEL_BG:
-                pthread_mutex_lock(&long_mu);
-                if (pending_select) {
-                    gr_color(0, 156, 100, 255);
-                } else {
-                    gr_color(0, 106, 157, 255);
-                }
-                pthread_mutex_unlock(&long_mu);
-                break;
-            case MENU_SEL_FG:
-                gr_color(255, 255, 255, 255);
-                break;
-            case LOG:
-                gr_color(249, 194, 0, 255);
-                break;
-            case TEXT_FILL:
-                gr_color(0, 0, 0, 160);
-                break;
-            default:
-                gr_color(255, 255, 255, 255);
-                break;
-        }
-    }
-
-    void NextCheckKeyIsLong(bool is_long_press) override {
-        long_press = is_long_press;
-    }
-
-    void KeyLongPress(int /*key*/) override {
-        pthread_mutex_lock(&long_mu);
-        pending_select = true;
-        pthread_mutex_unlock(&long_mu);
-
-        Redraw();
-    }
-
-    KeyAction CheckKey(int key) override {
-        pthread_mutex_lock(&long_mu);
-        pending_select = false;
-        pthread_mutex_unlock(&long_mu);
-
-        if (long_press) {
-            if (IsTextVisible()) {
-                EnqueueKey(KEY_ENTER);
-                return IGNORE;
-            } else {
-                return TOGGLE;
-            }
-        } else {
-            return IsTextVisible() ? ENQUEUE : IGNORE;
-        }
-    }
-
-  private:
-    pthread_mutex_t long_mu;
-    bool pending_select;
-
-    bool long_press;
 };
 
 class FuguDevice : public Device {
