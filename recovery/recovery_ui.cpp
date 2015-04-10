@@ -41,12 +41,9 @@
 class FuguUI : public ScreenRecoveryUI {
   public:
     FuguUI() :
-        up_keys(0),
-        next_key_pos(0),
         pending_select(false),
         long_press(false) {
         pthread_mutex_init(&long_mu, NULL);
-        memset(last_keys, 0, kKeyBufferSize * sizeof(int));
     }
 
     void Init() override {
@@ -166,12 +163,6 @@ class FuguUI : public ScreenRecoveryUI {
     }
 
   private:
-    static const int kKeyBufferSize = 100;
-
-    int up_keys;
-    int next_key_pos;
-    int last_keys[kKeyBufferSize];
-
     pthread_mutex_t long_mu;
     bool pending_select;
 
