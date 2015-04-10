@@ -96,30 +96,6 @@ class FuguUI : public ScreenRecoveryUI {
     }
 };
 
-class FuguDevice : public Device {
-  public:
-    FuguDevice() : Device(new FuguUI) {
-    }
-
-    int HandleMenuKey(int key, int visible) override {
-        if (visible) {
-            switch (key) {
-                case KEY_ENTER:
-                    return kInvokeItem;
-
-                case KEY_UP:
-                    return kHighlightUp;
-
-                case KEY_DOWN:
-                case KEY_CONNECT:   // the Fugu hardware button
-                    return kHighlightDown;
-            }
-        }
-
-        return kNoAction;
-    }
-};
-
 Device* make_device() {
-    return new FuguDevice;
+    return new Device(new FuguUI);
 }
