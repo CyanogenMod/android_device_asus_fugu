@@ -56,21 +56,10 @@ status_t HDMIAudioOutput::setupForStream(const AudioStreamOut& stream)
         return BAD_VALUE;
     }
 
-    if (stream.isEncoded()) {
-        ALOGI("HDMIAudioOutput::setupForStream() use %d channels for playing encoded data!",
-            SPDIF_ENCODED_CHANNEL_COUNT);
-        mChannelCnt = SPDIF_ENCODED_CHANNEL_COUNT;
-    }
-
     setupInternal();
-
-    // TODO Maybe set SPDIF channel status to compressed mode.
-    // Some receivers do not need the bit set. But some might.
 
     return initCheck();
 }
-
-#define IEC958_AES0_NONAUDIO      (1<<1)   /* 0 = audio, 1 = non-audio */
 
 void HDMIAudioOutput::applyPendingVolParams()
 {
