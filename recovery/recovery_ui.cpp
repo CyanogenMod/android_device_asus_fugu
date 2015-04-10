@@ -153,10 +153,6 @@ class FuguUI : public ScreenRecoveryUI {
         pending_select = false;
         pthread_mutex_unlock(&long_mu);
 
-        if (key == KEY_F1) {
-            return MOUNT_SYSTEM;
-        }
-
         if (long_press) {
             if (IsTextVisible()) {
                 EnqueueKey(KEY_ENTER);
