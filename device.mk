@@ -84,6 +84,9 @@ PRODUCT_PROPERTY_OVERRIDES +=  \
     media.aac_51_output_enabled=true \
     dalvik.vm.implicit_checks=none
 
+# Set the prop to enable arm native bridge
+ADDITIONAL_DEFAULT_PROPERTIES += ro.dalvik.vm.native.bridge=libhoudini.so
+
 # Bluetooth
 PRODUCT_PACKAGES += \
     bt_bcm4354
