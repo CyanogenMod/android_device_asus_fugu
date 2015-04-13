@@ -85,6 +85,9 @@ ADDITIONAL_DEFAULT_PROPERTIES += ro.dalvik.vm.native.bridge=libhoudini.so
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.media.avsync=true
 
+# set USB OTG enabled to add support for USB storage type
+PRODUCT_PROPERTY_OVERRIDES += persist.sys.isUsbOtgEnabled=1
+
 # Bluetooth
 PRODUCT_PACKAGES += \
     bt_bcm4354
