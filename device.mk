@@ -87,6 +87,10 @@ PRODUCT_PROPERTY_OVERRIDES +=  \
 # Set the prop to enable arm native bridge
 ADDITIONAL_DEFAULT_PROPERTIES += ro.dalvik.vm.native.bridge=libhoudini.so
 
+# Enable frame-exact AV sync
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.sys.media.avsync=true
+
 # Bluetooth
 PRODUCT_PACKAGES += \
     bt_bcm4354
