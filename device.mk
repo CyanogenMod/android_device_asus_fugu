@@ -263,6 +263,3 @@ PRODUCT_COPY_FILES += \
 PRODUCT_DEX_PREOPT_DEFAULT_FLAGS += --compiler-filter=space
 
 #PRODUCT_CHARACTERISTICS := tablet
-
-# To enable Live Channels app update through PlayStore
-USE_GMS_LIVECHANNELS := true
