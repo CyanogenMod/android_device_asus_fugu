@@ -261,4 +261,4 @@ $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4354
 PRODUCT_COPY_FILES += \
     device/asus/fugu/sep_policy.conf:system/etc/security/sep_policy.conf
 
-PRODUCT_CHARACTERISTICS := nosdcard
+#PRODUCT_CHARACTERISTICS := tablet
