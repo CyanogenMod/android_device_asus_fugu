@@ -208,6 +208,10 @@ lib/libstlport-mfx.so
 -priv-app/LeanbackLauncher/LeanbackLauncher.apk
 -priv-app/RemoteControlService/RemoteControlService.apk
 -priv-app/TV/TV.apk
+usr/idc/virtual-remote.idc
+usr/keychars/virtual-remote.kcm
+usr/keylayout/ADT-1_Remote.kl
+usr/keylayout/virtual-remote.kl
 usr/share/librscruntime.bc
 vendor/bin/bcc.moorefield
 vendor/bin/framebuffer_test
@@ -218,6 +222,7 @@ vendor/bin/pvrsrvctl
 vendor/bin/pvrtld
 vendor/firmware/BCM4350C0.hcd
 vendor/firmware/BCM4350C0_SR2.hcd
+vendor/firmware/PR-ModelCert
 vendor/lib/drm/libdrmwvmplugin.so
 vendor/lib/egl/libEGL_POWERVR_ROGUE.so
 vendor/lib/egl/libGLESv1_CM_POWERVR_ROGUE.so
