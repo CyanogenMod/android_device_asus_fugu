@@ -14,6 +14,7 @@ DEVICE_PACKAGE_OVERLAYS += device/asus/fugu/overlay-cm
 PRODUCT_NAME := cm_fugu
 PRODUCT_BRAND := google
 PRODUCT_MODEL := Nexus Player
+PRODUCT_MANUFACTURER := Asus
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
     PRODUCT_NAME=fugu \
