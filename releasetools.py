@@ -77,7 +77,9 @@ def WriteBootloader(info, bootloader):
       continue
 
 def FullOTA_InstallEnd(info):
+  info.script.Mount("/system")
   info.script.AppendExtra('delete("/system/app/LatinIME/LatinIME.apk");')
+  info.script.Unmount("/system")
   try:
     bootloader_img = info.input_zip.read("RADIO/bootloader.img")
   except KeyError:
