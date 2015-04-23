@@ -15,7 +15,7 @@
 ** limitations under the License.
 */
 
-#define LOG_TAG "AudioHAL:AudioStreamOut"
+#define LOG_TAG "AudioHAL_AudioStreamOut"
 
 #include <utils/Log.h>
 
@@ -37,8 +37,7 @@
 namespace android {
 
 AudioStreamOut::AudioStreamOut(AudioHardwareOutput& owner, bool mcOut)
-    : mFramesPresented(0)
-    , mFramesRendered(0)
+    : mFramesRendered(0)
     , mOwnerHAL(owner)
     , mFramesWritten(0)
     , mTgtDevices(0)
@@ -129,14 +128,18 @@ void AudioStreamOut::setTgtDevices(uint32_t tgtDevices)
     }
 }
 
-status_t AudioStreamOut::standby()
+status_t AudioStreamOut::standbyHardware()
 {
-    mFramesRendered = 0;
     releaseAllOutputs();
     mOwnerHAL.standbyStatusUpdate(true, mIsMCOutput);
     mInStandby = true;
-
     return NO_ERROR;
+}
+
+status_t AudioStreamOut::standby()
+{
+    mFramesRendered = 0;
+    return standbyHardware();
 }
 
 void AudioStreamOut::releaseAllOutputs() {
@@ -148,6 +151,22 @@ void AudioStreamOut::releaseAllOutputs() {
         mOwnerHAL.releaseOutput(*this, *I);
 
     mPhysOutputs.clear();
+}
+
+status_t AudioStreamOut::pause()
+{
+    return standbyHardware();
+}
+
+status_t AudioStreamOut::resume()
+{
+    return NO_ERROR;
+}
+
+status_t AudioStreamOut::flush()
+{
+    mFramesRendered = 0;
+    return NO_ERROR;
 }
 
 void AudioStreamOut::updateInputNums()
@@ -242,7 +261,6 @@ void AudioStreamOut::finishedWriteOp(size_t framesWritten,
     }
 
     mFramesWritten += framesWritten;
-    mFramesPresented += framesWritten;
     mFramesRendered += framesWritten;
 
     if (needThrottle) {
@@ -386,21 +404,21 @@ status_t AudioStreamOut::getPresentationPosition(uint64_t *frames,
                     (int64_t)audioOutput->getKernelBufferSize() - (int64_t)avail;
 
                 int64_t pendingFrames = framesInDriverBuffer + fudgeFrames;
-                int64_t signedFrames = mFramesPresented - pendingFrames;
+                int64_t signedFrames = mFramesRendered - pendingFrames;
                 if (pendingFrames < 0) {
                     ALOGE("getPresentationPosition: negative pendingFrames = %lld",
                         pendingFrames);
                 } else if (signedFrames < 0) {
                     ALOGI("getPresentationPosition: playing silent preroll"
-                        ", mFramesPresented = %llu, pendingFrames = %lld",
-                        mFramesPresented, pendingFrames);
+                        ", mFramesRendered = %llu, pendingFrames = %lld",
+                        mFramesRendered, pendingFrames);
                 } else {
 #if HAL_PRINT_TIMESTAMP_CSV
                     // Print comma separated values for spreadsheet analysis.
                     uint64_t nanos = (((uint64_t)timestamp->tv_sec) * 1000000000L)
                             + timestamp->tv_nsec;
                     ALOGI("getPresentationPosition, %lld, %4u, %lld, %llu",
-                            mFramesPresented, avail, signedFrames, nanos);
+                            mFramesRendered, avail, signedFrames, nanos);
 #endif
                     *frames = (uint64_t) signedFrames;
                     result = NO_ERROR;
@@ -424,10 +442,6 @@ status_t AudioStreamOut::getRenderPosition(__unused uint32_t *dspFrames)
 {
     if (dspFrames == NULL) {
         return -EINVAL;
-    }
-    if (mPhysOutputs.isEmpty()) {
-        *dspFrames = 0;
-        return -ENODEV;
     }
     *dspFrames = (uint32_t) mFramesRendered;
     return NO_ERROR;
@@ -581,7 +595,7 @@ ssize_t AudioStreamOut::write(const void* buffer, size_t bytes)
     // has not started yet.  This is odd, but certainly not impossible.  The
     // other possibility is that AudioFlinger is in its silence-pushing mode and
     // is not calling getNextWriteTimestamp.  After an output is primed, its in
-    // GNWTS where the amt of padding to compensate for different DMA start
+    // GNWTS where the amount of padding to compensate for different DMA start
     // times is taken into account.  Go ahead and force a call to GNWTS, just to
     // be certain that we have checked recently and are not stuck in silence
     // fill mode.  Failure to do this will cause the AudioOutput state machine

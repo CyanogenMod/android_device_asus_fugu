@@ -41,6 +41,9 @@ class AudioStreamOut {
     status_t            getPresentationPosition(uint64_t *frames, struct timespec *timestamp);
     status_t            getNextWriteTimestamp(int64_t *timestamp);
     status_t            standby();
+    status_t            pause();
+    status_t            resume();
+    status_t            flush();
     status_t            dump(int fd);
 
     uint32_t            sampleRate()        const { return mInputSampleRate; }
@@ -69,9 +72,7 @@ protected:
     Mutex           mLock;
     Mutex           mRoutingLock;
 
-    // Used to implment get_presentation_position()
-    int64_t         mFramesPresented;
-    // Used to implement get_render_position()
+    // Track frame position for timestamps, etc.
     int64_t         mFramesRendered;
 
     // Our HAL, used as the middle-man to collect and trade AudioOutputs.
@@ -114,6 +115,7 @@ protected:
     // reduce log spew
     bool            mReportedAvailFail;
 
+    status_t        standbyHardware();
     void            releaseAllOutputs();
     void            updateTargetOutputs();
     void            updateInputNums();
