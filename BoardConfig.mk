@@ -184,6 +184,9 @@ BOARD_SEPOLICY_UNION := \
     property_contexts \
     service_contexts
 
+# Camera
+INTEL_USE_CAMERA_UVC := true
+
 # Use the non-open-source parts, if they're present
 -include vendor/asus/fugu/BoardConfigVendor.mk
 

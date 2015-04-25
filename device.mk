@@ -63,6 +63,17 @@ PRODUCT_PACKAGES += \
 
 USE_CUSTOM_AUDIO_POLICY := 1
 
+# Camera
+PRODUCT_PACKAGES += \
+    camera.fugu \
+    libs3cjpeg
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.camera.number=1 \
+    ro.camera.0.devname=/dev/video0 \
+    ro.camera.0.facing=back \
+    ro.camera.0.orientation=0
+
 # specific management of audio_policy.conf
 PRODUCT_COPY_FILES += \
     device/asus/fugu/audio_policy.conf:system/etc/audio_policy.conf
@@ -228,6 +239,9 @@ PRODUCT_COPY_FILES += \
     device/asus/fugu/wpa_supplicant.conf:/system/etc/wifi/wpa_supplicant.conf
 
 PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.camera.xml:system/etc/permissions/android.hardware.camera.xml \
+    frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
+    frameworks/native/data/etc/android.hardware.camera.autofocus.xml:system/etc/permissions/android.hardware.camera.autofocus.xml \
     frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
