@@ -393,6 +393,12 @@ void AudioHardwareOutput::updateRouting(uint32_t devMask) {
     Mutex::Autolock _l(mStreamLock);
 
     bool hasHDMI = 0 != (devMask & HDMIAudioOutput::classDevMask());
+
+    if (mHDMIConnected == 0)
+    hasHDMI = 1;
+    else
+    hasHDMI = 0;
+
     ALOGI("%s: hasHDMI = %d, mHDMIConnected = %d", __func__, hasHDMI, mHDMIConnected);
     if (mHDMIConnected != hasHDMI) {
         mHDMIConnected = hasHDMI;

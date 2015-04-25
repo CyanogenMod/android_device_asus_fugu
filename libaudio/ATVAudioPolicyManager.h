@@ -39,11 +39,6 @@ public:
 
     virtual audio_devices_t getDeviceForInputSource(audio_source_t inputSource);
 
-protected:
-    virtual float computeVolume(audio_stream_type_t stream,
-                                int index,
-                                audio_io_handle_t output,
-                                audio_devices_t device);
 
 private:
     // Flag which indicates whether to record from the submix device.

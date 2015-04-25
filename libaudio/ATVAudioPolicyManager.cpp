@@ -58,19 +58,6 @@ ATVAudioPolicyManager::ATVAudioPolicyManager(
 {
 }
 
-float ATVAudioPolicyManager::computeVolume(audio_stream_type_t stream,
-                                           int index,
-                                           audio_io_handle_t output,
-                                           audio_devices_t device)
-{
-    // We only use master volume, so all audio flinger streams
-    // should be set to maximum
-    (void)stream;
-    (void)index;
-    (void)output;
-    (void)device;
-    return 1.0;
-}
 
 status_t ATVAudioPolicyManager::setDeviceConnectionState(audio_devices_t device,
                                                          audio_policy_dev_state_t state,
@@ -91,7 +78,7 @@ status_t ATVAudioPolicyManager::setDeviceConnectionState(audio_devices_t device,
         }
     }
 
-    if (audio_is_output_device(device)) {
+    if (audio_is_output_device(device) && device != 00000004) {
       switch (state) {
           case AUDIO_POLICY_DEVICE_STATE_AVAILABLE:
               tmp = mAvailableOutputDevices.types() | device;
@@ -110,12 +97,15 @@ status_t ATVAudioPolicyManager::setDeviceConnectionState(audio_devices_t device,
     }
 
     status_t ret = 0;
-    if (device != AUDIO_DEVICE_IN_REMOTE_SUBMIX) {
+if (device !=  AUDIO_DEVICE_OUT_SPEAKER && device != AUDIO_DEVICE_OUT_AUX_DIGITAL &&
+        device != 00000004 && device != 80000010) {
+
       ret = AudioPolicyManager::setDeviceConnectionState(
                     device, state, device_address);
+       ALOGE("setDeviceConnectionState mio if");
     }
 
-    if (audio_is_output_device(device)) {
+    if (audio_is_output_device(device) && device != 00000004) {
       if (tmp != mAvailableOutputDevices.types())
           gAudioHardwareOutput.updateRouting(mAvailableOutputDevices.types());
     }
@@ -127,8 +117,9 @@ audio_devices_t ATVAudioPolicyManager::getDeviceForInputSource(audio_source_t in
 {
     uint32_t device = AUDIO_DEVICE_NONE;
     bool usePhysRemote = true;
+ALOGV("getDeviceForInputSource() input source %d, device %08x", inputSource, device);
 
-    if (inputSource == AUDIO_SOURCE_VOICE_RECOGNITION) {
+    //if (inputSource == AUDIO_SOURCE_VOICE_RECOGNITION) {
 #ifdef REMOTE_CONTROL_INTERFACE
       // Check if remote is actually connected or we should move on
       sp<IRemoteControlService> service = IRemoteControlService::getInstance();
@@ -149,13 +140,18 @@ audio_devices_t ATVAudioPolicyManager::getDeviceForInputSource(audio_source_t in
           // User a wired headset (physical remote) if available, connected and active
           ALOGV("Wired Headset available");
           device = AUDIO_DEVICE_IN_WIRED_HEADSET;
+      } else if (availableDeviceTypes & AUDIO_DEVICE_IN_BUILTIN_MIC &&
+            usePhysRemote) {
+          // User a wired headset (physical remote) if available, connected and active
+          ALOGV("Wired Headset available");
+          device = AUDIO_DEVICE_IN_BUILTIN_MIC;
       } else if (availableDeviceTypes & AUDIO_DEVICE_IN_REMOTE_SUBMIX &&
             mForceSubmixInputSelection) {
           // REMOTE_SUBMIX should always be avaible, let's make sure it's being forced at the moment
           ALOGV("Virtual remote available");
           device = AUDIO_DEVICE_IN_REMOTE_SUBMIX;
       }
-    }
+    //}
 
     ALOGV("getDeviceForInputSource() input source %d, device %08x", inputSource, device);
     return device;

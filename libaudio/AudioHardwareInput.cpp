@@ -256,7 +256,8 @@ void AudioHardwareInput::onDeviceRemoved(unsigned int pcmCard, unsigned int pcmD
 
 const AudioHotplugThread::DeviceInfo* AudioHardwareInput::getBestDevice(int inputSource)
 {
-    bool doVoiceRecognition = (inputSource == AUDIO_SOURCE_VOICE_RECOGNITION);
+    bool doVoiceRecognition = (inputSource == AUDIO_SOURCE_VOICE_RECOGNITION ||
+            inputSource == AUDIO_SOURCE_MIC || inputSource == AUDIO_SOURCE_VOICE_COMMUNICATION);
     int chosenDeviceIndex = -1;
     Mutex::Autolock _l(mLock);
 

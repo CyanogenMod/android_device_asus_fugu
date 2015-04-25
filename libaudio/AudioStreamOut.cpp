@@ -340,7 +340,7 @@ char* AudioStreamOut::getParameters(const char* k)
 
     if (param.get(keySupChannels, value) == NO_ERROR) {
         if (mIsMCOutput) {
-            hdmiCaps.getChannelMasksForAF(value);
+            hdmiCaps.getChannelMasksForAF(value, false);
             param.add(keySupChannels, value);
         } else {
             param.add(keySupChannels, String8("AUDIO_CHANNEL_OUT_STEREO"));
