@@ -80,6 +80,9 @@ on boot
     write /proc/sys/net/ipv4/tcp_limit_output_bytes 1500000
     setprop net.tcp.buffersize.wifi 500000,1000000,1500000,500000,1000000,1500000
 
+    # Enable runtime PM for USB Host
+    write /sys/devices/pci0000\:00/0000\:00\:14.0/power/control auto
+
     chown system system /sys/class/backlight/psb-bl/brightness
     chown system system /sys/class/backlight/psb-bl/max_brightness
     chown system system /sys/class/backlight/psb-bl/actual_brightness
