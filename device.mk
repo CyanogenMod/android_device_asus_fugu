@@ -54,8 +54,10 @@ PRODUCT_COPY_FILES += \
 # Audio
 PRODUCT_PACKAGES += \
     libtinyalsa \
+    audio.a2dp.default \
     audio.primary.fugu \
-    audio.r_submix.default
+    audio.r_submix.default \
+    audio.usb.default
 
 USE_CUSTOM_AUDIO_POLICY := 1
 
