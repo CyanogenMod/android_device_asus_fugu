@@ -91,6 +91,9 @@ ADDITIONAL_DEFAULT_PROPERTIES += ro.dalvik.vm.native.bridge=libhoudini.so
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.media.avsync=true
 
+# Set default USB interface
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += persist.sys.usb.config=mtp
+
 # Include the Tv parts for use
 PRODUCT_PACKAGES += \
     TvProvider \
