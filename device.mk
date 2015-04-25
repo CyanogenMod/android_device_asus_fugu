@@ -88,6 +88,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # set USB OTG enabled to add support for USB storage type
 PRODUCT_PROPERTY_OVERRIDES += persist.sys.isUsbOtgEnabled=1
 
+# Set default USB interface
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += persist.sys.usb.config=mtp
+
 # Include the Tv parts for use
 PRODUCT_PACKAGES += \
     TvProvider \
