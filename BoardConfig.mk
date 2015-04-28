@@ -59,6 +59,7 @@ ifeq ($(HOST_OS),linux)
     endif
   endif
 endif
+DONT_DEXPREOPT_PREBUILTS := true
 
 # Security
 BUILD_WITH_SECURITY_FRAMEWORK := chaabi_token
