@@ -153,7 +153,6 @@ system/lib/arm/nb/libm.so:intel
 system/lib/arm/nb/libnativehelper.so:intel
 system/lib/arm/nb/libOpenMAXAL.so:intel
 system/lib/arm/nb/libOpenSLES.so:intel
-system/lib/arm/nb/libpcre.so:intel
 system/lib/arm/nb/libpixelflinger.so:intel
 system/lib/arm/nb/libskia.so:intel
 system/lib/arm/nb/libsqlite.so:intel

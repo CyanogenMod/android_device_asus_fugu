@@ -162,7 +162,6 @@ PRODUCT_COPY_FILES := \
     vendor/intel/fugu/proprietary/armnb/libnativehelper.so:system/lib/arm/nb/libnativehelper.so:intel \
     vendor/intel/fugu/proprietary/armnb/libOpenMAXAL.so:system/lib/arm/nb/libOpenMAXAL.so:intel \
     vendor/intel/fugu/proprietary/armnb/libOpenSLES.so:system/lib/arm/nb/libOpenSLES.so:intel \
-    vendor/intel/fugu/proprietary/armnb/libpcre.so:system/lib/arm/nb/libpcre.so:intel \
     vendor/intel/fugu/proprietary/armnb/libpixelflinger.so:system/lib/arm/nb/libpixelflinger.so:intel \
     vendor/intel/fugu/proprietary/armnb/libskia.so:system/lib/arm/nb/libskia.so:intel \
     vendor/intel/fugu/proprietary/armnb/libsqlite.so:system/lib/arm/nb/libsqlite.so:intel \
