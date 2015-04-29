@@ -169,7 +169,6 @@
 /system/lib/arm/nb/libnativehelper.so
 /system/lib/arm/nb/libOpenMAXAL.so
 /system/lib/arm/nb/libOpenSLES.so
-/system/lib/arm/nb/libpcre.so
 /system/lib/arm/nb/libpixelflinger.so
 /system/lib/arm/nb/libskia.so
 /system/lib/arm/nb/libsqlite.so
