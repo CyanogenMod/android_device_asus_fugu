@@ -49,6 +49,7 @@ AudioOutput::AudioOutput(const char* alsa_name,
         , mBytesPerChunk(0)
         , mStagingBuf(NULL)
         , mPrimeTimeoutChunks(0)
+        , mReportedWriteFail(false)
         , mVolume(0.0)
         , mFixedLvl(0.0)
         , mMute(false)
@@ -478,15 +479,16 @@ void AudioOutput::doPCMWrite(const uint8_t* data, size_t len) {
         mState = FATAL;
     }
     else if (err < 0) {
-        ALOGW("pcm_write failed err %d", err);
+        ALOGW_IF(!mReportedWriteFail, "pcm_write failed err %d", err);
+        mReportedWriteFail = true;
     }
-
-#if 1 /* not implemented in driver yet, just fake it */
     else {
+        mReportedWriteFail = false;
+#if 1 /* not implemented in driver yet, just fake it */
         LocalClock lc;
         mLastDMAStartTime = lc.getLocalTime();
-    }
 #endif
+    }
 }
 
 void AudioOutput::setVolume(float vol) {

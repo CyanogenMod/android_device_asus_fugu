@@ -111,6 +111,9 @@ protected:
     // Is the stream on standby?
     bool            mInStandby;
 
+    // reduce log spew
+    bool            mReportedAvailFail;
+
     void            releaseAllOutputs();
     void            updateTargetOutputs();
     void            updateInputNums();

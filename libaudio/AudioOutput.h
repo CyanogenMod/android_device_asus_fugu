@@ -160,6 +160,9 @@ class AudioOutput : public RefBase {
     uint64_t            mFramesQueuedToDriver;
     uint32_t            mPrimeTimeoutChunks;
 
+    // reduce log spew
+    bool                mReportedWriteFail;
+
     // Volume stuff
     Mutex               mVolumeLock;
     float               mVolume;

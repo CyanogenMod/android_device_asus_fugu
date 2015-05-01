@@ -45,6 +45,7 @@ AudioStreamOut::AudioStreamOut(AudioHardwareOutput& owner, bool mcOut)
     , mAudioFlingerTgtDevices(0)
     , mIsMCOutput(mcOut)
     , mInStandby(false)
+    , mReportedAvailFail(false)
 {
     assert(mLocalClock.initCheck());
 
@@ -407,8 +408,11 @@ status_t AudioStreamOut::getPresentationPosition(uint64_t *frames,
             } else {
                 ALOGE("getPresentationPosition: avail too large = %u", avail);
             }
+            mReportedAvailFail = false;
         } else {
-            ALOGE("getPresentationPosition: getHardwareTimestamp returned non-zero");
+            ALOGW_IF(!mReportedAvailFail,
+                    "getPresentationPosition: getHardwareTimestamp returned non-zero");
+            mReportedAvailFail = true;
         }
     } else {
         ALOGVV("getPresentationPosition: no physical outputs! This HAL is inactive!");
