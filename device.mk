@@ -101,6 +101,11 @@ PRODUCT_PACKAGES += \
     TvProvider \
     TvSettings \
     tv_input.default
+
+# Include AppDrawer
+PRODUCT_PACKAGES += \
+    AppDrawer
+
 # Bluetooth
 PRODUCT_PACKAGES += \
     bt_bcm4354
