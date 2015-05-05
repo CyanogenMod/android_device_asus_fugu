@@ -17,7 +17,9 @@
 package org.cyanogenmod.appdrawer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -82,7 +84,7 @@ public class AppDrawerActivity extends Activity {
                 e.printStackTrace();
             }
         }
-
+        Collections.sort(applist, new ApplicationInfo.DisplayNameComparator(packageManager));
         return applist;
     }
 
