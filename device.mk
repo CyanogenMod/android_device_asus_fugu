@@ -77,7 +77,8 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     libtinyalsa \
     audio.primary.fugu \
-    audio.usb.default
+    audio.usb.default \
+    audio.a2dp.default
 
 USE_CUSTOM_AUDIO_POLICY := 1
 
