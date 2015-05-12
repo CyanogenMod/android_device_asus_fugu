@@ -80,6 +80,10 @@ PRODUCT_PACKAGES += \
     audio.usb.default \
     audio.a2dp.default
 
+# http://b/15193147
+# TODO(danalbert): Remove this once stlport is dead and gone.
+PRODUCT_PACKAGES +=  libstlport
+
 USE_CUSTOM_AUDIO_POLICY := 1
 
 # specific management of audio_policy.conf
