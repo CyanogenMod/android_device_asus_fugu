@@ -110,7 +110,9 @@ PRODUCT_PACKAGES += \
     bt_bcm4354
 
 PRODUCT_COPY_FILES += \
-    device/asus/fugu/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf
+    device/asus/fugu/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf \
+    device/asus/fugu/wifi/bcmdhd.cal:system/etc/wifi/bcmdhd.cal \
+    device/asus/fugu/wifi/bcmdhd_sr2.cal:system/etc/wifi/bcmdhd_sr2.cal
 
 # IMG graphics
 PRODUCT_PACKAGES += \
