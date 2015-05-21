@@ -1051,7 +1051,14 @@ int CameraDriver::detectDeviceResolutions()
     memset(mDetectedRes,0,sizeof(mDetectedRes));
     while((noOfDetectRes-1) > 0){
         length = strlen(mDetectedRes);
-        snprintf(mDetectedRes + length, noOfDetectRes*4*sizeof(frame_size.discrete.width), "%s,",supportedRes + offset);
+        if (noOfDetectRes != 2) {
+            snprintf(mDetectedRes + length, noOfDetectRes*4*sizeof(frame_size.discrete.width),
+                    "%s,",supportedRes + offset);
+        } else {
+            snprintf(mDetectedRes + length, noOfDetectRes*4*sizeof(frame_size.discrete.width),
+                    "%s",supportedRes + offset);
+        }
+
         noOfDetectRes--;
         offset=offset+10;
     }
