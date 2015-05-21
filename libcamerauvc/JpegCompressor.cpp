@@ -193,8 +193,11 @@ int JpegCompressor::encode(const InputBuffer &in, const OutputBuffer &out)
             mJpegSize = -1;
             goto exit;
         }
-        skBitmap.setConfig(SkBitmap::kRGB_565_Config, in.width, in.height);
-        skBitmap.setPixels(out.buf, NULL);
+       SkColorType ct = SkBitmapConfigToColorType(SkBitmap::kRGB_565_Config);
+       SkImageInfo info = SkImageInfo::Make(in.width, in.height, ct, kPremul_SkAlphaType);
+       skBitmap.installPixels(info, out.buf, 0);
+       // skBitmap.setConfig(SkBitmap::kRGB_565_Config, in.width, in.height);
+      //  skBitmap.setPixels(out.buf, NULL);
         LOG1("Encoding stream using Skia...");
         if (mJpegEncoder->encodeStream(&skStream, skBitmap, out.quality)) {
             mJpegSize = skStream.getOffset();
