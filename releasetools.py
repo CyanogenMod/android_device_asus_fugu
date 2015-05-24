@@ -76,9 +76,15 @@ def WriteBootloader(info, bootloader):
       WriteSplashscreen(info);
       continue
 
+def DeleteRecursive(self, startdir):
+  """Delete recursively."""
+  cmd = 'delete_recursive("%s");'
+  self.script.append(self._WordWrap(cmd) % (startdir))
+
 def FullOTA_InstallEnd(info):
   info.script.Mount("/system")
-  info.script.AppendExtra('delete("/system/app/LatinIME/LatinIME.apk");')
+  info.script.AppendExtra('delete_recursive("/system/app/LatinIME");')
+  info.script.AppendExtra('delete("/system/lib/libjni_latinime.so");')
   info.script.Unmount("/system")
   try:
     bootloader_img = info.input_zip.read("RADIO/bootloader.img")
