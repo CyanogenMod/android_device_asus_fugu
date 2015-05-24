@@ -121,12 +121,17 @@ for APK in `ls ../../../$OUTDIR/proprietary/app/*/*apk`; do
   fi
     apkname=`basename $APK`
     apkmodulename=`echo $apkname|sed -e 's/\.apk$//gi'`
+  if [[ $apkmodulename = LeanbackIme ]]; then
+    signature="PRESIGNED"
+  else
+    signature="platform"
+  fi
     (cat << EOF) >> ../../../$OUTDIR/proprietary/app/Android.mk
 include \$(CLEAR_VARS)
 LOCAL_MODULE := $apkmodulename
 LOCAL_MODULE_TAGS := optional
 LOCAL_SRC_FILES := $apkmodulename/$apkname
-LOCAL_CERTIFICATE := platform
+LOCAL_CERTIFICATE := $signature
 LOCAL_MODULE_CLASS := APPS
 LOCAL_MODULE_SUFFIX := \$(COMMON_ANDROID_PACKAGE_SUFFIX)
 include \$(BUILD_PREBUILT)
@@ -229,12 +234,17 @@ for PRIVAPK in `ls ../../../$OUTDIR/proprietary/priv-app/*/*apk`; do
   fi
     privapkname=`basename $PRIVAPK`
     privmodulename=`echo $privapkname|sed -e 's/\.apk$//gi'`
+  if [[ $privmodulename = LeanbackLauncher  || $privmodulename = TV ]]; then
+    signature="PRESIGNED"
+  else
+    signature="platform"
+  fi
     (cat << EOF) >> ../../../$OUTDIR/proprietary/priv-app/Android.mk
 include \$(CLEAR_VARS)
 LOCAL_MODULE := $privmodulename
 LOCAL_MODULE_TAGS := optional
 LOCAL_SRC_FILES := $privmodulename/$privapkname
-LOCAL_CERTIFICATE := platform
+LOCAL_CERTIFICATE := $signature
 LOCAL_MODULE_CLASS := APPS
 LOCAL_PRIVILEGED_MODULE := true
 LOCAL_MODULE_SUFFIX := \$(COMMON_ANDROID_PACKAGE_SUFFIX)
