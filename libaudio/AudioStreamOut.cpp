@@ -231,9 +231,11 @@ void AudioStreamOut::updateInputNums()
     ALOGD("AudioStreamOut::updateInputNums: chunk size %u from output rate %u\n",
         mInputChunkFrames, outputSampleRate());
 
+    mInputFrameSize = mInputChanCount * audio_bytes_per_sample(mInputFormat);
+
     // Buffer size is just the frame size multiplied by the number of
     // frames per chunk.
-    mInputBufSize = mInputChunkFrames * mInputChanCount * audio_bytes_per_sample(mInputFormat);
+    mInputBufSize = mInputChunkFrames * mInputFrameSize;
 
     // The nominal latency is just the duration of a chunk * the number of
     // chunks we nominally keep in flight at any given point in time.
@@ -360,12 +362,6 @@ char* AudioStreamOut::getParameters(const char* k)
 uint32_t AudioStreamOut::outputSampleRate() const
 {
     return mInputSampleRate;
-}
-
-int AudioStreamOut::getBytesPerOutputFrame()
-{
-    // FIXME: Use output format (PCM_FORMAT_S24_LE), should be 4 bytes per sample.
-    return mInputChanCount * sizeof(int16_t);
 }
 
 uint32_t AudioStreamOut::latency() const {
@@ -642,7 +638,7 @@ ssize_t AudioStreamOut::write(const void* buffer, size_t bytes)
     // If we don't actually have any physical outputs to write to, just sleep
     // for the proper amt of time in order to simulate the throttle that writing
     // to the hardware would impose.
-    finishedWriteOp(bytes / getBytesPerOutputFrame(), (0 == mPhysOutputs.size()));
+    finishedWriteOp(bytes / mInputFrameSize, (0 == mPhysOutputs.size()));
 
     return static_cast<ssize_t>(bytes);
 }
