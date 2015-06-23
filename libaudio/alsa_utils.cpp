@@ -256,7 +256,7 @@ void HDMIAudioCaps::getFmtsForAF(String8& fmts) {
         return;
     }
 
-    fmts.append("AUDIO_FORMAT_PCM_16_BIT");
+    fmts.append("AUDIO_FORMAT_PCM_16_BIT|AUDIO_FORMAT_PCM_8_24_BIT");
     // TODO: when we can start to expect 20 and 24 bit audio modes coming from
     // AF, we need to implement support to enumerate those modes.
 
@@ -390,7 +390,10 @@ bool HDMIAudioCaps::supportsFormat(audio_format_t format,
         uint32_t subFormat = format & AUDIO_FORMAT_SUB_MASK;
         BPSMask bpsMask;
         switch (subFormat) {
-            case AUDIO_FORMAT_PCM_SUB_16_BIT: bpsMask = kBPS_16bit; break;
+        // FIXME: (legacy code). We match on 16 bits, but on Fugu we hard code to use
+        // PCM_FORMAT_S24_LE.
+            case AUDIO_FORMAT_PCM_SUB_16_BIT: // fall through
+            case AUDIO_FORMAT_PCM_SUB_8_24_BIT: bpsMask = kBPS_16bit; break;
             default: return false;
         }
 

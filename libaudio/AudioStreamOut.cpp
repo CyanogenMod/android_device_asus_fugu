@@ -99,16 +99,19 @@ status_t AudioStreamOut::set(
 
     if (!mIsMCOutput) {
         // If this is the primary stream out, then demand our defaults.
-        if ((lFormat   != format()) ||
+        if ((lFormat != AUDIO_FORMAT_PCM_16_BIT && lFormat != AUDIO_FORMAT_PCM_8_24_BIT) ||
             (lChannels != chanMask()) ||
-            (lRate     != sampleRate()))
+            (lRate     != sampleRate())) {
+            ALOGW("set: parameters incompatible with defaults");
             return BAD_VALUE;
+        }
     } else {
         // Else check to see if our HDMI sink supports this format before proceeding.
-        if (!mOwnerHAL.getHDMIAudioCaps().supportsFormat(lFormat,
-                                                     lRate,
-                                                     audio_channel_count_from_out_mask(lChannels)))
+        if (!mOwnerHAL.getHDMIAudioCaps().supportsFormat(
+                lFormat, lRate, audio_channel_count_from_out_mask(lChannels))) {
+            ALOGW("set: parameters incompatible with hdmi capabilities");
             return BAD_VALUE;
+        }
     }
 
     mInputFormat = lFormat;
@@ -230,7 +233,7 @@ void AudioStreamOut::updateInputNums()
 
     // Buffer size is just the frame size multiplied by the number of
     // frames per chunk.
-    mInputBufSize = mInputChunkFrames * getBytesPerOutputFrame();
+    mInputBufSize = mInputChunkFrames * mInputChanCount * audio_bytes_per_sample(mInputFormat);
 
     // The nominal latency is just the duration of a chunk * the number of
     // chunks we nominally keep in flight at any given point in time.
@@ -338,7 +341,7 @@ char* AudioStreamOut::getParameters(const char* k)
             hdmiCaps.getFmtsForAF(value);
             param.add(keySupFormats, value);
         } else {
-            param.add(keySupFormats, String8("AUDIO_FORMAT_PCM_16_BIT"));
+            param.add(keySupFormats, String8("AUDIO_FORMAT_PCM_16_BIT|AUDIO_FORMAT_PCM_8_24_BIT"));
         }
     }
 
@@ -361,6 +364,7 @@ uint32_t AudioStreamOut::outputSampleRate() const
 
 int AudioStreamOut::getBytesPerOutputFrame()
 {
+    // FIXME: Use output format (PCM_FORMAT_S24_LE), should be 4 bytes per sample.
     return mInputChanCount * sizeof(int16_t);
 }
 
@@ -632,7 +636,7 @@ ssize_t AudioStreamOut::write(const void* buffer, size_t bytes)
     // We always call processOneChunk on the outputs, as it is the
     // tick for their state machines.
     for (I = mPhysOutputs.begin(); I != mPhysOutputs.end(); ++I) {
-        (*I)->processOneChunk((uint8_t *)buffer, bytes, hasActiveOutputs);
+        (*I)->processOneChunk((uint8_t *)buffer, bytes, hasActiveOutputs, mInputFormat);
     }
 
     // If we don't actually have any physical outputs to write to, just sleep
