@@ -25,6 +25,7 @@
 #include <semaphore.h>
 #include <sys/ioctl.h>
 
+#include <audio_utils/primitives.h>
 #include <common_time/local_clock.h>
 
 #define __DO_FUNCTION_IMPL__
@@ -414,33 +415,6 @@ void AudioOutput::processOneChunk(const uint8_t* data, size_t len,
 
 }
 
-static int convert_16PCM_to_24PCM(const void* input, void *output, int ipbytes)
-{
-    int i = 0,outbytes = 0;
-    const int *src = (const int*)input;
-    int *dst = (int*)output;
-
-    ALOGV("convert 16 to 24 bits for %d",ipbytes);
-    /*convert 16 bit input to 24 bit output
-       in a 32 bit sample*/
-    if(0 == ipbytes)
-        return outbytes;
-
-    for(i = 0; i < (ipbytes/4); i++){
-        int x = (int)((int*)src)[i];
-        dst[i*2] = ((int)( x & 0x0000FFFF)) << 8;
-        // trying to sign extend
-        dst[i*2] = dst[i*2] << 8;
-        dst[i*2] = dst[i*2] >> 8;
-        //shift to middle
-        dst[i*2 + 1] = (int)(( x & 0xFFFF0000) >> 8);
-        dst[i*2 + 1] = dst[i*2 + 1] << 8;
-        dst[i*2 + 1] = dst[i*2 + 1] >> 8;
-    }
-    outbytes= ipbytes * 2;
-    return outbytes;
-}
-
 void AudioOutput::doPCMWrite(const uint8_t* data, size_t len, audio_format_t format) {
     if (len == 0 || hasFatalError())
         return;
@@ -472,9 +446,7 @@ void AudioOutput::doPCMWrite(const uint8_t* data, size_t len, audio_format_t for
             mStagingBuf = buf;
             mStagingSize = outputSize;
         }
-
-        // TODO: convert_16PCM_to_24PCM() is really slow, replace with memcpy_to_q8_23_from_i16().
-        (void) convert_16PCM_to_24PCM(data, mStagingBuf, len);
+        memcpy_to_q8_23_from_i16((int32_t*)mStagingBuf, (const int16_t*)data, len >> 1);
         err = pcm_write(mDevice, mStagingBuf, outputSize);
     } break;
     case AUDIO_FORMAT_PCM_8_24_BIT:
