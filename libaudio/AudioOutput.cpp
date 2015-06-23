@@ -16,6 +16,7 @@
 */
 
 #define LOG_TAG "AudioHAL:AudioOutput"
+// #define LOG_NDEBUG 0
 
 #include <utils/Log.h>
 
@@ -30,6 +31,8 @@
 #include "alsa_utils.h"
 #undef __DO_FUNCTION_IMPL__
 #include "AudioOutput.h"
+
+// TODO: Consider using system/media/alsa_utils for the future.
 
 namespace android {
 
@@ -47,6 +50,7 @@ AudioOutput::AudioOutput(const char* alsa_name,
         , mALSAFormat(alsa_pcm_format)
         , mBytesPerFrame(0)
         , mBytesPerChunk(0)
+        , mStagingSize(0)
         , mStagingBuf(NULL)
         , mPrimeTimeoutChunks(0)
         , mReportedWriteFail(false)
@@ -69,7 +73,7 @@ AudioOutput::AudioOutput(const char* alsa_name,
 
 AudioOutput::~AudioOutput() {
     cleanupResources();
-    delete[] mStagingBuf;
+    free(mStagingBuf);
 }
 
 status_t AudioOutput::initCheck() {
@@ -99,20 +103,19 @@ void AudioOutput::setupInternal() {
         mBytesPerSample = 2;
         break;
     case PCM_FORMAT_S24_LE:
-        mBytesPerSample = 3;
+        mBytesPerSample = 3; // FIXME: This is 4 bytes.
         break;
     case PCM_FORMAT_S32_LE:
         mBytesPerSample = 4;
         break;
     default:
         ALOGE("Unexpected alsa format 0x%x, setting mBytesPerSample to 3", mALSAFormat);
-        mBytesPerSample = 3;
+        mBytesPerSample = 3; // FIXME: Should be fatal.
         break;
     }
 #endif
     mBytesPerFrame = mBytesPerSample * mChannelCnt;
     mBytesPerChunk = mBytesPerFrame * mFramesPerChunk;
-    mStagingBuf = new uint8_t[mBytesPerChunk];
 
     memset(&mFramesToLocalTime, 0, sizeof(mFramesToLocalTime));
     mFramesToLocalTime.a_to_b_numer = lc.getLocalFreq();
@@ -160,8 +163,11 @@ void AudioOutput::pushSilence(uint32_t nFrames)
     if (hasFatalError())
         return;
 
+    // TODO: use a single write.  use calloc instead of stack allocation.
+    // choose 8_24_BIT instead of 16_BIT as it is native to Fugu
+    const audio_format_t format = AUDIO_FORMAT_PCM_8_24_BIT;
     uint8_t sbuf[mBytesPerChunk];
-    uint32_t primeAmount = mBytesPerFrame*nFrames;
+    uint32_t primeAmount = audio_bytes_per_sample(format) * mChannelCnt * nFrames;
     uint32_t zeroAmount = primeAmount < sizeof(sbuf)
                         ? primeAmount
                         : sizeof(sbuf);
@@ -171,11 +177,11 @@ void AudioOutput::pushSilence(uint32_t nFrames)
     while (primeAmount && !hasFatalError()) {
         uint32_t amt = (primeAmount < mBytesPerChunk) ?
                         primeAmount : mBytesPerChunk;
-        doPCMWrite(sbuf, amt);
+        doPCMWrite(sbuf, amt, format);
         primeAmount -= amt;
     }
 
-    mFramesQueuedToDriver += nFrames;
+    mFramesQueuedToDriver += nFrames; // FIXME: should take into account error?
 }
 
 void AudioOutput::stageChunk(const uint8_t* chunkData,
@@ -388,7 +394,7 @@ status_t AudioOutput::getDMAStartData(
 }
 
 void AudioOutput::processOneChunk(const uint8_t* data, size_t len,
-                                  bool hasActiveOutputs) {
+                                  bool hasActiveOutputs, audio_format_t format) {
     switch (mState) {
     case OUT_OF_SYNC:
         primeOutput(hasActiveOutputs);
@@ -406,7 +412,7 @@ void AudioOutput::processOneChunk(const uint8_t* data, size_t len,
         // We need to align the ALSA buffers first.
         break;
     case ACTIVE:
-        doPCMWrite(data, len);
+        doPCMWrite(data, len, format);
         mFramesQueuedToDriver += len / mBytesPerFrame;
         break;
     default:
@@ -443,8 +449,8 @@ static int convert_16PCM_to_24PCM(const void* input, void *output, int ipbytes)
     return outbytes;
 }
 
-void AudioOutput::doPCMWrite(const uint8_t* data, size_t len) {
-    if (hasFatalError())
+void AudioOutput::doPCMWrite(const uint8_t* data, size_t len, audio_format_t format) {
+    if (len == 0 || hasFatalError())
         return;
 
     // If write fails with an error of EBADFD, then our underlying audio
@@ -456,18 +462,37 @@ void AudioOutput::doPCMWrite(const uint8_t* data, size_t len) {
     // write will return EBADFD.
 #if 1
     /* Intel HDMI appears to be locked at 24bit PCM, but Android
-     * only supports 16 or 32bit, so we have to convert to 24-bit
-     * over 32 bit data type.
+     * will send data in the format specified in adev_open_output_stream().
      */
-    int32_t *dstbuff = (int32_t*)malloc(len * 2);
-    if (!dstbuff) {
-        ALOGE("%s: memory allocation for conversion buffer failed", __func__);
-        return;
+    LOG_ALWAYS_FATAL_IF(mALSAFormat != PCM_FORMAT_S24_LE,
+            "Fugu alsa device format(%d) must be PCM_FORMAT_S24_LE", mALSAFormat);
+
+    int err = BAD_VALUE;
+    switch(format) {
+    case AUDIO_FORMAT_PCM_16_BIT: {
+        const size_t outputSize = len * 2;
+        if (outputSize > mStagingSize) {
+            void *buf = realloc(mStagingBuf, outputSize);
+            if (buf == NULL) {
+                ALOGE("%s: memory allocation for conversion buffer failed", __func__);
+                return;
+            }
+            mStagingBuf = buf;
+            mStagingSize = outputSize;
+        }
+
+        // TODO: convert_16PCM_to_24PCM() is really slow, replace with memcpy_to_q8_23_from_i16().
+        (void) convert_16PCM_to_24PCM(data, mStagingBuf, len);
+        err = pcm_write(mDevice, mStagingBuf, outputSize);
+    } break;
+    case AUDIO_FORMAT_PCM_8_24_BIT:
+        err = pcm_write(mDevice, data, len);
+        break;
+    default:
+        LOG_ALWAYS_FATAL("Fugu input format(%#x) should be 16 bit or 8_24 bit pcm", format);
+        break;
     }
-    memset(dstbuff, 0, len*2);
-    len = convert_16PCM_to_24PCM(data, dstbuff, len);
-    int err = pcm_write(mDevice, dstbuff, len);
-    free(dstbuff);
+
 #else
 
     int err = pcm_write(mDevice, data, len);
