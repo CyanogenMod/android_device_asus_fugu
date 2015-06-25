@@ -23,3 +23,4 @@
 /dev/block/pci/pci0000:00/0000:00:01\.0/by-name/userdata       u:object_r:userdata_block_device:s0
 /dev/block/pci/pci0000:00/0000:00:01\.0/by-name/recovery       u:object_r:recovery_block_device:s0
 /dev/block/pci/pci0000:00/0000:00:01\.0/by-name/boot           u:object_r:boot_block_device:s0
+
