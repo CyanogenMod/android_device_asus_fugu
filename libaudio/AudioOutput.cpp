@@ -54,6 +54,8 @@ AudioOutput::AudioOutput(const char* alsa_name,
         , mBytesPerChunk(0)
         , mStagingSize(0)
         , mStagingBuf(NULL)
+        , mSilenceSize(0)
+        , mSilenceBuf(NULL)
         , mPrimeTimeoutChunks(0)
         , mReportedWriteFail(false)
         , mVolume(0.0)
@@ -76,6 +78,7 @@ AudioOutput::AudioOutput(const char* alsa_name,
 AudioOutput::~AudioOutput() {
     cleanupResources();
     free(mStagingBuf);
+    free(mSilenceBuf);
 }
 
 status_t AudioOutput::initCheck() {
@@ -159,28 +162,22 @@ void AudioOutput::adjustDelay(int32_t nFrames) {
 
 void AudioOutput::pushSilence(uint32_t nFrames)
 {
-    if (hasFatalError())
+    if (nFrames == 0 || hasFatalError())
         return;
-
-    // TODO: use a single write.  use calloc instead of stack allocation.
     // choose 8_24_BIT instead of 16_BIT as it is native to Fugu
     const audio_format_t format = AUDIO_FORMAT_PCM_8_24_BIT;
-    uint8_t sbuf[mBytesPerChunk];
-    uint32_t primeAmount = audio_bytes_per_sample(format) * mChannelCnt * nFrames;
-    uint32_t zeroAmount = primeAmount < sizeof(sbuf)
-                        ? primeAmount
-                        : sizeof(sbuf);
-
-    // Dispatch full buffer at a time if possible.
-    memset(sbuf, 0, zeroAmount);
-    while (primeAmount && !hasFatalError()) {
-        uint32_t amt = (primeAmount < mBytesPerChunk) ?
-                        primeAmount : mBytesPerChunk;
-        doPCMWrite(sbuf, amt, format);
-        primeAmount -= amt;
+    const size_t frameSize = audio_bytes_per_sample(format) * mChannelCnt;
+    const size_t writeSize = nFrames * frameSize;
+    if (mSilenceSize < writeSize) {
+        // for zero initialized memory calloc is much faster than malloc or realloc.
+        void *sbuf = calloc(nFrames, frameSize);
+        if (sbuf == NULL) return;
+        free(mSilenceBuf);
+        mSilenceBuf = sbuf;
+        mSilenceSize = writeSize;
     }
-
-    mFramesQueuedToDriver += nFrames; // FIXME: should take into account error?
+    doPCMWrite((const uint8_t*)mSilenceBuf, writeSize, format);
+    mFramesQueuedToDriver += nFrames;
 }
 
 void AudioOutput::cleanupResources() {
