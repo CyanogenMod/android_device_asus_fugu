@@ -134,6 +134,8 @@ class AudioOutput : public RefBase {
     uint32_t            mBytesPerChunk;
     size_t              mStagingSize;
     void*               mStagingBuf;
+    size_t              mSilenceSize;
+    void*               mSilenceBuf;
 
     // Get next write time stuff.
     bool                mLastNextWriteTimeValid;
