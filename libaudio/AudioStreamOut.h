@@ -88,6 +88,7 @@ protected:
     // Handy values pre-computed from the audio configuration.
     uint32_t        mInputBufSize;
     uint32_t        mInputChanCount;
+    uint32_t        mInputFrameSize;
     uint32_t        mInputChunkFrames;
     uint32_t        mInputNominalLatencyUSec;
     LinearTransform mLocalTimeToFrames;
@@ -124,7 +125,6 @@ protected:
     status_t        getNextWriteTimestamp_internal(int64_t *timestamp);
     void            adjustOutputs(int64_t maxTime);
     ssize_t         writeInternal(const void* buffer, size_t bytes);
-    int             getBytesPerOutputFrame();
 };
 
 }  // android
