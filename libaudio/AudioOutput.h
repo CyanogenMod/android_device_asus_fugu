@@ -109,13 +109,7 @@ class AudioOutput : public RefBase {
   protected:
 
     void                pushSilence(uint32_t nFrames);
-    // Take nBytes of chunkData, convert to output format and write at
-    // sbuf. sbuf WILL point to enough space to convert from 16 to 32 bit
-    // if needed.
-    virtual void        stageChunk(const uint8_t* chunkData,
-                                   uint8_t* sbuf,
-                                   uint32_t inBytesPerSample,
-                                   uint32_t nSamples);
+
     virtual void        openPCMDevice();
     virtual void        reset();
     virtual status_t    getDMAStartData(int64_t* dma_start_time,

@@ -48,6 +48,7 @@ AudioOutput::AudioOutput(const char* alsa_name,
         , mChannelCnt(0)
         , mALSAName(alsa_name)
         , mALSAFormat(alsa_pcm_format)
+        , mBytesPerSample(0)
         , mBytesPerFrame(0)
         , mBytesPerChunk(0)
         , mStagingSize(0)
@@ -95,25 +96,22 @@ void AudioOutput::setupInternal() {
 
     mMaxDelayCompFrames = kMaxDelayCompensationMSec * mFramesPerSec / 1000;
 
-#if 0
-    mBytesPerSample = ((mALSAFormat == PCM_FORMAT_S32_LE) ? 4 : 2);
-#else
     switch (mALSAFormat) {
     case PCM_FORMAT_S16_LE:
         mBytesPerSample = 2;
         break;
-    case PCM_FORMAT_S24_LE:
-        mBytesPerSample = 3; // FIXME: This is 4 bytes.
+    case PCM_FORMAT_S24_3LE:
+        mBytesPerSample = 3;
         break;
+    case PCM_FORMAT_S24_LE: // fall through
     case PCM_FORMAT_S32_LE:
         mBytesPerSample = 4;
         break;
     default:
-        ALOGE("Unexpected alsa format 0x%x, setting mBytesPerSample to 3", mALSAFormat);
-        mBytesPerSample = 3; // FIXME: Should be fatal.
+        LOG_ALWAYS_FATAL("Unexpected alsa format %d", mALSAFormat);
         break;
     }
-#endif
+
     mBytesPerFrame = mBytesPerSample * mChannelCnt;
     mBytesPerChunk = mBytesPerFrame * mFramesPerChunk;
 
@@ -182,14 +180,6 @@ void AudioOutput::pushSilence(uint32_t nFrames)
     }
 
     mFramesQueuedToDriver += nFrames; // FIXME: should take into account error?
-}
-
-void AudioOutput::stageChunk(const uint8_t* chunkData,
-                             uint8_t* sbuf,
-                             uint32_t inBytesPerSample,
-                             uint32_t nSamples)
-{
-    memcpy(sbuf, chunkData, inBytesPerSample * nSamples);
 }
 
 void AudioOutput::cleanupResources() {
@@ -411,10 +401,12 @@ void AudioOutput::processOneChunk(const uint8_t* data, size_t len,
         // Don't push data when primed and waiting for buffer alignment.
         // We need to align the ALSA buffers first.
         break;
-    case ACTIVE:
+    case ACTIVE: {
         doPCMWrite(data, len, format);
-        mFramesQueuedToDriver += len / mBytesPerFrame;
-        break;
+        // we use input frame size here (mBytesPerFrame is alsa device frame size)
+        const size_t frameSize = mChannelCnt * audio_bytes_per_sample(format);
+        mFramesQueuedToDriver += len / frameSize;
+        } break;
     default:
         // Do nothing.
         break;
