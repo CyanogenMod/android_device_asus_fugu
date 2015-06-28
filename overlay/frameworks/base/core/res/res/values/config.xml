@@ -64,4 +64,6 @@
          off until the normal polling interval. A value < 0 indicates infinite. -->
     <integer name="config_ntpRetry">-1</integer>
 
+    <!-- Flag indicating if device supports EAP SIM, AKA, AKA' -->
+    <bool name="config_eap_sim_based_auth_supported">false</bool>
 </resources>
