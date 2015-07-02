@@ -4,7 +4,6 @@ libOMXVideoDecoderWMV.so
 libOMXVideoDecoderMPEG4.so
 libOMXVideoDecoderVP8.so
 libOMXVideoDecoderMPEG2.so
-libOMXVideoDecoderVP9HWR.so
 libOMXVideoDecoderVP9Hybrid.so
 libOMXVideoDecoderAVCSecure.so
 libOMXVideoEncoderAVC.so
