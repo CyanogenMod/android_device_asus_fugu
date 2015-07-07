@@ -37,7 +37,8 @@
 namespace android {
 
 AudioStreamOut::AudioStreamOut(AudioHardwareOutput& owner, bool mcOut)
-    : mFramesRendered(0)
+    : mRenderPosition(0)
+    , mPresentationPosition(0)
     , mOwnerHAL(owner)
     , mFramesWritten(0)
     , mTgtDevices(0)
@@ -141,7 +142,8 @@ status_t AudioStreamOut::standbyHardware()
 
 status_t AudioStreamOut::standby()
 {
-    mFramesRendered = 0;
+    mRenderPosition = 0;
+    // Don't reset the presentation position.
     return standbyHardware();
 }
 
@@ -168,7 +170,8 @@ status_t AudioStreamOut::resume()
 
 status_t AudioStreamOut::flush()
 {
-    mFramesRendered = 0;
+    mRenderPosition = 0;
+    mPresentationPosition = 0;
     return NO_ERROR;
 }
 
@@ -266,7 +269,8 @@ void AudioStreamOut::finishedWriteOp(size_t framesWritten,
     }
 
     mFramesWritten += framesWritten;
-    mFramesRendered += framesWritten;
+    mPresentationPosition += framesWritten;
+    mRenderPosition += framesWritten;
 
     if (needThrottle) {
         int64_t deltaLT;
@@ -404,21 +408,21 @@ status_t AudioStreamOut::getPresentationPosition(uint64_t *frames,
                     (int64_t)audioOutput->getKernelBufferSize() - (int64_t)avail;
 
                 int64_t pendingFrames = framesInDriverBuffer + fudgeFrames;
-                int64_t signedFrames = mFramesRendered - pendingFrames;
+                int64_t signedFrames = mPresentationPosition - pendingFrames;
                 if (pendingFrames < 0) {
                     ALOGE("getPresentationPosition: negative pendingFrames = %lld",
                         pendingFrames);
                 } else if (signedFrames < 0) {
                     ALOGI("getPresentationPosition: playing silent preroll"
-                        ", mFramesRendered = %llu, pendingFrames = %lld",
-                        mFramesRendered, pendingFrames);
+                        ", mPresentationPosition = %llu, pendingFrames = %lld",
+                        mPresentationPosition, pendingFrames);
                 } else {
 #if HAL_PRINT_TIMESTAMP_CSV
                     // Print comma separated values for spreadsheet analysis.
                     uint64_t nanos = (((uint64_t)timestamp->tv_sec) * 1000000000L)
                             + timestamp->tv_nsec;
                     ALOGI("getPresentationPosition, %lld, %4u, %lld, %llu",
-                            mFramesRendered, avail, signedFrames, nanos);
+                            mPresentationPosition, avail, signedFrames, nanos);
 #endif
                     *frames = (uint64_t) signedFrames;
                     result = NO_ERROR;
@@ -443,7 +447,7 @@ status_t AudioStreamOut::getRenderPosition(__unused uint32_t *dspFrames)
     if (dspFrames == NULL) {
         return -EINVAL;
     }
-    *dspFrames = (uint32_t) mFramesRendered;
+    *dspFrames = (uint32_t) mRenderPosition;
     return NO_ERROR;
 }
 
