@@ -73,7 +73,8 @@ protected:
     Mutex           mRoutingLock;
 
     // Track frame position for timestamps, etc.
-    int64_t         mFramesRendered;
+    uint64_t        mRenderPosition;
+    uint64_t        mPresentationPosition;
 
     // Our HAL, used as the middle-man to collect and trade AudioOutputs.
     AudioHardwareOutput&  mOwnerHAL;
