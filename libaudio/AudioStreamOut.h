@@ -75,6 +75,7 @@ protected:
     // Track frame position for timestamps, etc.
     uint64_t        mRenderPosition;
     uint64_t        mPresentationPosition;
+    uint64_t        mLastTimestampPosition;
 
     // Our HAL, used as the middle-man to collect and trade AudioOutputs.
     AudioHardwareOutput&  mOwnerHAL;

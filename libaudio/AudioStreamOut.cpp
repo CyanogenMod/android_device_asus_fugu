@@ -39,6 +39,7 @@ namespace android {
 AudioStreamOut::AudioStreamOut(AudioHardwareOutput& owner, bool mcOut)
     : mRenderPosition(0)
     , mPresentationPosition(0)
+    , mLastTimestampPosition(0)
     , mOwnerHAL(owner)
     , mFramesWritten(0)
     , mTgtDevices(0)
@@ -51,13 +52,13 @@ AudioStreamOut::AudioStreamOut(AudioHardwareOutput& owner, bool mcOut)
 
     mPhysOutputs.setCapacity(3);
 
-    // Set some reasonable defaults for these.  All of this should be eventually
+    // Set some reasonable defaults for these.  All of this should eventually
     // be overwritten by a specific audio flinger configuration, but it does not
     // hurt to have something here by default.
     mInputSampleRate = 48000;
     mInputChanMask = AUDIO_CHANNEL_OUT_STEREO;
     mInputFormat = AUDIO_FORMAT_PCM_16_BIT;
-    mInputNominalChunksInFlight = 4;
+    mInputNominalChunksInFlight = 4; // pcm_open() fails if not 4!
     updateInputNums();
 
     mThrottleValid = false;
@@ -179,59 +180,14 @@ void AudioStreamOut::updateInputNums()
 {
     assert(mLocalClock.initCheck());
 
-    // mInputBufSize determines how many audio frames AudioFlinger is going to
-    // mix at a time.  We also use the mInputBufSize to determine the ALSA
-    // period_size, the number of of samples which need to play out (at most)
-    // before low level ALSA driver code is required to wake up upper levels of
-    // SW to fill a new buffer.  As it turns out, ALSA is going to apply some
-    // rules and modify the period_size which we pass to it.  One of the things
-    // ALSA seems to do is attempt to round the period_size up to a value which
-    // will make the period an integral number of 0.5 mSec.  This round-up
-    // behavior can cause the low levels of ALSA to consume more data per period
-    // than the AudioFlinger mixer has been told to produce.  If there are only
-    // two buffers in flight at any given point in time, this can lead to a
-    // situation where the pipeline ends up slipping an extra buffer and
-    // underflowing.  There are two approaches to mitigate this, both of which
-    // are implemented in this HAL...
-    //
-    // 1) Try as hard as possible to make certain that the buffer size we choose
-    //    results in a period_size which is not going to get rounded up by ALSA.
-    //    This means that we want a buffer size which at the chosen sample rate
-    //    and frame size will be an integral multiple of 1/2 mSec.
-    // 2) Increate the number of chunks we keep in flight.  If the system slips
-    //    a single period, its only really a problem if there is no data left in
-    //    the pipeline waiting to be played out.  The mixer should going to mix
-    //    as fast as possible until the buffer has been topped off.  By
-    //    decreasing the buffer size and increasing the number of buffers in
-    //    flight, we increase the number of interrups and mix events per second,
-    //    but buy ourselves some insurance against the negative side effects of
-    //    slipping one buffer in the schedule.  We end up using 4 buffers at
-    //    10mSec, making the total audio latency somewhere between 40 and 50
-    //    mSec, depending on when a sample begins playback relative to
-    //    AudioFlinger's mixing schedule.
-    //
     mInputChanCount = audio_channel_count_from_out_mask(mInputChanMask);
 
-    // Picking a chunk duration 10mSec should satisfy #1 for both major families
-    // of audio sample rates (the 44.1K and 48K families).  In the case of 44.1
-    // (or higher) we will end up with a multiple of 441 frames of audio per
-    // chunk, while for 48K, we will have a multiple of 480 frames of audio per
-    // chunk.  This will not work well for lower sample rates in the 44.1 family
-    // (22.05K and 11.025K); it is unlikely that we will ever be configured to
-    // deliver those rates, and if we ever do, we will need to rely on having
-    // extra chunks in flight to deal with the jitter problem described above.
-    mInputChunkFrames = outputSampleRate() / 100;
+    // We found by experimentation that a buffer size that was a multiple of 512
+    // prevented some problems with retrograde results from get_presentation_position().
+    // It also prevents some spontaneous shutdowns of the output device.
+    mInputChunkFrames = 512 * ((outputSampleRate() + 48000 - 1) / 48000);
 
-    // FIXME: Currently, audio flinger demands an input buffer size which is a
-    // multiple of 16 audio frames.  Right now, there is no good way to
-    // reconcile this with ALSA round-up behavior described above when the
-    // desired sample rate is a member of the 44.1 family.  For now, we just
-    // round up to the nearest multiple of 16 frames and roll the dice, but
-    // someday it would be good to fix one or the other halves of the problem
-    // (either ALSA or AudioFlinger)
-    mInputChunkFrames = (mInputChunkFrames + 0xF) & ~0xF;
-
-    ALOGD("AudioStreamOut::updateInputNums: chunk size %u from output rate %u\n",
+    ALOGI("updateInputNums: chunk size %u from output rate %u\n",
         mInputChunkFrames, outputSampleRate());
 
     mInputFrameSize = mInputChanCount * audio_bytes_per_sample(mInputFormat);
@@ -424,7 +380,16 @@ status_t AudioStreamOut::getPresentationPosition(uint64_t *frames,
                     ALOGI("getPresentationPosition, %lld, %4u, %lld, %llu",
                             mPresentationPosition, avail, signedFrames, nanos);
 #endif
-                    *frames = (uint64_t) signedFrames;
+                    uint64_t unsignedFrames = (uint64_t) signedFrames;
+                    *frames = unsignedFrames;
+
+                    // Log retrograde timestamps to help debug driver.
+                    if (unsignedFrames < mLastTimestampPosition) {
+                        ALOGW("getPresentationPosition: retrograde timestamp, diff = %d",
+                            (int32_t)(mLastTimestampPosition - unsignedFrames));
+                    }
+                    mLastTimestampPosition = unsignedFrames;
+
                     result = NO_ERROR;
                 }
             } else {
@@ -522,7 +487,7 @@ void AudioStreamOut::updateTargetOutputs()
             if (newOutput != NULL) {
                 // If we actually got an output, go ahead and add it to our list
                 // of physical outputs.  The rest of the system will handle
-                // starting it up.  If we didn't get an output, but also go no
+                // starting it up.  If we didn't get an output, but also got no
                 // error code, it just means that the output is currently busy
                 // and should become available soon.
                 ALOGI("updateTargetOutputs: adding output back to mPhysOutputs");
