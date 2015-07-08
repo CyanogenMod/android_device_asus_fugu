@@ -113,7 +113,6 @@ system/lib/arm/libstagefright_omx.so:intel
 system/lib/arm/libstagefright.so:intel
 system/lib/arm/libstagefright_yuv.so:intel
 system/lib/arm/libstdc++.so:intel
-system/lib/arm/libstlport.so:intel
 system/lib/arm/libsurfaceflinger.so:intel
 system/lib/arm/libsync.so:intel
 system/lib/arm/libsysutils.so:intel
@@ -185,7 +184,7 @@ system/lib/libstlport-mfx.so:intel
 system/priv-app/AtvRemoteService/AtvRemoteService.apk:google
 system/priv-app/LeanbackLauncher/LeanbackLauncher.apk:google
 system/priv-app/TV/TV.apk:google
-system/usr/share/librscruntime.bc:intel
+system/vendor/lib/librscruntime.bc:intel
 system/vendor/bin/bcc.moorefield:intel
 system/vendor/bin/framebuffer_test:intel
 system/vendor/bin/hwperfbin2jsont:intel

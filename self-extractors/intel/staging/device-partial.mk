@@ -122,7 +122,6 @@ PRODUCT_COPY_FILES := \
     vendor/intel/fugu/proprietary/libstagefright.so:system/lib/arm/libstagefright.so:intel \
     vendor/intel/fugu/proprietary/libstagefright_yuv.so:system/lib/arm/libstagefright_yuv.so:intel \
     vendor/intel/fugu/proprietary/libstdc++.so:system/lib/arm/libstdc++.so:intel \
-    vendor/intel/fugu/proprietary/libstlport.so:system/lib/arm/libstlport.so:intel \
     vendor/intel/fugu/proprietary/libsurfaceflinger.so:system/lib/arm/libsurfaceflinger.so:intel \
     vendor/intel/fugu/proprietary/libsync.so:system/lib/arm/libsync.so:intel \
     vendor/intel/fugu/proprietary/libsysutils.so:system/lib/arm/libsysutils.so:intel \
@@ -189,7 +188,7 @@ PRODUCT_COPY_FILES := \
     vendor/intel/fugu/proprietary/libOMXVideoDecoderAVCSecure.so:system/lib/libOMXVideoDecoderAVCSecure.so:intel \
     vendor/intel/fugu/proprietary/libsepdrm_cc54.so:system/lib/libsepdrm_cc54.so:intel \
     vendor/intel/fugu/proprietary/libstlport-mfx.so:system/lib/libstlport-mfx.so:intel \
-    vendor/intel/fugu/proprietary/librscruntime.bc:system/usr/share/librscruntime.bc:intel \
+    vendor/intel/fugu/proprietary/librscruntime.bc:system/vendor/lib/librscruntime.bc:intel \
     vendor/intel/fugu/proprietary/bcc.moorefield:system/vendor/bin/bcc.moorefield:intel \
     vendor/intel/fugu/proprietary/framebuffer_test:system/vendor/bin/framebuffer_test:intel \
     vendor/intel/fugu/proprietary/hwperfbin2jsont:system/vendor/bin/hwperfbin2jsont:intel \
