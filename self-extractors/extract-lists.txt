@@ -133,7 +133,6 @@
             system/lib/arm/libstagefright.so \
             system/lib/arm/libstagefright_yuv.so \
             system/lib/arm/libstdc++.so \
-            system/lib/arm/libstlport.so \
             system/lib/arm/libsurfaceflinger.so \
             system/lib/arm/libsync.so \
             system/lib/arm/libsysutils.so \
@@ -200,7 +199,7 @@
             system/lib/libOMXVideoDecoderAVCSecure.so \
             system/lib/libsepdrm_cc54.so \
             system/lib/libstlport-mfx.so \
-            system/usr/share/librscruntime.bc \
+            system/vendor/lib/librscruntime.bc \
             system/vendor/bin/bcc.moorefield \
             system/vendor/bin/framebuffer_test \
             system/vendor/bin/hwperfbin2jsont \
