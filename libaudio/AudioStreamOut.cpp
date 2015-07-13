@@ -361,7 +361,13 @@ status_t AudioStreamOut::getPresentationPosition(uint64_t *frames,
                 int fudgeFrames = kFudgeMSec * sampleRate() / 1000;
 
                 int64_t framesInDriverBuffer =
-                    (int64_t)audioOutput->getKernelBufferSize() - (int64_t)avail;
+                    (int64_t)audioOutput->getKernelBufferSize();
+                // make use of the avail if it is greater then buffer size
+                // This avail value can be ignored as application is writing
+                // at different buffer size then the one configured.
+                if ((int64_t)avail >= framesInDriverBuffer) {
+                    framesInDriverBuffer -= (int64_t)avail;
+                }
 
                 int64_t pendingFrames = framesInDriverBuffer + fudgeFrames;
                 int64_t signedFrames = mPresentationPosition - pendingFrames;
