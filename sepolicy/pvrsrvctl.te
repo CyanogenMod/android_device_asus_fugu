@@ -16,3 +16,4 @@ allow bootanim surfaceflinger:fifo_file rw_file_perms;
 allow system_server surfaceflinger:fifo_file rw_file_perms;
 allow appdomain surfaceflinger:fifo_file rw_file_perms;
 allow mediaserver surfaceflinger:fifo_file rw_file_perms;
+allow dumpstate surfaceflinger:fifo_file rw_file_perms;
