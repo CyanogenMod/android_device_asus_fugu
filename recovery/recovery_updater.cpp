@@ -54,7 +54,7 @@ static void dump_fw_versions(struct firmware_versions *v)
 	fprintf(stderr, "	    mIA: %04X.%04X\n", v->mia.major, v->mia.minor);
 }
 
-static int force_rw(char *name) {
+static int force_rw(const char *name) {
 	int ret, fd;
 
 	fd = open(name, O_WRONLY);
@@ -104,40 +104,40 @@ int check_ifwi_file_scu_emmc(void *data, size_t size)
 
 static uint32_t xor_compute(char *ptr, uint32_t size)
 {
-	uint32_t xor = 0;
+	uint32_t val = 0;
 	uint32_t i;
 
 	for (i = 0; i < size; i+=4)
-		xor = xor ^ *(uint32_t *)(ptr + i);
+		val = val ^ *(uint32_t *)(ptr + i);
 
-	return xor;
+	return val;
 }
 
-static uint8_t xor_factorize(uint32_t xor)
+static uint8_t xor_factorize(uint32_t val)
 {
-	return (uint8_t)((xor & 0xff) ^ ((xor >> 8) & 0xff) ^ ((xor >> 16) & 0xff) ^ ((xor >> 24) & 0xff));
+	return (uint8_t)((val & 0xff) ^ ((val >> 8) & 0xff) ^ ((val >> 16) & 0xff) ^ ((val >> 24) & 0xff));
 }
 
 static void xor_update(char *ptr)
 {
 	uint16_t i;
-	uint32_t xor;
+	uint32_t val;
 
 	/* update UMIP xor of sector 2 to 127 */
 	for (i = 2; i < 128; i++) {
-		xor = xor_compute(ptr + i * BOOT_UMIP_SECTOR_SIZE, BOOT_UMIP_SECTOR_SIZE);
-		*(uint32_t *)(ptr + 4 * i) = xor;
+		val = xor_compute(ptr + i * BOOT_UMIP_SECTOR_SIZE, BOOT_UMIP_SECTOR_SIZE);
+		*(uint32_t *)(ptr + 4 * i) = val;
 	}
 
 	/* update UMIP xor */
 	*(ptr + BOOT_UMIP_XOR_OFFSET) = 0;
-	xor = xor_compute(ptr, BOOT_UMIP_SIZE);
-	*(ptr + BOOT_UMIP_XOR_OFFSET) = xor_factorize(xor);
+	val= xor_compute(ptr, BOOT_UMIP_SIZE);
+	*(ptr + BOOT_UMIP_XOR_OFFSET) = xor_factorize(val);
 
 	/* update IFWI xor */
 	*(uint32_t *)(ptr + BOOT_IFWI_XOR_OFFSET) = 0x0;
-	xor = xor_compute(ptr, BOOT_IFWI_SIZE);
-	*(uint32_t *)(ptr + BOOT_IFWI_XOR_OFFSET) = xor;
+	val= xor_compute(ptr, BOOT_IFWI_SIZE);
+	*(uint32_t *)(ptr + BOOT_IFWI_XOR_OFFSET) = val;
 }
 
 static int write_umip_emmc(uint32_t addr_offset, void *data, size_t size)
@@ -150,7 +150,7 @@ static int write_umip_emmc(uint32_t addr_offset, void *data, size_t size)
 	char *token_data;
 
 	if (addr_offset == IFWI_OFFSET) {
-		token_data = malloc(TOKEN_UMIP_AREA_SIZE);
+		token_data = reinterpret_cast<char *>(malloc(TOKEN_UMIP_AREA_SIZE));
 		if (!token_data) {
 			fprintf(stderr, "write_umip_emmc: Malloc error\n");
 			return -1;
@@ -316,7 +316,7 @@ Value* FlashIfwiFuguFn(const char *name, State * state, int argc, Expr * argv[])
 	};
 	fseek(f, 0, SEEK_SET);
 
-	if ((buffer = malloc(ifwi_size)) == NULL) {
+	if ((buffer = reinterpret_cast<unsigned char *>(malloc(ifwi_size))) == NULL) {
 		ErrorAbort(state, "Unable to alloc ifwi flash buffer of size %d", ifwi_size);
 		goto done;
 	}
