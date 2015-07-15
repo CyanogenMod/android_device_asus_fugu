@@ -158,6 +158,7 @@ Only the three quirks included above are recognized at this point:
             <Feature name="adaptive-playback" />
         </MediaCodec>
 
+       <MediaCodec name="OMX.google.gsm.decoder" type="audio/gsm" />
        <MediaCodec name="OMX.Intel.alac.decoder" type="audio/alac" />
     </Decoders>
 
