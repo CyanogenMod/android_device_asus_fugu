@@ -218,7 +218,7 @@ PRODUCT_COPY_FILES := \
     vendor/intel/fugu/proprietary/libPVRRS.so:system/vendor/lib/libPVRRS.so:intel \
     vendor/intel/fugu/proprietary/libPVRScopeServices.so:system/vendor/lib/libPVRScopeServices.so:intel \
     vendor/intel/fugu/proprietary/librsccompiler.so:system/vendor/lib/librsccompiler.so:intel \
-    vendor/intel/fugu/proprietary/libRS.moorefield.so:system/vendor/lib/libRS.moorefield.so:intel \
+    vendor/intel/fugu/proprietary/memtrack.moorefield.so:system/vendor/lib/hw/memtrack.moorefield.so:intel \
     vendor/intel/fugu/proprietary/libseppr_hal.so:system/vendor/lib/libseppr_hal.so:intel \
     vendor/intel/fugu/proprietary/libsrv_init.so:system/vendor/lib/libsrv_init.so:intel \
     vendor/intel/fugu/proprietary/libsrv_um.so:system/vendor/lib/libsrv_um.so:intel \

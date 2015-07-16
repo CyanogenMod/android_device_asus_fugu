@@ -229,7 +229,7 @@
             system/vendor/lib/libPVRRS.so \
             system/vendor/lib/libPVRScopeServices.so \
             system/vendor/lib/librsccompiler.so \
-            system/vendor/lib/libRS.moorefield.so \
+            system/vendor/lib/hw/memtrack.moorefield.so \
             system/vendor/lib/libseppr_hal.so \
             system/vendor/lib/libsrv_init.so \
             system/vendor/lib/libsrv_um.so \
