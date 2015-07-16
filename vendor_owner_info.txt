@@ -219,7 +219,7 @@ system/vendor/lib/libPVRRS.sha1.so:intel
 system/vendor/lib/libPVRRS.so:intel
 system/vendor/lib/libPVRScopeServices.so:intel
 system/vendor/lib/librsccompiler.so:intel
-system/vendor/lib/libRS.moorefield.so:intel
+system/vendor/lib/hw/memtrack.moorefield.so:intel
 system/vendor/lib/libseppr_hal.so:intel
 system/vendor/lib/libsrv_init.so:intel
 system/vendor/lib/libsrv_um.so:intel
