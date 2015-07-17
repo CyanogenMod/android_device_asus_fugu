@@ -17,6 +17,7 @@
 
 #define LOG_TAG "AudioHAL_AudioStreamOut"
 
+#include <inttypes.h>
 #include <utils/Log.h>
 
 #include "AudioHardwareOutput.h"
@@ -38,8 +39,9 @@ namespace android {
 
 AudioStreamOut::AudioStreamOut(AudioHardwareOutput& owner, bool mcOut)
     : mRenderPosition(0)
-    , mPresentationPosition(0)
-    , mLastTimestampPosition(0)
+    , mFramesPresented(0)
+    , mLastPresentationPosition(0)
+    , mLastPresentationValid(false)
     , mOwnerHAL(owner)
     , mFramesWritten(0)
     , mTgtDevices(0)
@@ -80,7 +82,7 @@ status_t AudioStreamOut::set(
         uint32_t *pChannels,
         uint32_t *pRate)
 {
-    Mutex::Autolock _l(mLock);
+    Mutex::Autolock _l(mRoutingLock);
     audio_format_t lFormat   = pFormat ? *pFormat : AUDIO_FORMAT_DEFAULT;
     uint32_t       lChannels = pChannels ? *pChannels : 0;
     uint32_t       lRate     = pRate ? *pRate : 0;
@@ -145,13 +147,13 @@ status_t AudioStreamOut::standby()
 {
     ALOGI("standby: ==========================");
     mRenderPosition = 0;
+    mLastPresentationValid = false;
     // Don't reset the presentation position.
     return standbyHardware();
 }
 
 void AudioStreamOut::releaseAllOutputs() {
     Mutex::Autolock _l(mRoutingLock);
-
     ALOGI("releaseAllOutputs: releasing %d mPhysOutputs", mPhysOutputs.size());
     AudioOutputList::iterator I;
     for (I = mPhysOutputs.begin(); I != mPhysOutputs.end(); ++I)
@@ -163,6 +165,7 @@ void AudioStreamOut::releaseAllOutputs() {
 status_t AudioStreamOut::pause()
 {
     ALOGI("pause: ==========================");
+    mLastPresentationValid = false;
     return standbyHardware();
 }
 
@@ -176,7 +179,10 @@ status_t AudioStreamOut::flush()
 {
     ALOGI("flush: ==========================");
     mRenderPosition = 0;
-    mPresentationPosition = 0;
+    mFramesPresented = 0;
+    Mutex::Autolock _l(mPresentationLock);
+    mLastPresentationPosition = 0;
+    mLastPresentationValid = false;
     return NO_ERROR;
 }
 
@@ -186,12 +192,10 @@ void AudioStreamOut::updateInputNums()
 
     mInputChanCount = audio_channel_count_from_out_mask(mInputChanMask);
 
-    // We found by experimentation that a buffer size that was a multiple of 512
-    // prevented some problems with retrograde results from get_presentation_position().
-    // It also prevents some spontaneous shutdowns of the output device.
+    // 512 is good for AC3 and DTS passthrough.
     mInputChunkFrames = 512 * ((outputSampleRate() + 48000 - 1) / 48000);
 
-    ALOGI("updateInputNums: chunk size %u from output rate %u\n",
+    ALOGV("updateInputNums: chunk size %u from output rate %u\n",
         mInputChunkFrames, outputSampleRate());
 
     mInputFrameSize = mInputChanCount * audio_bytes_per_sample(mInputFormat);
@@ -229,7 +233,7 @@ void AudioStreamOut::finishedWriteOp(size_t framesWritten,
     }
 
     mFramesWritten += framesWritten;
-    mPresentationPosition += framesWritten;
+    mFramesPresented += framesWritten;
     mRenderPosition += framesWritten;
 
     if (needThrottle) {
@@ -247,7 +251,7 @@ void AudioStreamOut::finishedWriteOp(size_t framesWritten,
             // We should never be a full second ahead of schedule; sanity check
             // our throttle time and cap the max sleep time at 1 second.
             if (deltaUSec > 1000000) {
-                ALOGW("throttle time clipped! deltaLT = %lld deltaUSec = %lld",
+                ALOGW("throttle time clipped! deltaLT = %" PRIi64 " deltaUSec = %" PRIi64,
                     deltaLT, deltaUSec);
                 sleep_time = 1000000;
             } else {
@@ -344,68 +348,94 @@ uint32_t AudioStreamOut::latency() const {
 status_t AudioStreamOut::getPresentationPosition(uint64_t *frames,
         struct timespec *timestamp)
 {
-    Mutex::Autolock _l(mRoutingLock);
+    status_t result = -ENODEV;
+    // If we cannot get a lock then try to return a cached position and timestamp.
+    // It is better to return an old timestamp then to wait for a fresh one.
+    if (mRoutingLock.tryLock() != OK) {
+        // We failed to get the lock. It is probably held by a blocked write().
+        if (mLastPresentationValid) {
+            // Use cached position.
+            // Use mutex because this cluster of variables may be getting
+            // updated by the write thread.
+            Mutex::Autolock _l(mPresentationLock);
+            *frames = mLastPresentationPosition;
+            *timestamp = mLastPresentationTime;
+            result = NO_ERROR;
+        }
+        return result;
+    }
+
+    // Lock succeeded so it is safe to call this.
+    result = getPresentationPosition_l(frames, timestamp);
+
+    mRoutingLock.unlock();
+    return result;
+}
+
+// Used to implement get_presentation_position() for Audio HAL.
+// According to the prototype in audio.h, the frame count should not get
+// reset on standby().
+// mRoutingLock should be locked before calling this method.
+status_t AudioStreamOut::getPresentationPosition_l(uint64_t *frames,
+        struct timespec *timestamp)
+{
     status_t result = -ENODEV;
     // The presentation timestamp should be the same for all devices.
     // Also Molly only has one output device at the moment.
     // So just use the first one in the list.
     if (!mPhysOutputs.isEmpty()) {
-        const unsigned int kInsaneAvail = 10 * 48000;
         unsigned int avail = 0;
         sp<AudioOutput> audioOutput = mPhysOutputs.itemAt(0);
-        if (audioOutput->getHardwareTimestamp(&avail, timestamp) == 0) {
-            if (avail < kInsaneAvail) {
-                // FIXME av sync fudge factor
-                // Use a fudge factor to account for hidden buffering in the
-                // HDMI output path. This is a hack until we can determine the
-                // actual buffer sizes.
-                // Increasing kFudgeMSec will move the audio earlier in
-                // relation to the video.
-                const int kFudgeMSec = 50;
-                int fudgeFrames = kFudgeMSec * sampleRate() / 1000;
 
-                int64_t framesInDriverBuffer =
-                    (int64_t)audioOutput->getKernelBufferSize();
-                // make use of the avail if it is greater then buffer size
-                // This avail value can be ignored as application is writing
-                // at different buffer size then the one configured.
-                if ((int64_t)avail >= framesInDriverBuffer) {
-                    framesInDriverBuffer -= (int64_t)avail;
-                }
+        int64_t framesInDriverBuffer = (int64_t)audioOutput->getKernelBufferSize() - (int64_t)avail;
+        if (framesInDriverBuffer >= 0) {
+            // FIXME av sync fudge factor
+            // Use a fudge factor to account for hidden buffering in the
+            // HDMI output path. This is a hack until we can determine the
+            // actual buffer sizes.
+            // Increasing kFudgeMSec will move the audio earlier in
+            // relation to the video.
+            const int kFudgeMSec = 50;
+            int fudgeFrames = kFudgeMSec * sampleRate() / 1000;
+            int64_t pendingFrames = framesInDriverBuffer + fudgeFrames;
 
-                int64_t pendingFrames = framesInDriverBuffer + fudgeFrames;
-                int64_t signedFrames = mPresentationPosition - pendingFrames;
-                if (pendingFrames < 0) {
-                    ALOGE("getPresentationPosition: negative pendingFrames = %lld",
-                        pendingFrames);
-                } else if (signedFrames < 0) {
-                    ALOGI("getPresentationPosition: playing silent preroll"
-                        ", mPresentationPosition = %llu, pendingFrames = %lld",
-                        mPresentationPosition, pendingFrames);
-                } else {
-#if HAL_PRINT_TIMESTAMP_CSV
-                    // Print comma separated values for spreadsheet analysis.
-                    uint64_t nanos = (((uint64_t)timestamp->tv_sec) * 1000000000L)
-                            + timestamp->tv_nsec;
-                    ALOGI("getPresentationPosition, %lld, %4u, %lld, %llu",
-                            mPresentationPosition, avail, signedFrames, nanos);
-#endif
-                    uint64_t unsignedFrames = (uint64_t) signedFrames;
-                    *frames = unsignedFrames;
-
-                    // Log retrograde timestamps to help debug driver.
-                    if (unsignedFrames < mLastTimestampPosition) {
-                        ALOGW("getPresentationPosition: retrograde timestamp, diff = %d",
-                            (int32_t)(mLastTimestampPosition - unsignedFrames));
-                    }
-                    mLastTimestampPosition = unsignedFrames;
-
-                    result = NO_ERROR;
-                }
+            int64_t signedFrames = mFramesPresented - pendingFrames;
+            if (signedFrames < 0) {
+                ALOGV("getPresentationPosition: playing silent preroll"
+                        ", mFramesPresented = %" PRIu64 ", pendingFrames = %" PRIi64,
+                        mFramesPresented, pendingFrames);
             } else {
-                ALOGE("getPresentationPosition: avail too large = %u", avail);
+#if HAL_PRINT_TIMESTAMP_CSV
+                // Print comma separated values for spreadsheet analysis.
+                uint64_t nanos = (((uint64_t)timestamp->tv_sec) * 1000000000L)
+                        + timestamp->tv_nsec;
+                ALOGI("getPresentationPosition, %" PRIu64 ", %4u, %" PRIi64 ", %" PRIu64,
+                        mFramesPresented, avail, signedFrames, nanos);
+#endif
+                uint64_t unsignedFrames = (uint64_t) signedFrames;
+
+                {
+                    Mutex::Autolock _l(mPresentationLock);
+                    // Check for retrograde timestamps.
+                    if (unsignedFrames < mLastPresentationPosition) {
+                        ALOGW("getPresentationPosition: RETROGRADE timestamp, diff = %" PRId64,
+                            (int64_t)(unsignedFrames - mLastPresentationPosition));
+                        if (mLastPresentationValid) {
+                            // Use previous presentation position and time.
+                            *timestamp = mLastPresentationTime;
+                            *frames = mLastPresentationPosition;
+                            result = NO_ERROR;
+                        }
+                        // else return error
+                    } else {
+                        *frames = unsignedFrames;
+                        // Save cached data that we can use when the HAL is locked.
+                        mLastPresentationPosition = unsignedFrames;
+                        mLastPresentationTime = *timestamp;
+                        result = NO_ERROR;
+                    }
+                }
             }
-            mReportedAvailFail = false;
         } else {
             ALOGW_IF(!mReportedAvailFail,
                     "getPresentationPosition: getHardwareTimestamp returned non-zero");
@@ -414,6 +444,7 @@ status_t AudioStreamOut::getPresentationPosition(uint64_t *frames,
     } else {
         ALOGVV("getPresentationPosition: no physical outputs! This HAL is inactive!");
     }
+    mLastPresentationValid = result == NO_ERROR;
     return result;
 }
 
@@ -429,7 +460,6 @@ status_t AudioStreamOut::getRenderPosition(__unused uint32_t *dspFrames)
 void AudioStreamOut::updateTargetOutputs()
 {
     Mutex::Autolock _l(mRoutingLock);
-
     AudioOutputList::iterator I;
     uint32_t cur_outputs = 0;
 
@@ -547,12 +577,8 @@ ssize_t AudioStreamOut::write(const void* buffer, size_t bytes)
         data[12], data[13], data[14], data[15]
         );
 
-    // Note: no lock is obtained here.  Calls to write and getNextWriteTimestamp
-    // happen only on the AudioFlinger mixer thread which owns this particular
-    // output stream, so there is no need to worry that there will be two
-    // threads in this instance method concurrently.
     //
-    // In addition, only calls to write change the contents of the mPhysOutputs
+    // Note that only calls to write change the contents of the mPhysOutputs
     // collection (during the call to updateTargetOutputs).  updateTargetOutputs
     // will hold the routing lock during the operation, as should any reader of
     // mPhysOutputs, unless the reader is a call to write or
@@ -567,7 +593,7 @@ ssize_t AudioStreamOut::write(const void* buffer, size_t bytes)
         mInStandby = false;
     }
 
-    updateTargetOutputs();
+    updateTargetOutputs(); // locks mRoutingLock
 
     // If any of our outputs is in the PRIMED state when ::write is called, it
     // means one of two things.  First, it could be that the DMA output really
@@ -595,14 +621,16 @@ ssize_t AudioStreamOut::write(const void* buffer, size_t bytes)
     AudioOutputList::iterator I;
     bool checkDMAStart = false;
     bool hasActiveOutputs = false;
-    for (I = mPhysOutputs.begin(); I != mPhysOutputs.end(); ++I) {
-        if (AudioOutput::PRIMED == (*I)->getState())
-            checkDMAStart = true;
+    {
+        Mutex::Autolock _l(mRoutingLock);
+        for (I = mPhysOutputs.begin(); I != mPhysOutputs.end(); ++I) {
+            if (AudioOutput::PRIMED == (*I)->getState())
+                checkDMAStart = true;
 
-        if ((*I)->getState() == AudioOutput::ACTIVE)
-            hasActiveOutputs = true;
+            if ((*I)->getState() == AudioOutput::ACTIVE)
+                hasActiveOutputs = true;
+        }
     }
-
     if (checkDMAStart) {
         int64_t junk;
         getNextWriteTimestamp_internal(&junk);
@@ -610,15 +638,26 @@ ssize_t AudioStreamOut::write(const void* buffer, size_t bytes)
 
     // We always call processOneChunk on the outputs, as it is the
     // tick for their state machines.
-    for (I = mPhysOutputs.begin(); I != mPhysOutputs.end(); ++I) {
-        (*I)->processOneChunk((uint8_t *)buffer, bytes, hasActiveOutputs, mInputFormat);
+    {
+        Mutex::Autolock _l(mRoutingLock);
+        for (I = mPhysOutputs.begin(); I != mPhysOutputs.end(); ++I) {
+            (*I)->processOneChunk((uint8_t *)buffer, bytes, hasActiveOutputs, mInputFormat);
+        }
+
+        // If we don't actually have any physical outputs to write to, just sleep
+        // for the proper amount of time in order to simulate the throttle that writing
+        // to the hardware would impose.
+        uint32_t framesWritten = bytes / mInputFrameSize;
+        finishedWriteOp(framesWritten, (0 == mPhysOutputs.size()));
     }
 
-    // If we don't actually have any physical outputs to write to, just sleep
-    // for the proper amt of time in order to simulate the throttle that writing
-    // to the hardware would impose.
-    finishedWriteOp(bytes / mInputFrameSize, (0 == mPhysOutputs.size()));
-
+    // Load presentation position cache because we will normally be locked when it is called.
+    {
+        Mutex::Autolock _l(mRoutingLock);
+        uint64_t frames;
+        struct timespec timestamp;
+        getPresentationPosition_l(&frames, &timestamp);
+    }
     return static_cast<ssize_t>(bytes);
 }
 
