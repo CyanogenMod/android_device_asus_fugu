@@ -69,13 +69,20 @@ class AudioStreamOut {
     ssize_t             write(const void* buffer, size_t bytes);
 
 protected:
-    Mutex           mLock;
-    Mutex           mRoutingLock;
+    // Lock in this order to avoid deadlock.
+    //    mRoutingLock
+    //    mPresentationLock
 
     // Track frame position for timestamps, etc.
-    uint64_t        mRenderPosition;
-    uint64_t        mPresentationPosition;
-    uint64_t        mLastTimestampPosition;
+    uint64_t        mRenderPosition;  // in frames, increased by write
+    uint64_t        mFramesPresented; // increased by write
+
+    // Cache of the last PresentationPosition.
+    // This cache is used in case of retrograde timestamps or if the mRoutingLock is held.
+    Mutex           mPresentationLock; // protects these mLastPresentation* variables
+    uint64_t        mLastPresentationPosition; // frames
+    struct timespec mLastPresentationTime;
+    bool            mLastPresentationValid;
 
     // Our HAL, used as the middle-man to collect and trade AudioOutputs.
     AudioHardwareOutput&  mOwnerHAL;
@@ -104,6 +111,7 @@ protected:
     LinearTransform mUSecToLocalTime;
 
     // State to track which actual outputs are assigned to this output stream.
+    Mutex           mRoutingLock; // This protects mPhysOutputs and mTgtDevices
     AudioOutputList mPhysOutputs;
     uint32_t        mTgtDevices;
     bool            mTgtDevicesDirty;
@@ -119,14 +127,17 @@ protected:
     bool            mReportedAvailFail;
 
     status_t        standbyHardware();
-    void            releaseAllOutputs();
-    void            updateTargetOutputs();
+    void            releaseAllOutputs(); // locks mRoutingLock
+    void            updateTargetOutputs();  // locks mRoutingLock
     void            updateInputNums();
     void            finishedWriteOp(size_t framesWritten, bool needThrottle);
     void            resetThrottle() { mThrottleValid = false; }
     status_t        getNextWriteTimestamp_internal(int64_t *timestamp);
     void            adjustOutputs(int64_t maxTime);
     ssize_t         writeInternal(const void* buffer, size_t bytes);
+
+    // mRoutingLock should be held before calling this.
+    status_t        getPresentationPosition_l(uint64_t *frames, struct timespec *timestamp);
 };
 
 }  // android
