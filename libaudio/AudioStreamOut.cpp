@@ -386,56 +386,61 @@ status_t AudioStreamOut::getPresentationPosition_l(uint64_t *frames,
     if (!mPhysOutputs.isEmpty()) {
         unsigned int avail = 0;
         sp<AudioOutput> audioOutput = mPhysOutputs.itemAt(0);
+        if (audioOutput->getHardwareTimestamp(&avail, timestamp) == OK) {
 
-        int64_t framesInDriverBuffer = (int64_t)audioOutput->getKernelBufferSize() - (int64_t)avail;
-        if (framesInDriverBuffer >= 0) {
-            // FIXME av sync fudge factor
-            // Use a fudge factor to account for hidden buffering in the
-            // HDMI output path. This is a hack until we can determine the
-            // actual buffer sizes.
-            // Increasing kFudgeMSec will move the audio earlier in
-            // relation to the video.
-            const int kFudgeMSec = 50;
-            int fudgeFrames = kFudgeMSec * sampleRate() / 1000;
-            int64_t pendingFrames = framesInDriverBuffer + fudgeFrames;
+            int64_t framesInDriverBuffer = (int64_t)audioOutput->getKernelBufferSize() - (int64_t)avail;
+            if (framesInDriverBuffer >= 0) {
+                // FIXME av sync fudge factor
+                // Use a fudge factor to account for hidden buffering in the
+                // HDMI output path. This is a hack until we can determine the
+                // actual buffer sizes.
+                // Increasing kFudgeMSec will move the audio earlier in
+                // relation to the video.
+                const int kFudgeMSec = 50;
+                int fudgeFrames = kFudgeMSec * sampleRate() / 1000;
+                int64_t pendingFrames = framesInDriverBuffer + fudgeFrames;
 
-            int64_t signedFrames = mFramesPresented - pendingFrames;
-            if (signedFrames < 0) {
-                ALOGV("getPresentationPosition: playing silent preroll"
-                        ", mFramesPresented = %" PRIu64 ", pendingFrames = %" PRIi64,
-                        mFramesPresented, pendingFrames);
-            } else {
-#if HAL_PRINT_TIMESTAMP_CSV
-                // Print comma separated values for spreadsheet analysis.
-                uint64_t nanos = (((uint64_t)timestamp->tv_sec) * 1000000000L)
-                        + timestamp->tv_nsec;
-                ALOGI("getPresentationPosition, %" PRIu64 ", %4u, %" PRIi64 ", %" PRIu64,
-                        mFramesPresented, avail, signedFrames, nanos);
-#endif
-                uint64_t unsignedFrames = (uint64_t) signedFrames;
+                int64_t signedFrames = mFramesPresented - pendingFrames;
+                if (signedFrames < 0) {
+                    ALOGV("getPresentationPosition: playing silent preroll"
+                            ", mFramesPresented = %" PRIu64 ", pendingFrames = %" PRIi64,
+                            mFramesPresented, pendingFrames);
+                } else {
+    #if HAL_PRINT_TIMESTAMP_CSV
+                    // Print comma separated values for spreadsheet analysis.
+                    uint64_t nanos = (((uint64_t)timestamp->tv_sec) * 1000000000L)
+                            + timestamp->tv_nsec;
+                    ALOGI("getPresentationPosition, %" PRIu64 ", %4u, %" PRIi64 ", %" PRIu64,
+                            mFramesPresented, avail, signedFrames, nanos);
+    #endif
+                    uint64_t unsignedFrames = (uint64_t) signedFrames;
 
-                {
-                    Mutex::Autolock _l(mPresentationLock);
-                    // Check for retrograde timestamps.
-                    if (unsignedFrames < mLastPresentationPosition) {
-                        ALOGW("getPresentationPosition: RETROGRADE timestamp, diff = %" PRId64,
-                            (int64_t)(unsignedFrames - mLastPresentationPosition));
-                        if (mLastPresentationValid) {
-                            // Use previous presentation position and time.
-                            *timestamp = mLastPresentationTime;
-                            *frames = mLastPresentationPosition;
+                    {
+                        Mutex::Autolock _l(mPresentationLock);
+                        // Check for retrograde timestamps.
+                        if (unsignedFrames < mLastPresentationPosition) {
+                            ALOGW("getPresentationPosition: RETROGRADE timestamp, diff = %" PRId64,
+                                (int64_t)(unsignedFrames - mLastPresentationPosition));
+                            if (mLastPresentationValid) {
+                                // Use previous presentation position and time.
+                                *timestamp = mLastPresentationTime;
+                                *frames = mLastPresentationPosition;
+                                result = NO_ERROR;
+                            }
+                            // else return error
+                        } else {
+                            *frames = unsignedFrames;
+                            // Save cached data that we can use when the HAL is locked.
+                            mLastPresentationPosition = unsignedFrames;
+                            mLastPresentationTime = *timestamp;
                             result = NO_ERROR;
                         }
-                        // else return error
-                    } else {
-                        *frames = unsignedFrames;
-                        // Save cached data that we can use when the HAL is locked.
-                        mLastPresentationPosition = unsignedFrames;
-                        mLastPresentationTime = *timestamp;
-                        result = NO_ERROR;
                     }
                 }
+            } else {
+                ALOGE("getPresentationPosition: avail too large = %u", avail);
             }
+            mReportedAvailFail = false;
         } else {
             ALOGW_IF(!mReportedAvailFail,
                     "getPresentationPosition: getHardwareTimestamp returned non-zero");
