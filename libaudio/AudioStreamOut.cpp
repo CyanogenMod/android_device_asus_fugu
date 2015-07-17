@@ -143,6 +143,7 @@ status_t AudioStreamOut::standbyHardware()
 
 status_t AudioStreamOut::standby()
 {
+    ALOGI("standby: ==========================");
     mRenderPosition = 0;
     // Don't reset the presentation position.
     return standbyHardware();
@@ -161,16 +162,19 @@ void AudioStreamOut::releaseAllOutputs() {
 
 status_t AudioStreamOut::pause()
 {
+    ALOGI("pause: ==========================");
     return standbyHardware();
 }
 
 status_t AudioStreamOut::resume()
 {
+    ALOGI("resume: ==========================");
     return NO_ERROR;
 }
 
 status_t AudioStreamOut::flush()
 {
+    ALOGI("flush: ==========================");
     mRenderPosition = 0;
     mPresentationPosition = 0;
     return NO_ERROR;
