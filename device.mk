@@ -95,7 +95,7 @@ PRODUCT_PROPERTY_OVERRIDES += ro.hdmi.device_type=4
 
 # Boot Animation
 PRODUCT_COPY_FILES += \
-    device/asus/fugu/bootanimation.zip:system/media/bootanimation.zip
+    device/asus/fugu/bootanimation-580-256col.zip:system/media/bootanimation.zip
 
 # Bluetooth
 PRODUCT_PACKAGES += \
