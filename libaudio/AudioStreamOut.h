@@ -33,7 +33,7 @@ class AudioHardwareOutput;
 
 class AudioStreamOut {
   public:
-    AudioStreamOut(AudioHardwareOutput& owner, bool mcOut);
+    AudioStreamOut(AudioHardwareOutput& owner, bool mcOut, bool isIec958NonAudio);
     ~AudioStreamOut();
 
     uint32_t            latency() const;
@@ -67,6 +67,8 @@ class AudioStreamOut {
                                                              : "Main"; }
 
     ssize_t             write(const void* buffer, size_t bytes);
+
+    bool                isIec958NonAudio() const { return mIsIec958NonAudio; }
 
 protected:
     // Lock in this order to avoid deadlock.
@@ -122,6 +124,8 @@ protected:
     bool            mIsMCOutput;
     // Is the stream on standby?
     bool            mInStandby;
+    // Is the stream compressed audio in SPDIF data bursts?
+    const bool      mIsIec958NonAudio;
 
     // reduce log spew
     bool            mReportedAvailFail;
