@@ -37,7 +37,7 @@
 
 namespace android {
 
-AudioStreamOut::AudioStreamOut(AudioHardwareOutput& owner, bool mcOut)
+AudioStreamOut::AudioStreamOut(AudioHardwareOutput& owner, bool mcOut, bool isIec958NonAudio)
     : mRenderPosition(0)
     , mFramesPresented(0)
     , mLastPresentationPosition(0)
@@ -48,6 +48,7 @@ AudioStreamOut::AudioStreamOut(AudioHardwareOutput& owner, bool mcOut)
     , mAudioFlingerTgtDevices(0)
     , mIsMCOutput(mcOut)
     , mInStandby(false)
+    , mIsIec958NonAudio(isIec958NonAudio)
     , mReportedAvailFail(false)
 {
     assert(mLocalClock.initCheck());
