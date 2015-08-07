@@ -207,13 +207,10 @@ static int out_get_presentation_position(const struct audio_stream_out *stream,
     return tstream->impl->getPresentationPosition(frames, timestamp);
 }
 
-static int out_get_next_write_timestamp(const struct audio_stream_out *stream,
-                                        int64_t *timestamp)
+static int out_get_next_write_timestamp(const struct audio_stream_out *stream __unused,
+                                        int64_t *timestamp __unused)
 {
-    const struct atv_stream_out* tstream =
-        reinterpret_cast<const struct atv_stream_out*>(stream);
-
-    return tstream->impl->getNextWriteTimestamp(timestamp);
+    return -ENOSYS;
 }
 
 static int out_pause(struct audio_stream_out* stream)
