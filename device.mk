@@ -78,7 +78,9 @@ PRODUCT_PACKAGES += \
     libtinyalsa \
     audio.primary.fugu \
     audio.usb.default \
-    audio.a2dp.default
+    audio.a2dp.default \
+    audio.r_submix.default \
+    libaudio-resampler
 
 # http://b/15193147
 # TODO(danalbert): Remove this once stlport is dead and gone.
