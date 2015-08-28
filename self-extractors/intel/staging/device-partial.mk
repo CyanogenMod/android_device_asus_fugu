@@ -196,9 +196,6 @@ PRODUCT_COPY_FILES := \
     vendor/intel/fugu/proprietary/pvrhwperf:system/vendor/bin/pvrhwperf:intel \
     vendor/intel/fugu/proprietary/pvrsrvctl:system/vendor/bin/pvrsrvctl:intel \
     vendor/intel/fugu/proprietary/pvrtld:system/vendor/bin/pvrtld:intel \
-    vendor/intel/fugu/proprietary/game_controller.hex:system/vendor/firmware/game_controller.hex:intel \
-    vendor/intel/fugu/proprietary/nexus_tv_gamepad.hex:system/vendor/firmware/nexus_tv_gamepad.hex:intel \
-    vendor/intel/fugu/proprietary/nexus_tv_remote.hex:system/vendor/firmware/nexus_tv_remote.hex:intel \
     vendor/intel/fugu/proprietary/PR-ModelCert:system/vendor/firmware/PR-ModelCert:intel \
     vendor/intel/fugu/proprietary/libEGL_POWERVR_ROGUE.so:system/vendor/lib/egl/libEGL_POWERVR_ROGUE.so:intel \
     vendor/intel/fugu/proprietary/libGLESv1_CM_POWERVR_ROGUE.so:system/vendor/lib/egl/libGLESv1_CM_POWERVR_ROGUE.so:intel \

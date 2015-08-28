@@ -207,9 +207,6 @@
             system/vendor/bin/pvrhwperf \
             system/vendor/bin/pvrsrvctl \
             system/vendor/bin/pvrtld \
-            system/vendor/firmware/game_controller.hex \
-            system/vendor/firmware/nexus_tv_gamepad.hex \
-            system/vendor/firmware/nexus_tv_remote.hex \
             system/vendor/firmware/PR-ModelCert \
             system/vendor/lib/egl/libEGL_POWERVR_ROGUE.so \
             system/vendor/lib/egl/libGLESv1_CM_POWERVR_ROGUE.so \
