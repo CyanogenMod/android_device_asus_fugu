@@ -113,7 +113,8 @@ status_t AudioStreamOut::set(
     } else {
         // Else check to see if our HDMI sink supports this format before proceeding.
         if (!mOwnerHAL.getHDMIAudioCaps().supportsFormat(
-                lFormat, lRate, audio_channel_count_from_out_mask(lChannels))) {
+                lFormat, lRate, audio_channel_count_from_out_mask(lChannels),
+                mIsIec958NonAudio)) {
             ALOGW("set: parameters incompatible with hdmi capabilities");
             return BAD_VALUE;
         }
