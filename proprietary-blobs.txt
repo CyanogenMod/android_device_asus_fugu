@@ -210,9 +210,6 @@
 /system/vendor/bin/pvrtld
 /system/vendor/firmware/BCM4350C0.hcd
 /system/vendor/firmware/BCM4350C0_SR2.hcd
-/system/vendor/firmware/game_controller.hex
-/system/vendor/firmware/nexus_tv_gamepad.hex
-/system/vendor/firmware/nexus_tv_remote.hex
 /system/vendor/firmware/PR-ModelCert
 /system/vendor/lib/drm/libdrmwvmplugin.so
 /system/vendor/lib/egl/libEGL_POWERVR_ROGUE.so
