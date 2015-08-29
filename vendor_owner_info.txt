@@ -194,9 +194,6 @@ system/vendor/bin/pvrsrvctl:intel
 system/vendor/bin/pvrtld:intel
 system/vendor/firmware/BCM4350C0.hcd:broadcom
 system/vendor/firmware/BCM4350C0_SR2.hcd:broadcom
-system/vendor/firmware/game_controller.hex:intel
-system/vendor/firmware/nexus_tv_gamepad.hex:intel
-system/vendor/firmware/nexus_tv_remote.hex:intel
 system/vendor/firmware/PR-ModelCert:intel
 system/vendor/lib/drm/libdrmwvmplugin.so:widevine
 system/vendor/lib/egl/libEGL_POWERVR_ROGUE.so:intel
