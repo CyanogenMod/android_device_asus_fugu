@@ -356,9 +356,12 @@ ssize_t HDMIAudioCaps::getMaxChModeNdx_l() {
 
 bool HDMIAudioCaps::supportsFormat(audio_format_t format,
                                       uint32_t sampleRate,
-                                      uint32_t channelCount) {
+                                      uint32_t channelCount,
+                                      bool isIec958NonAudio) {
     Mutex::Autolock _l(mLock);
 
+    ALOGV("supportsFormat() format = 0x%08X, sampleRate = %u, channels = 0x%08X, iec958 = %d",
+                format, sampleRate, channelCount, isIec958NonAudio ? 1 : 0);
     // If the sink does not support basic audio, then it supports no audio.
     if (!mBasicAudioSupported)
         return false;
@@ -371,6 +374,19 @@ bool HDMIAudioCaps::supportsFormat(audio_format_t format,
         case AUDIO_FORMAT_DTS: alsaFormat = kFmtDTS; break;
         case AUDIO_FORMAT_DTS_HD: alsaFormat = kFmtDTSHD; break;
         default: return false;
+    }
+
+    // EAC3 uses a PCM sample rate of 4X the base rate.
+    // We try to detect that situation and allow 4X rate even if the
+    // EDID does not report that it is supported.
+    // This rate was chosen because it is between the region of typical PCM rates
+    // and the extreme rates used for IEC61973.
+    // It is > 96000 and < 4*32000.
+    const uint32_t maxReasonableRate = 100000; // FIXME review for N
+    if (isIec958NonAudio && (alsaFormat == kFmtLPCM) && (sampleRate > maxReasonableRate)) {
+        ALOGI("supportsFormat() dividing sample %u by 4 to test support for EAC3 over HDMI",
+                sampleRate);
+        sampleRate = sampleRate / 4;
     }
 
     SRMask srMask;
