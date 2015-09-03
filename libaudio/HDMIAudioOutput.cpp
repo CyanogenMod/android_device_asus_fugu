@@ -51,7 +51,8 @@ status_t HDMIAudioOutput::setupForStream(const AudioStreamOut& stream)
     if (!gAudioHardwareOutput.getHDMIAudioCaps().supportsFormat(
             stream.format(),
             stream.sampleRate(),
-            mChannelCnt)) {
+            mChannelCnt,
+            stream.isIec958NonAudio())) {
         ALOGE("HDMI Sink does not support format = 0x%0X, srate = %d, #channels = 0%d",
                 stream.format(), mFramesPerSec, mChannelCnt);
         return BAD_VALUE;
