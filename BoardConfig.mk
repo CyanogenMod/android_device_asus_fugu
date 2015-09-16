@@ -156,6 +156,8 @@ TARGET_BOOTLOADER_IS_2ND := true
 
 BOARD_SEPOLICY_DIRS += device/asus/fugu/sepolicy
 
+USE_CLANG_PLATFORM_BUILD := true
+
 # Use the non-open-source parts, if they're present
 -include vendor/asus/fugu/BoardConfigVendor.mk
 
