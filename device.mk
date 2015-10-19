@@ -223,6 +223,9 @@ PRODUCT_PACKAGES += \
     bcmdhd.cal \
     bcmdhd_sr2.cal
 
+# Recovery
+PRODUCT_PACKAGES += librecovery_ui_fugu
+
 PRODUCT_COPY_FILES += \
     device/asus/fugu/wpa_supplicant.conf:/system/etc/wifi/wpa_supplicant.conf
 
