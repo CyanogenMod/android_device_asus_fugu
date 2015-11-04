@@ -1,4 +1,4 @@
-type pvrsrvctl, domain;
+type pvrsrvctl, domain, domain_deprecated;
 type pvrsrvctl_exec, exec_type, file_type;
 
 # Started by init
