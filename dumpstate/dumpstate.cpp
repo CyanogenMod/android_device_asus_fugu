@@ -19,6 +19,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 static const char base64[] =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
