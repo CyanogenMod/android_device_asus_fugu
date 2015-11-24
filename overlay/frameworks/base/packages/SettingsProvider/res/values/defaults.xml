@@ -23,5 +23,8 @@
     <!-- Set default sleep timeout value for atv -->
     <integer name="def_sleep_timeout">10800000</integer>
 
+    <!-- Disable netstats for atv -->
+    <bool name="def_netstats_enabled">false</bool>
+
 </resources>
 
