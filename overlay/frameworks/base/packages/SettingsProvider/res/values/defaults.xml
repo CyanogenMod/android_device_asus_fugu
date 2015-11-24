@@ -20,5 +20,8 @@
     <!-- Do not give up on DHCP -->
     <integer name="def_max_dhcp_retries">0</integer>
 
+    <!-- Set default sleep timeout value for atv -->
+    <integer name="def_sleep_timeout">10800000</integer>
+
 </resources>
 
