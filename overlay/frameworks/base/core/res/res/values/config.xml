@@ -125,6 +125,10 @@
     <!-- Disable Cell broadcast message support -->
     <bool name="config_cellBroadcastAppLinks">false</bool>
 
+    <!-- Use android tv account activity -->
+    <string name="config_chooseAccountActivity">com.google.android.gms/.common.account.NoTouchAccountPickerActivity</string>
+    <string name="config_chooseTypeAndAccountActivity">com.google.android.gms/.common.account.NoTouchAccountPickerActivity</string>
+
     <!-- Wifi Dual Band support -->
     <bool name="config_wifi_dual_band_support">true</bool>
     
