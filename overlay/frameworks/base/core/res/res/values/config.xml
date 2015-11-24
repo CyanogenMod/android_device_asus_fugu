@@ -108,6 +108,9 @@
 
     <bool name="config_defaultInTouchMode">false</bool>
 
+    <!-- disable screenshot chord -->
+    <bool name="config_enableScreenshotChord">false</bool>
+
     <!-- Wifi Dual Band support -->
     <bool name="config_wifi_dual_band_support">true</bool>
     
@@ -119,4 +122,5 @@
 
     <!-- Wifi driver stop delay -->
     <integer name="config_wifi_driver_stop_delay">5000</integer>
+
 </resources>
