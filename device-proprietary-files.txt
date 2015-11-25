@@ -17,6 +17,7 @@
 -app/LeanbackIme/LeanbackIme.apk
 bin/BtFwLoader
 bin/houdini
+bin/teeprov
 etc/binfmt_misc/arm_dyn
 etc/binfmt_misc/arm_exe
 etc/binfmt_misc/disable
@@ -48,12 +49,15 @@ lib/arm/libandroid.so
 lib/arm/libart.so
 lib/arm/libaudioflinger.so
 lib/arm/libaudioresampler.so
+lib/arm/libaudiospdif.so
 lib/arm/libaudioutils.so
 lib/arm/libbacktrace_libc++.so
 lib/arm/libbacktrace.so
+lib/arm/libbase.so
 lib/arm/libbcc.so
 lib/arm/libbcinfo.so
 lib/arm/libbinder.so
+lib/arm/libblas.so
 lib/arm/libcamera_client.so
 lib/arm/libcamera_metadata.so
 lib/arm/libcommon_time_client.so
@@ -69,6 +73,7 @@ lib/arm/libEGL.so
 lib/arm/libemoji.so
 lib/arm/libETC1.so
 lib/arm/libexpat.so
+lib/arm/libFFTEm.so
 lib/arm/libfilterfw.so
 lib/arm/libfilterpack_imageproc.so
 lib/arm/libft2.so
@@ -77,6 +82,7 @@ lib/arm/libgccdemangle.so
 lib/arm/libGLES_trace.so
 lib/arm/libGLESv1_CM.so
 lib/arm/libGLESv2.so
+lib/arm/libGLESv3.so
 lib/arm/libgui.so
 lib/arm/libhardware_legacy.so
 lib/arm/libhardware.so
@@ -92,6 +98,7 @@ lib/arm/libjpeg.so
 lib/arm/libLLVM.so
 lib/arm/liblog.so
 lib/arm/libmediandk.so
+lib/arm/libmediautils.so
 lib/arm/libmedia.so
 lib/arm/libmemtrack.so
 lib/arm/libminikin.so
@@ -102,6 +109,7 @@ lib/arm/libnbaio.so
 lib/arm/libnetd_client.so
 lib/arm/libnetutils.so
 lib/arm/libnfc_ndef.so
+lib/arm/libnl.so
 lib/arm/libOpenMAXAL.so
 lib/arm/libOpenSLES.so
 lib/arm/libopus.so
@@ -111,13 +119,18 @@ lib/arm/libpixelflinger.so
 lib/arm/libpng.so
 lib/arm/libpowermanager.so
 lib/arm/libprocessgroup.so
+lib/arm/libprotobuf-cpp-lite.so
+lib/arm/libradio.so
+lib/arm/libradio_metadata.so
 lib/arm/libRScpp.so
 lib/arm/libRSCpuRef.so
 lib/arm/libRSDriver.so
 lib/arm/libRS.so
 lib/arm/libselinux.so
+lib/arm/libserviceutility.so
 lib/arm/libsigchain.so
 lib/arm/libskia.so
+lib/arm/libsonic.so
 lib/arm/libsonivox.so
 lib/arm/libsoundtrigger.so
 lib/arm/libspeexresampler.so
@@ -193,6 +206,7 @@ lib/libmfx_omx_core.so
 lib/libmfxsw32.so
 lib/libmixvbp_h264secure.so
 lib/libmixvbp_h264.so
+lib/libmixvbp_mpeg2.so
 lib/libmixvbp_mpeg4.so
 lib/libmixvbp.so
 lib/libmixvbp_vc1.so
@@ -202,6 +216,7 @@ lib/libremotecontrolservice.so
 lib/libsepdrm_cc54.so
 lib/libstlport-mfx.so
 -priv-app/AtvRemoteService/AtvRemoteService.apk
+-priv-app/GamepadPairingService/GamepadPairingService.apk
 -priv-app/GlobalKeyInterceptor/GlobalKeyInterceptor.apk
 -priv-app/LeanbackLauncher/LeanbackLauncher.apk
 -priv-app/Overscan/Overscan.apk
