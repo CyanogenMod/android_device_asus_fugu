@@ -6,7 +6,7 @@
     <string name="partner_wallpaper" translatable="false">bg_custom</string>
     <!-- DO NOT TRANSLATE -->
     <string name="partner_widget_provider_component_name" translatable="false">
-        com.cyanogenmod.lockclock.ClockWidgetProvider
+        com.cyanogenmod.lockclock/.ClockWidgetProvider
     </string>
 
     <!-- DO NOT TRANSLATE -->
