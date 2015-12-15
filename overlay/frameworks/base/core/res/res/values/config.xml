@@ -50,7 +50,7 @@
     <integer name="config_multiuserMaximumUsers">2</integer>
 
     <!-- Apps that are authorized to access shared accounts -->
-    <string name="config_appsAuthorizedForSharedAccounts">;com.android.tv.settings;</string>
+    <string name="config_appsAuthorizedForSharedAccounts">;com.android.vending;com.android.settings;com.android.tv.settings;</string>
 
     <!-- Device configuration adjusting the minfree tunable in the lowmemorykiller in the
          kernel.  A high value will cause the lowmemorykiller to fire earlier, keeping more
