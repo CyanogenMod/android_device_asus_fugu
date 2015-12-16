@@ -140,8 +140,6 @@ ADDITIONAL_DEFAULT_PROPERTIES += \
     persist.intel.isv.vpp = 1 \
     persist.intel.isv.frc = 1
 
-COMMON_GLOBAL_CFLAGS += -DGFX_BUF_EXT
-
 OVERRIDE_RS_DRIVER := libPVRRS.so
 
 # enable ARM codegen for x86 with Houdini
