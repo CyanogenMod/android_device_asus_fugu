@@ -53,15 +53,8 @@ BOARD_HAL_STATIC_LIBRARIES := libdumpstate.fugu
 # Binder API version
 TARGET_USES_64_BIT_BINDER := true
 
-# Enable dex-preoptimization to speed up first boot sequence
-ifeq ($(HOST_OS),linux)
-  ifeq ($(TARGET_BUILD_VARIANT),user)
-    ifeq ($(WITH_DEXPREOPT),)
-      WITH_DEXPREOPT := true
-    endif
-  endif
-endif
-DONT_DEXPREOPT_PREBUILTS := true
+# Only preopt the boot image, there is not enough space in the system partition.
+WITH_DEXPREOPT_BOOT_IMG_ONLY := true
 
 # Security
 BUILD_WITH_SECURITY_FRAMEWORK := chaabi_token
