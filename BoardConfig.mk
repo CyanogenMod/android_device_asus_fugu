@@ -37,8 +37,7 @@ BOARD_CACHEIMAGE_PARTITION_SIZE := 260014080
 TARGET_DROIDBOOT_LIBS := libintel_droidboot
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 
-# Use dlmalloc
-MALLOC_IMPL := dlmalloc
+MALLOC_SVELTE := true
 
 # Kernel cmdline
 BOARD_KERNEL_CMDLINE := pci=noearly vmalloc=256M ptrace.ptrace_can_access=1
