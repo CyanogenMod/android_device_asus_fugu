@@ -1,0 +1,5 @@
+<resources>
+
+    <!-- Long press home to start picture-in-picture (PIP) or show PIP UI -->
+    <integer name="config_longPressOnHomeBehavior">3</integer>
+</resources>
