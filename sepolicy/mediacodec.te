@@ -1,0 +1,2 @@
+dontaudit mediacodec graphics_device:dir search;
+
