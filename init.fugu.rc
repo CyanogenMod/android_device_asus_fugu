@@ -228,11 +228,6 @@ service watchdogd /sbin/watchdogd 60 20
 on property:sys.boot_completed=1
     write /sys/devices/virtual/misc/watchdog/counter "0"
 
-service pvrsrvctl /system/vendor/bin/pvrsrvctl --no-module --start
-    class core
-    oneshot
-    user root
-
 # Enable native bridge for target executables
 on early-init
     mount binfmt_misc binfmt_misc /proc/sys/fs/binfmt_misc

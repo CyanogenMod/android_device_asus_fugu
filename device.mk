@@ -120,7 +120,6 @@ PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
     device/asus/fugu/media_codecs.xml:system/etc/media_codecs.xml \
     device/asus/fugu/media_codecs_performance.xml:system/etc/media_codecs_performance.xml \
-    device/asus/fugu/vp9_interpredict.binary:system/etc/vp9_interpredict.binary \
     device/asus/fugu/mfx_omxil_core.conf:system/etc/mfx_omxil_core.conf \
     device/asus/fugu/video_isv_profile.xml:system/etc/video_isv_profile.xml \
     device/asus/fugu/codec_resources_limitation.xml:system/etc/codec_resources_limitation.xml

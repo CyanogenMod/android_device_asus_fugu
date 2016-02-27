@@ -33,6 +33,7 @@ PRODUCT_COPY_FILES := \
     vendor/intel/fugu/proprietary/vsp.bin.0008.0000.0002:system/etc/firmware/vsp.bin.0008.0000.0002:intel \
     vendor/intel/fugu/proprietary/vsp.bin.0008.0002.0001:system/etc/firmware/vsp.bin.0008.0002.0001:intel \
     vendor/intel/fugu/proprietary/vsp.bin.000c.0001.0001:system/etc/firmware/vsp.bin.000c.0001.0001:intel \
+    vendor/intel/fugu/proprietary/vp9_interpredict.binary:system/etc/vp9_interpredict.binary:intel \
     vendor/intel/fugu/proprietary/cpuinfo:system/lib/arm/cpuinfo:intel \
     vendor/intel/fugu/proprietary/libandroidfw.so:system/lib/arm/libandroidfw.so:intel \
     vendor/intel/fugu/proprietary/libandroid_runtime.so:system/lib/arm/libandroid_runtime.so:intel \
@@ -188,38 +189,32 @@ PRODUCT_COPY_FILES := \
     vendor/intel/fugu/proprietary/libOMXVideoDecoderAVCSecure.so:system/lib/libOMXVideoDecoderAVCSecure.so:intel \
     vendor/intel/fugu/proprietary/libsepdrm_cc54.so:system/lib/libsepdrm_cc54.so:intel \
     vendor/intel/fugu/proprietary/libstlport-mfx.so:system/lib/libstlport-mfx.so:intel \
-    vendor/intel/fugu/proprietary/librscruntime.bc:system/vendor/lib/librscruntime.bc:intel \
-    vendor/intel/fugu/proprietary/bcc.moorefield:system/vendor/bin/bcc.moorefield:intel \
-    vendor/intel/fugu/proprietary/framebuffer_test:system/vendor/bin/framebuffer_test:intel \
     vendor/intel/fugu/proprietary/hwperfbin2jsont:system/vendor/bin/hwperfbin2jsont:intel \
     vendor/intel/fugu/proprietary/pvrdebug:system/vendor/bin/pvrdebug:intel \
-    vendor/intel/fugu/proprietary/pvrhwperf:system/vendor/bin/pvrhwperf:intel \
-    vendor/intel/fugu/proprietary/pvrsrvctl:system/vendor/bin/pvrsrvctl:intel \
+    vendor/intel/fugu/proprietary/pvrhtb2txt:system/vendor/bin/pvrhtb2txt:intel \
     vendor/intel/fugu/proprietary/pvrtld:system/vendor/bin/pvrtld:intel \
+    vendor/intel/fugu/proprietary/rscompiler:system/vendor/bin/rscompiler:intel \
     vendor/intel/fugu/proprietary/PR-ModelCert:system/vendor/firmware/PR-ModelCert:intel \
+    vendor/intel/fugu/proprietary/rgx.fw.signed:system/vendor/firmware/rgx.fw.signed:intel \
     vendor/intel/fugu/proprietary/libEGL_POWERVR_ROGUE.so:system/vendor/lib/egl/libEGL_POWERVR_ROGUE.so:intel \
     vendor/intel/fugu/proprietary/libGLESv1_CM_POWERVR_ROGUE.so:system/vendor/lib/egl/libGLESv1_CM_POWERVR_ROGUE.so:intel \
     vendor/intel/fugu/proprietary/libGLESv2_POWERVR_ROGUE.so:system/vendor/lib/egl/libGLESv2_POWERVR_ROGUE.so:intel \
     vendor/intel/fugu/proprietary/gralloc.moorefield.so:system/vendor/lib/hw/gralloc.moorefield.so:intel \
-    vendor/intel/fugu/proprietary/libbcc.moorefield.so:system/vendor/lib/libbcc.moorefield.so:intel \
-    vendor/intel/fugu/proprietary/libbcinfo.moorefield.so:system/vendor/lib/libbcinfo.moorefield.so:intel \
+    vendor/intel/fugu/proprietary/memtrack.moorefield.so:system/vendor/lib/hw/memtrack.moorefield.so:intel \
+    vendor/intel/fugu/proprietary/vulkan.moorefield.so:system/vendor/lib/hw/vulkan.moorefield.so:intel \
+    vendor/intel/fugu/proprietary/libclangIMG.so:system/vendor/lib/libclangIMG.so:intel \
     vendor/intel/fugu/proprietary/libcptcompiler.so:system/vendor/lib/libcptcompiler.so:intel \
-    vendor/intel/fugu/proprietary/libcreatesurface.so:system/vendor/lib/libcreatesurface.so:intel \
     vendor/intel/fugu/proprietary/libglslcompiler.so:system/vendor/lib/libglslcompiler.so:intel \
     vendor/intel/fugu/proprietary/libIMGegl.so:system/vendor/lib/libIMGegl.so:intel \
-    vendor/intel/fugu/proprietary/libLLVM.moorefield.so:system/vendor/lib/libLLVM.moorefield.so:intel \
-    vendor/intel/fugu/proprietary/libpvr2d.so:system/vendor/lib/libpvr2d.so:intel \
+    vendor/intel/fugu/proprietary/libLLVM33IMG.so:system/vendor/lib/libLLVM33IMG.so:intel \
+    vendor/intel/fugu/proprietary/libLLVMIMG.so:system/vendor/lib/libLLVMIMG.so:intel \
     vendor/intel/fugu/proprietary/libpvrANDROID_WSEGL.so:system/vendor/lib/libpvrANDROID_WSEGL.so:intel \
     vendor/intel/fugu/proprietary/libpvrcpt.so:system/vendor/lib/libpvrcpt.so:intel \
     vendor/intel/fugu/proprietary/libPVRRS.sha1.so:system/vendor/lib/libPVRRS.sha1.so:intel \
     vendor/intel/fugu/proprietary/libPVRRS.so:system/vendor/lib/libPVRRS.so:intel \
     vendor/intel/fugu/proprietary/libPVRScopeServices.so:system/vendor/lib/libPVRScopeServices.so:intel \
-    vendor/intel/fugu/proprietary/librsccompiler.so:system/vendor/lib/librsccompiler.so:intel \
-    vendor/intel/fugu/proprietary/memtrack.moorefield.so:system/vendor/lib/hw/memtrack.moorefield.so:intel \
     vendor/intel/fugu/proprietary/libseppr_hal.so:system/vendor/lib/libseppr_hal.so:intel \
-    vendor/intel/fugu/proprietary/libsrv_init.so:system/vendor/lib/libsrv_init.so:intel \
     vendor/intel/fugu/proprietary/libsrv_um.so:system/vendor/lib/libsrv_um.so:intel \
     vendor/intel/fugu/proprietary/libufwriter.so:system/vendor/lib/libufwriter.so:intel \
     vendor/intel/fugu/proprietary/libusc.so:system/vendor/lib/libusc.so:intel \
-    vendor/intel/fugu/proprietary/iperf3:system/xbin/iperf3:intel \
-
+    vendor/intel/fugu/proprietary/iperf3:system/xbin/iperf3:intel

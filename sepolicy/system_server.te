@@ -1,3 +1,6 @@
 # Allow system server factory file access
 allow system_server efs_file:dir search;
 allow system_server efs_file:file r_file_perms;
+
+# GPU dynamic fbc feature
+allow system_server surfaceflinger:fifo_file rw_file_perms;

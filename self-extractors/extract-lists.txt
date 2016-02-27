@@ -44,6 +44,7 @@
             system/etc/firmware/vsp.bin.0008.0000.0002 \
             system/etc/firmware/vsp.bin.0008.0002.0001 \
             system/etc/firmware/vsp.bin.000c.0001.0001 \
+            system/etc/vp9_interpredict.binary \
             system/lib/arm/cpuinfo \
             system/lib/arm/libandroidfw.so \
             system/lib/arm/libandroid_runtime.so \
@@ -199,36 +200,31 @@
             system/lib/libOMXVideoDecoderAVCSecure.so \
             system/lib/libsepdrm_cc54.so \
             system/lib/libstlport-mfx.so \
-            system/vendor/lib/librscruntime.bc \
-            system/vendor/bin/bcc.moorefield \
-            system/vendor/bin/framebuffer_test \
             system/vendor/bin/hwperfbin2jsont \
             system/vendor/bin/pvrdebug \
-            system/vendor/bin/pvrhwperf \
-            system/vendor/bin/pvrsrvctl \
+            system/vendor/bin/pvrhtb2txt \
             system/vendor/bin/pvrtld \
+            system/vendor/bin/rscompiler \
             system/vendor/firmware/PR-ModelCert \
+            system/vendor/firmware/rgx.fw.signed \
             system/vendor/lib/egl/libEGL_POWERVR_ROGUE.so \
             system/vendor/lib/egl/libGLESv1_CM_POWERVR_ROGUE.so \
             system/vendor/lib/egl/libGLESv2_POWERVR_ROGUE.so \
             system/vendor/lib/hw/gralloc.moorefield.so \
-            system/vendor/lib/libbcc.moorefield.so \
-            system/vendor/lib/libbcinfo.moorefield.so \
+            system/vendor/lib/hw/memtrack.moorefield.so \
+            system/vendor/lib/hw/vulkan.moorefield.so \
+            system/vendor/lib/libclangIMG.so \
             system/vendor/lib/libcptcompiler.so \
-            system/vendor/lib/libcreatesurface.so \
             system/vendor/lib/libglslcompiler.so \
             system/vendor/lib/libIMGegl.so \
-            system/vendor/lib/libLLVM.moorefield.so \
-            system/vendor/lib/libpvr2d.so \
+            system/vendor/lib/libLLVM33IMG.so \
+            system/vendor/lib/libLLVMIMG.so \
             system/vendor/lib/libpvrANDROID_WSEGL.so \
             system/vendor/lib/libpvrcpt.so \
             system/vendor/lib/libPVRRS.sha1.so \
             system/vendor/lib/libPVRRS.so \
             system/vendor/lib/libPVRScopeServices.so \
-            system/vendor/lib/librsccompiler.so \
-            system/vendor/lib/hw/memtrack.moorefield.so \
             system/vendor/lib/libseppr_hal.so \
-            system/vendor/lib/libsrv_init.so \
             system/vendor/lib/libsrv_um.so \
             system/vendor/lib/libufwriter.so \
             system/vendor/lib/libusc.so \
