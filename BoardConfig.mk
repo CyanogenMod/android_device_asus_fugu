@@ -55,9 +55,6 @@ BOARD_HAL_STATIC_LIBRARIES := libdumpstate.fugu
 # Binder API version
 TARGET_USES_64_BIT_BINDER := true
 
-# Only preopt the boot image, there is not enough space in the system partition.
-WITH_DEXPREOPT_BOOT_IMG_ONLY := true
-
 # Security
 BUILD_WITH_SECURITY_FRAMEWORK := chaabi_token
 BUILD_WITH_CHAABI_SUPPORT := true
