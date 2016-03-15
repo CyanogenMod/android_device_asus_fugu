@@ -172,6 +172,7 @@ Only the three quirks included above are recognized at this point:
             <Limit name="frame-rate" range="1-60" />
             <Limit name="bitrate" range="1-50000000" />
             <Limit name="concurrent-instances" max="3" />
+            <Feature name="intra-refresh" optional="yes"/>
         </MediaCodec>
         <MediaCodec name="OMX.Intel.VideoEncoder.VP8" type="video/x-vnd.on2.vp8" >
             <Quirk name="requires-allocate-on-input-ports" />
@@ -181,6 +182,7 @@ Only the three quirks included above are recognized at this point:
             <Limit name="frame-rate" range="1-30" />
             <Limit name="bitrate" range="1-10000000" />
             <Limit name="concurrent-instances" max="3" />
+            <Feature name="intra-refresh" optional="yes"/>
         </MediaCodec>
     </Encoders>
 
