@@ -113,10 +113,10 @@ on post-fs
     chmod 0666 /dev/dx_sep_q1
 
     # hdmi cec
-    chown system system /sys/module/tngdisp/parameters/hdmi_state
-    chmod 0440 /sys/module/tngdisp/parameters/hdmi_state
-    chown system system /sys/module/tngdisp/parameters/hdmi_edid_src_phy_addr
-    chmod 0440 /sys/module/tngdisp/parameters/hdmi_edid_src_phy_addr
+    chown system system /sys/module/drm_intel_mid/parameters/hdmi_state
+    chmod 0440 /sys/module/drm_intel_mid/parameters/hdmi_state
+    chown system system /sys/module/drm_intel_mid/parameters/hdmi_edid_src_phy_addr
+    chmod 0440 /sys/module/drm_intel_mid/parameters/hdmi_edid_src_phy_addr
 
 on post-fs-data
     # Create the directories used by the Wireless subsystem
