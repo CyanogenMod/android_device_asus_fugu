@@ -31,8 +31,6 @@ on init
     # /dev/block/by-name so that we can use the same fstabs everywhere.
     symlink /dev/block/pci/pci0000:00/0000:00:01.0/by-name /dev/block/by-name
 
-    # Support legacy paths
-    symlink /sdcard /mnt/sdcard
     symlink /sdcard /storage/sdcard0
 
     # ZRAM options
