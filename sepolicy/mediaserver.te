@@ -1,5 +1,2 @@
-# TODO: investigate cause of this
-allow mediaserver graphics_device:dir search;
-
 # GPU dynamic fbc feature
 allow mediaserver surfaceflinger:fifo_file rw_file_perms;
