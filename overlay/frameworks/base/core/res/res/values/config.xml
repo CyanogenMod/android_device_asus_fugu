@@ -59,4 +59,7 @@
 
     <!-- Flag indicating if device supports EAP SIM, AKA, AKA' -->
     <bool name="config_eap_sim_based_auth_supported">false</bool>
+
+    <!-- Package of the unbundled tv remote service which can connect to tv remote provider -->
+    <string translatable="false" name="config_tvRemoteServicePackage">com.google.android.tv.remote</string>
 </resources>
