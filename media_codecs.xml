@@ -140,15 +140,16 @@ Only the three quirks included above are recognized at this point:
             <Feature name="adaptive-playback" />
             <Limit name="concurrent-instances" max="3" />
         </MediaCodec>
-        <MediaCodec name="OMX.Intel.VideoDecoder.VP9.hybrid" type="video/x-vnd.on2.vp9">
-            <Limit name="size" min="16x16" max="1920x1088" />
-            <Limit name="alignment" value="2x2" />
-            <Limit name="block-size" value="16x16" />
-            <Limit name="blocks-per-second" range="1-244800" />
-            <Limit name="bitrate" range="1-8000000" />
-            <Feature name="adaptive-playback" />
-            <Limit name="concurrent-instances" max="2" />
-        </MediaCodec>
+        <!-- Disable in b/27589011 -->
+        <!--<MediaCodec name="OMX.Intel.VideoDecoder.VP9.hybrid" type="video/x-vnd.on2.vp9">-->
+            <!--<Limit name="size" min="16x16" max="1920x1088" />-->
+            <!--<Limit name="alignment" value="2x2" />-->
+            <!--<Limit name="block-size" value="16x16" />-->
+            <!--<Limit name="blocks-per-second" range="1-244800" />-->
+            <!--<Limit name="bitrate" range="1-8000000" />-->
+            <!--<Feature name="adaptive-playback" />-->
+            <!--<Limit name="concurrent-instances" max="2" />-->
+        <!--</MediaCodec>-->
         <MediaCodec name="OMX.Intel.sw_vd.h265" type="video/hevc">
             <Limit name="size" min="16x16" max="1920x1088" />
             <Limit name="alignment" value="2x2" />
