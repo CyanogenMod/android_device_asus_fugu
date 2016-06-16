@@ -291,3 +291,29 @@ PRODUCT_COPY_FILES += \
 # Wifi country code
 PRODUCT_COPY_FILES += \
     device/asus/fugu/init.fugu.countrycode.sh:system/bin/init.fugu.countrycode.sh
+
+# Get rid of dex preoptimization to save space for the system.img
+# Sorted by *.odex size
+FUGU_DONT_DEXPREOPT_MODULES := \
+    NoTouchAuthDelegate \
+    ConfigUpdater \
+    SecondScreenSetup \
+    SecondScreenSetupAuthBridge \
+    TvSettings \
+    SetupWraith \
+    GooglePackageInstaller \
+    GoogleContactsSyncAdapter \
+    BugReportSender \
+    ContactsProvider \
+    PrintSpooler \
+    CalendarProvider \
+    CanvasPackageInstaller \
+    SettingsProvider \
+    ituxd \
+    StatementService \
+    ExternalStorageProvider \
+    FrameworkPackageStubs \
+    CertInstaller \
+    KeyChain \
+    UserDictionaryProvider
+$(call add-product-dex-preopt-module-config,$(FUGU_DONT_DEXPREOPT_MODULES),disable)
