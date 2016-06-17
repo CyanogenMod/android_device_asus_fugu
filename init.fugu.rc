@@ -76,6 +76,8 @@ on boot
 
     # Wifi
     setprop wifi.interface wlan0
+    # Set correct country code
+    exec - root root system -- /system/bin/init.fugu.countrycode.sh
 
 on post-fs
     # Performance tweaks for interactive governor
