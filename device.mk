@@ -287,3 +287,7 @@ PRODUCT_COPY_FILES += \
     device/asus/fugu/sep_policy.conf:system/etc/security/sep_policy.conf
 
 #PRODUCT_CHARACTERISTICS := tablet
+
+# Wifi country code
+PRODUCT_COPY_FILES += \
+    device/asus/fugu/init.fugu.countrycode.sh:system/bin/init.fugu.countrycode.sh
