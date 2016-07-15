@@ -317,3 +317,8 @@ FUGU_DONT_DEXPREOPT_MODULES := \
     KeyChain \
     UserDictionaryProvider
 $(call add-product-dex-preopt-module-config,$(FUGU_DONT_DEXPREOPT_MODULES),disable)
+
+# Some CTS tests will be skipped based on what the initial API level that
+# shipped on device was.
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.product.first_api_level=21
